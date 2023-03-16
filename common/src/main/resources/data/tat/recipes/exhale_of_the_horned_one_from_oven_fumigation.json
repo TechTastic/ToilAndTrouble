@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "minecraft:oak_sapling"
+  },
+  "jar": {
+    "item": "tat:exhale_of_the_horned_one"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

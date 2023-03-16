@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#tat:alder_logs",
+    "#tat:hawthorn_logs",
+    "#tat:rowan_logs"
+  ]
+}

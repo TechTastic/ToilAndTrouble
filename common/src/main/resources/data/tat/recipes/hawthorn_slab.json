@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "wooden_slab",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "tat:hawthorn_planks"
+    }
+  },
+  "result": {
+    "item": "tat:hawthorn_slab",
+    "count": 6
+  }
+}

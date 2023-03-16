@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "tat:block/stripped_alder_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "tat:block/stripped_alder_log"
+    },
+    "axis=z": {
+      "model": "tat:block/stripped_alder_log_horizontal",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north,lit=false,top=false": {"model": "tat:block/cast_iron_oven"},
+    "facing=east,lit=false,top=false": {"model": "tat:block/cast_iron_oven", "y": 90},
+    "facing=south,lit=false,top=false": {"model": "tat:block/cast_iron_oven", "y": 180},
+    "facing=west,lit=false,top=false": {"model": "tat:block/cast_iron_oven", "y": 270},
+    "facing=north,lit=true,top=false": {"model": "tat:block/cast_iron_oven_lit"},
+    "facing=east,lit=true,top=false": {"model": "tat:block/cast_iron_oven_lit", "y": 90},
+    "facing=south,lit=true,top=false": {"model": "tat:block/cast_iron_oven_lit", "y": 180},
+    "facing=west,lit=true,top=false": {"model": "tat:block/cast_iron_oven_lit", "y": 270},
+    "facing=north,lit=false,top=true": {"model": "tat:block/cast_iron_oven_top"},
+    "facing=east,lit=false,top=true": {"model": "tat:block/cast_iron_oven_top", "y": 90},
+    "facing=south,lit=false,top=true": {"model": "tat:block/cast_iron_oven_top", "y": 180},
+    "facing=west,lit=false,top=true": {"model": "tat:block/cast_iron_oven_top", "y": 270},
+    "facing=north,lit=true,top=true": {"model": "tat:block/cast_iron_oven_top_lit"},
+    "facing=east,lit=true,top=true": {"model": "tat:block/cast_iron_oven_top_lit", "y": 90},
+    "facing=south,lit=true,top=true": {"model": "tat:block/cast_iron_oven_top_lit", "y": 180},
+    "facing=west,lit=true,top=true": {"model": "tat:block/cast_iron_oven_top_lit", "y": 270}
+  }
+}

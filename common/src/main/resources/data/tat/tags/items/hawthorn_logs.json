@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "tat:hawthorn_log",
+    "tat:hawthorn_wood",
+    "tat:stripped_hawthorn_log",
+    "tat:stripped_hawthorn_wood"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"1": "tat:item/taglock_empty",
+		"particle": "tat:item/taglock_empty"
+	},
+	"overrides": [
+		{"model": "tat:item/taglock/taglock_empty", "predicate": {"contents": 0.0}},
+		{"model": "tat:item/taglock/taglock_decayed", "predicate": {"contents": 0.5}},
+		{"model": "tat:item/taglock/taglock_filled", "predicate": {"contents": 1.0}}
+	]
+}

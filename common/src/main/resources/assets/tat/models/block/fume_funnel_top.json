@@ -1,0 +1,41 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "tat:block/fume_funnel_top",
+		"particle": "tat:block/fume_funnel"
+	},
+	"elements": [
+		{
+			"from": [7, 0, 13],
+			"to": [9, 12, 15],
+			"faces": {
+				"north": {"uv": [0, 0, 2, 12], "texture": "#1"},
+				"east": {"uv": [2, 0, 4, 12], "texture": "#1"},
+				"south": {"uv": [4, 0, 6, 12], "texture": "#1"},
+				"west": {"uv": [6, 0, 8, 12], "texture": "#1"},
+				"up": {"uv": [14, 4, 12, 2], "texture": "#1"},
+				"down": {"uv": [6, 12, 4, 14], "texture": "#1"}
+			}
+		},
+		{
+			"from": [6, 12, 12],
+			"to": [10, 14, 16],
+			"faces": {
+				"north": {"uv": [8, 8, 12, 10], "texture": "#1"},
+				"east": {"uv": [8, 10, 12, 12], "texture": "#1"},
+				"south": {"uv": [0, 12, 4, 14], "texture": "#1"},
+				"west": {"uv": [12, 0, 16, 2], "texture": "#1"},
+				"up": {"uv": [12, 4, 8, 0], "texture": "#1"},
+				"down": {"uv": [12, 4, 8, 8], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "funnel",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

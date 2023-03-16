@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "minecraft:porkchop"
+  },
+  "jar": {
+    "item": "tat:foul_fume"
+  },
+  "output": {
+    "item": "minecraft:cooked_porkchop"
+  }
+}

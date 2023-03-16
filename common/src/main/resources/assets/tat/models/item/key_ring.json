@@ -1,0 +1,15 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"1": "tat:item/key_ring/key_ring_5",
+		"particle": "tat:item/key_ring/key_ring_5"
+	},
+	"overrides": [
+		{"model": "tat:item/key_ring/key_ring_1", "predicate": {"key_count": 0.0}},
+		{"model": "tat:item/key_ring/key_ring_2", "predicate": {"key_count": 0.1}},
+		{"model": "tat:item/key_ring/key_ring_3", "predicate": {"key_count": 0.2}},
+		{"model": "tat:item/key_ring/key_ring_4", "predicate": {"key_count": 0.3}},
+		{"model": "tat:item/key_ring/key_ring_5", "predicate": {"key_count": 0.4}}
+	]
+}

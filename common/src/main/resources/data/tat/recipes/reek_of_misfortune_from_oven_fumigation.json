@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "tat:alder_sapling"
+  },
+  "jar": {
+    "item": "tat:reek_of_misfortune"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

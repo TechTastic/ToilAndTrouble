@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "tat:alder_log",
+    "tat:alder_wood",
+    "tat:stripped_alder_log",
+    "tat:stripped_alder_wood"
+  ]
+}

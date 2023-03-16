@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tat:block/alder_slab"
+    },
+    "type=double": {
+      "model": "tat:block/alder_planks"
+    },
+    "type=top": {
+      "model": "tat:block/alder_slab_top"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "tat",
+  "version": "${version}",
+  "name": "Toil and Trouble",
+  "description": "Modern Witchery for the Modern Witch!",
+  "authors": [
+    "TechTastic"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT License",
+  "icon": "assets/tat/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.techtastic.tat.fabric.ToilAndTroubleFabric"
+    ],
+    "client": [
+      "net.techtastic.tat.fabric.ToilAndTroubleFabricClient"
+    ],
+    "jei_mod_plugin": [
+      "net.techtastic.tat.integration.jei.JEIToilAndTroublePlugin"
+    ]
+  },
+  "mixins": [
+    "tat-common.mixins.json",
+    "tat.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.18.2",
+    "architectury": ">=4.9.83"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "tat:hawthorn_sapling"
+  },
+  "jar": {
+    "item": "tat:odor_of_purity"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

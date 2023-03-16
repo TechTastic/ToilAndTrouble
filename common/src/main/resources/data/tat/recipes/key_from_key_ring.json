@@ -1,0 +1,11 @@
+{
+  "type": "tat:key_ring",
+  "ingredients": [
+    {
+      "item": "tat:key_ring"
+    }
+  ],
+  "output": {
+    "item": "tat:key"
+  }
+}

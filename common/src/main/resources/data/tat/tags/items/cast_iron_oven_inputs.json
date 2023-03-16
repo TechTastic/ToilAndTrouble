@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:logs",
+    "#minecraft:saplings",
+    "minecraft:porkchop",
+    "minecraft:cod",
+    "minecraft:salmon",
+    "minecraft:chicken",
+    "minecraft:mutton",
+    "minecraft:rabbit",
+    "minecraft:beef",
+    "minecraft:potato",
+    "minecraft:kelp"
+  ]
+}

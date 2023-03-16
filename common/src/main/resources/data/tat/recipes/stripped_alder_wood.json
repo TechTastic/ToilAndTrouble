@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "tat:stripped_alder_log"
+    }
+  },
+  "result": {
+    "item": "tat:stripped_alder_wood",
+    "count": 3
+  }
+}

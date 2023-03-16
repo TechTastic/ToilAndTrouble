@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "net.techtastic.tat.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinBedBlockEntity",
+    "MixinBedBlock",
+    "MixinMinecraftServer"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

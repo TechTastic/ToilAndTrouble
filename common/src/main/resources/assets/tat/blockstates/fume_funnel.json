@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north,lit=false,top=false": {"model": "tat:block/fume_funnel"},
+    "facing=east,lit=false,top=false": {"model": "tat:block/fume_funnel", "y": 90},
+    "facing=south,lit=false,top=false": {"model": "tat:block/fume_funnel", "y": 180},
+    "facing=west,lit=false,top=false": {"model": "tat:block/fume_funnel", "y": 270},
+    "facing=north,lit=true,top=false": {"model": "tat:block/fume_funnel_lit"},
+    "facing=east,lit=true,top=false": {"model": "tat:block/fume_funnel_lit", "y": 90},
+    "facing=south,lit=true,top=false": {"model": "tat:block/fume_funnel_lit", "y": 180},
+    "facing=west,lit=true,top=false": {"model": "tat:block/fume_funnel_lit", "y": 270},
+    "facing=north,lit=false,top=true": {"model": "tat:block/fume_funnel_top"},
+    "facing=east,lit=false,top=true": {"model": "tat:block/fume_funnel_top", "y": 90},
+    "facing=south,lit=false,top=true": {"model": "tat:block/fume_funnel_top", "y": 180},
+    "facing=west,lit=false,top=true": {"model": "tat:block/fume_funnel_top", "y": 270},
+    "facing=north,lit=true,top=true": {"model": "tat:block/fume_funnel_top"},
+    "facing=east,lit=true,top=true": {"model": "tat:block/fume_funnel_top", "y": 90},
+    "facing=south,lit=true,top=true": {"model": "tat:block/fume_funnel_top", "y": 180},
+    "facing=west,lit=true,top=true": {"model": "tat:block/fume_funnel_top", "y": 270}
+  }
+}

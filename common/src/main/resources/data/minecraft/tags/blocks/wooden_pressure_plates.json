@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "tat:alder_pressure_plate",
+    "tat:hawthorn_pressure_plate",
+    "tat:rowan_pressure_plate"
+  ]
+}

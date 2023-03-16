@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "U  ",
+    "F  ",
+    "   "
+  ],
+  "key": {
+    "U": {
+      "item": "tat:fume_funnel"
+    },
+    "F": {
+      "item": "tat:fume_filter"
+    }
+  },
+  "result": {
+    "item": "tat:filtered_fume_funnel"
+  }
+}

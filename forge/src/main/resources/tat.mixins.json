@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.techtastic.tat.forge.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinIForgeBlock"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:saplings",
+    "#minecraft:coral_plants",
+    "#minecraft:replaceable_plants",
+    "minecraft:sea_pickle",
+    "minecraft:red_mushroom",
+    "minecraft:brown_mushroom",
+    "minecraft:kelp",
+    "minecraft:small_dripleaf",
+    "minecraft:moss_carpet",
+    "minecraft:spore_blossom",
+    "minecraft:lily_pad"
+  ]
+}

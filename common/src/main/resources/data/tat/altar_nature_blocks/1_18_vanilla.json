@@ -1,0 +1,142 @@
+[
+  {
+    "block": "minecraft:dragon_egg",
+    "power": 250,
+    "limit": 1
+  },
+  {
+    "tag": "minecraft:flowers",
+    "power": 4,
+    "limit": 30
+  },
+  {
+    "block": "minecraft:wheat",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:pumpkin",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:melon",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:carrots",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:potatoes",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "tag": "minecraft:saplings",
+    "power": 4,
+    "limit": 20
+  },
+  {
+    "tag": "minecraft:leaves",
+    "power": 3,
+    "limit": 100
+  },
+  {
+    "block": "minecraft:tall_grass",
+    "power": 3,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:brown_mushroom",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:red_mushroom",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:cactus",
+    "power": 3,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:sugar_cane",
+    "power": 3,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:pumpkin_stem",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:brown_mushroom_block",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:red_mushroom_block",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:melon_stem",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "block": "minecraft:cocoa",
+    "power": 3,
+    "limit": 20
+  },
+  {
+    "tag": "minecraft:logs",
+    "power": 2,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:grass",
+    "power": 2,
+    "limit": 80
+  },
+  {
+    "block": "minecraft:vine",
+    "power": 2,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:farmland",
+    "power": 1,
+    "limit": 100
+  },
+  {
+    "block": "minecraft:water",
+    "power": 1,
+    "limit": 50
+  },
+  {
+    "block": "minecraft:mycelium",
+    "power": 1,
+    "limit": 80
+  },
+  {
+    "block": "minecraft:moss_block",
+    "power": 2,
+    "limit": 100
+  },
+  {
+    "block": "minecraft:podzol",
+    "power": 1,
+    "limit": 80
+  },
+  {
+    "block": "minecraft:beetroots",
+    "power": 4,
+    "limit": 20
+  }
+]

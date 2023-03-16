@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tat:block/hawthorn_slab"
+    },
+    "type=double": {
+      "model": "tat:block/hawthorn_planks"
+    },
+    "type=top": {
+      "model": "tat:block/hawthorn_slab_top"
+    }
+  }
+}

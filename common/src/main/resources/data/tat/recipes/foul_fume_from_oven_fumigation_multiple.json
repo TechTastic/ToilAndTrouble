@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "tag": "tat:foul_fume_wood_ash"
+  },
+  "jar": {
+    "item": "tat:foul_fume"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

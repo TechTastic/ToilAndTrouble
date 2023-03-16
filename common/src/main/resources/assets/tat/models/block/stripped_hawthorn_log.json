@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "tat:block/stripped_hawthorn_log_top",
+    "side": "tat:block/stripped_hawthorn_log"
+  }
+}

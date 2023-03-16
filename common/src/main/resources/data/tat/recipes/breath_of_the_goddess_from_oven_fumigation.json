@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "minecraft:birch_sapling"
+  },
+  "jar": {
+    "item": "tat:breath_of_the_goddess"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

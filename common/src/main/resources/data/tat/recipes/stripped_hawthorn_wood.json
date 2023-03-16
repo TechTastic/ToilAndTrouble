@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "tat:stripped_hawthorn_log"
+    }
+  },
+  "result": {
+    "item": "tat:stripped_hawthorn_wood",
+    "count": 3
+  }
+}

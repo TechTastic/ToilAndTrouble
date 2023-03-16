@@ -1,0 +1,12 @@
+{
+  "type": "tat:oven_fumigation",
+  "input": {
+    "item": "tat:rowan_sapling"
+  },
+  "jar": {
+    "item": "tat:whiff_of_magic"
+  },
+  "output": {
+    "item": "tat:wood_ash"
+  }
+}

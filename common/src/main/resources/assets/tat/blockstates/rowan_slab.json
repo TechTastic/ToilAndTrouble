@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tat:block/rowan_slab"
+    },
+    "type=double": {
+      "model": "tat:block/rowan_planks"
+    },
+    "type=top": {
+      "model": "tat:block/rowan_slab_top"
+    }
+  }
+}
