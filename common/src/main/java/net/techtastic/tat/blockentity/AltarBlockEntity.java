@@ -1,8 +1,11 @@
 package net.techtastic.tat.blockentity;
 
+import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
+import net.minecraft.core.PositionImpl;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -11,6 +14,9 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.techtastic.tat.TATBlockEntities;
 import net.techtastic.tat.TATBlocks;
 import net.techtastic.tat.api.IAltarAugment;
@@ -19,10 +25,10 @@ import net.techtastic.tat.dataloader.NatureBlocksDataResolver;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import javax.swing.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 public class AltarBlockEntity extends BlockEntity implements IAltarSource {
     private double altarPower = 0;
@@ -34,6 +40,7 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource {
     private BlockPattern altarShape;
     private BlockPattern innerAltarShape;
     private int ticks = 0;
+    private NatureBlocksDataResolver nature = new NatureBlocksDataResolver();
     private HashMap<Block, Pair<Integer, Integer>> natureCount = new HashMap<>();
     private List<IAltarAugment> altarAugments = new ArrayList<>();
 
@@ -65,15 +72,15 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource {
         this.altarRange = compoundTag.getDouble("ToilAndTrouble$altarRange");
         this.altarRate = compoundTag.getDouble("ToilAndTrouble$altarRate");
         this.isMaster = compoundTag.getBoolean("ToilAndTrouble$isMaster");
-
-        if (compoundTag.contains("ToilAndTrouble$masterPos")) this.masterPos = BlockPos.of(compoundTag.getLong("ToilAndTrouble$masterPos"));
+        if (compoundTag.contains("ToilAndTrouble$masterPos"))
+            this.masterPos = BlockPos.of(compoundTag.getLong("ToilAndTrouble$masterPos"));
     }
 
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, AltarBlockEntity entity) {
         if (!entity.isMaster) return;
 
         if (entity.getTicks() % 5 == 0) {
-            populateNatureCount(level, blockPos, entity);
+            //entity.populateNatureCount(level, blockPos, entity);
             entity.resetTicks();
         }
 
@@ -192,19 +199,41 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource {
         this.natureCount = newNatureCount;
     }
 
-    public static void populateNatureCount(Level level, BlockPos altarPos, AltarBlockEntity altar) {
-        NatureBlocksDataResolver nature = new NatureBlocksDataResolver();
+    public Set<BlockPos> getAllPositionsInRadius(BlockPos altarPos, double range) {
+        Set<BlockPos> returnSet = new HashSet<>();
+
+        BlockPos startPos = altarPos.offset(-range, -range, -range);
+        System.err.println(startPos + "");
+        for (int x = 0; x < (range * 2); x++) {
+            for (int y = 0; y < (range * 2); y++) {
+                for (int z = 0; z < (range * 2); z++) {
+                    System.err.println("Offest: " + x + ", " + y + ", " + z);
+                    returnSet.add(startPos.offset(x, y, z));
+                }
+            }
+        }
+
+        return returnSet;
+    }
+
+    public void populateNatureCount(Level level, BlockPos altarPos, AltarBlockEntity altar) {
         HashMap<Block, Pair<Integer, Integer>> natureCount = altar.getNatureCount();
         double range = altar.getRange();
-        Iterable<BlockPos> surroundings = BlockPos.betweenClosed(altarPos.offset(-range, -range, -range), altarPos.offset(range, range, range));
-        for (BlockPos testPos : surroundings) {
-            BlockState testState = level.getBlockState(testPos);
+
+        Set<BlockPos> nearbyBlocks = getAllPositionsInRadius(altarPos, range);
+        for (BlockPos pos : nearbyBlocks) {
+            BlockState testState = level.getBlockState(pos);
             int power = nature.getNaturalPower(testState);
             int limit = nature.getMaxNaturalLimit(testState);
 
-            if (power == 0) continue;
+            System.err.println(testState.getBlock());
+            System.err.println(power + "");
+            System.err.println(limit + "");
+
+            if (power == 0) return;
 
             if (!natureCount.containsKey(testState.getBlock())) {
+                System.err.println("First time for " + testState.getBlock());
                 natureCount.put(testState.getBlock(), new Pair<>(1, power));
             } else if (natureCount.get(testState.getBlock()).getA() < limit) {
                 natureCount.put(testState.getBlock(), new Pair<>(natureCount.get(testState.getBlock()).getA() + 1, power));
@@ -214,21 +243,25 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource {
         altar.setNatureCount(natureCount);
     }
 
-    public static double getMaxAltarPowerFromNature(Level level, BlockPos altarPos, AltarBlockEntity altar) {
+    public double getMaxAltarPowerFromNature(Level level, BlockPos altarPos, AltarBlockEntity altar) {
         HashMap<Block, Pair<Integer, Integer>> natureCount = altar.getNatureCount();
 
         if (natureCount.isEmpty()) {
-            populateNatureCount(level, altarPos, altar);
+            System.err.println("Nature Count was empty!");
+            altar.populateNatureCount(level, altarPos, altar);
             natureCount = altar.getNatureCount();
         }
 
-        double natureMaxAltarPower = 0;
+        AtomicReference<Double> natureMaxAltarPower = new AtomicReference<>((double) 0);
 
-        for (Pair<Integer, Integer> naturalPair : natureCount.values()) {
-            natureMaxAltarPower += naturalPair.getA() * naturalPair.getB();
-        }
+        natureCount.forEach((block, naturePair) -> {
+            System.err.println(block);
+            System.err.println("Count: " + naturePair.getA());
+            System.err.println("Power: " + naturePair.getB());
+            natureMaxAltarPower.updateAndGet(v -> v + naturePair.getA() * naturePair.getB());
+        });
 
-        return natureMaxAltarPower;
+        return natureMaxAltarPower.get();
     }
 
     /*public List<IAltarAugment> getAltarAugments() {

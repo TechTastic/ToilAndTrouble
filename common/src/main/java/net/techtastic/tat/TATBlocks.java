@@ -36,6 +36,9 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> ALTAR = registerBlock("altar",
             new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0f).requiresCorrectToolForDrops()));
 
+    public static final RegistrySupplier<Block> BLODDY_ROSE = registerBlock("bloody_rose",
+            new BloodyRoseBlock(BlockBehaviour.Properties.copy(Blocks.DANDELION)));
+
     //////////////////////////
     //                      //
     //  ROWAN WOOD STUFFS   //

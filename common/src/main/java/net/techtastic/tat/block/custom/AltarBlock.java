@@ -48,14 +48,29 @@ public class AltarBlock extends BaseEntityBlock {
     public InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult blockHitResult) {
         AltarBlockEntity altar = (AltarBlockEntity) level.getBlockEntity(blockPos);
         assert altar != null;
-        player.sendMessage(new TextComponent("Current Nature Power: " + AltarBlockEntity.getMaxAltarPowerFromNature(level, blockPos, altar)), player.getUUID());
+        if (altar.isMaster()) {
+            player.sendMessage(new TextComponent("Current Nature Power: " + altar.getMaxAltarPowerFromNature(level, blockPos, altar)), player.getUUID());
 
-        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+            return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+        }
+
+        System.err.println(altar);
+        System.err.println(altar.isMaster() + "");
+        System.err.println(altar.getMasterPos());
+        System.err.println(altar.getBlockPos());
+
+        if (altar.getMasterPos() == null) {
+            setupAltarMultiblock(altar, level, blockPos);
+        }
+
+        return use(level.getBlockState(altar.getMasterPos()), level, altar.getMasterPos(), player, interactionHand, blockHitResult);
     }
 
     @Override
     public void onPlace(@NotNull BlockState blockState, @NotNull Level level, @NotNull BlockPos blockPos, @NotNull BlockState blockState2, boolean bl) {
         super.onPlace(blockState, level, blockPos, blockState2, bl);
+
+        if (level.isClientSide) return;
 
         AltarBlockEntity altar = (AltarBlockEntity) level.getBlockEntity(blockPos);
         assert altar != null;
@@ -199,5 +214,31 @@ public class AltarBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState blockState, @NotNull BlockEntityType<T> blockEntityType) {
         return createTickerHelper(blockEntityType, TATBlockEntities.ALTAR_BLOCK_ENTITY.get(), AltarBlockEntity::tick);
+    }
+
+    public void setupAltarMultiblock(AltarBlockEntity altar, Level level, BlockPos blockPos) {
+        BlockPattern.BlockPatternMatch match = altar.getOrCreateAltarShapeWithBoundaries().find(level, blockPos);
+        if (match != null) {
+            match = altar.getOrCreateAltarShape().find(level, blockPos);
+            if (match != null) {
+                int height = match.getHeight();
+                int width = match.getWidth();
+
+                BlockInWorld centerBlock = match.getBlock((width - 1) / 2, (height - 1) / 2, match.getDepth() - 1);
+                ((AltarBlockEntity) Objects.requireNonNull(centerBlock.getEntity())).isMaster(true);
+
+                for (int i = 0; i <= width - 1; i++) {
+                    for (int j = 0; j <= height - 1; j++) {
+                        for (int k = 0; k <= match.getDepth() - 1; k++) {
+                            BlockInWorld biw = match.getBlock(i, j, k);
+
+                            ((AltarBlockEntity) Objects.requireNonNull(biw.getEntity())).setMasterPos(centerBlock.getPos());
+
+                            level.setBlockAndUpdate(biw.getPos(), biw.getState().setValue(MULTIBLOCK, true));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

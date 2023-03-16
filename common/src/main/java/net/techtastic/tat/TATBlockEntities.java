@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.techtastic.tat.blockentity.AltarBlockEntity;
 import net.techtastic.tat.blockentity.BaseLockedBlockEntity;
+import net.techtastic.tat.blockentity.BaseTaglockedBlockEntity;
 import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
 
 public class TATBlockEntities {
@@ -30,6 +31,9 @@ public class TATBlockEntities {
 
     public static final RegistrySupplier<BlockEntityType<AltarBlockEntity>> ALTAR_BLOCK_ENTITY = BLOCK_ENTITIES.register("altar", () ->
             BlockEntityType.Builder.of(AltarBlockEntity::new, TATBlocks.ALTAR.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<BaseTaglockedBlockEntity>> BASE_TAGLOCKED_BLOCK_ENTITY = BLOCK_ENTITIES.register("taglocked", () ->
+            BlockEntityType.Builder.of(BaseTaglockedBlockEntity::new, TATBlocks.BLODDY_ROSE.get()).build(null));
 
     public static void register() {
         BLOCK_ENTITIES.register();

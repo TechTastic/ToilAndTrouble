@@ -25,6 +25,18 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
     private static final HashMap<ResourceLocation, NatureBlocksInfo> map = new HashMap<>();
     public static NatureBlocksDataLoader loader = new NatureBlocksDataLoader();
 
+    public void debugMap() {
+        System.err.println(map);
+        System.err.println(map.isEmpty());
+        System.err.println(map.size());
+        map.forEach((location, info) -> {
+            System.err.println(location);
+            System.err.println(info.id());
+            System.err.println(info.naturalPower());
+            System.err.println(info.limit());
+        });
+    }
+
     @Override
     public int getNaturalPower(BlockState state) {
         if (map.containsKey(Registry.BLOCK.getKey(state.getBlock()))) {
