@@ -36,9 +36,8 @@ public class NatureBlockStateInfo {
     public static void init() {
         Registry.register(REGISTRY, new ResourceLocation(ToilAndTrouble.MOD_ID, "data"), new NatureBlocksDataResolver());
 
-        RegistryEvents.onRegistriesComplete(() -> SORTED_REGISTRY = REGISTRY.stream().sorted((first, second) -> {
-
-        }).toList());
+        RegistryEvents.onRegistriesComplete(() -> SORTED_REGISTRY = REGISTRY.stream()
+                .sorted(Comparator.comparingInt(NaturalBlocksInfoProvider::getPriority).reversed()).toList());
     }
 
     // init { doesn't work since the class gets loaded too late
