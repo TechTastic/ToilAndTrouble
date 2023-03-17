@@ -12,21 +12,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.event.RegistryEvents;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.ToIntFunction;
 
 interface NaturalBlocksInfoProvider {
-    default int getNaturalPower(BlockState state) {
-        return 0;
-    }
-    default int getMaxNaturalLimit(BlockState state) {
-        return 0;
-    }
+    default int getPriority() {return 0;}
+    default int getNaturalPower(BlockState state) {return 0;}
+    default int getMaxNaturalLimit(BlockState state) {return 0;}
 }
 
-public class BlockStateInfo {
+public class NatureBlockStateInfo {
 
     // registry for mods to add their weights
-    static MappedRegistry<NaturalBlocksInfoProvider> REGISTRY = new MappedRegistry<NaturalBlocksInfoProvider>(
+    static MappedRegistry<NaturalBlocksInfoProvider> REGISTRY = new MappedRegistry<>(
             ResourceKey.createRegistryKey(new ResourceLocation(ToilAndTrouble.MOD_ID, "natural_block_providers")),
             Lifecycle.experimental(),
             null
@@ -37,7 +36,9 @@ public class BlockStateInfo {
     public static void init() {
         Registry.register(REGISTRY, new ResourceLocation(ToilAndTrouble.MOD_ID, "data"), new NatureBlocksDataResolver());
 
-        RegistryEvents.onRegistriesComplete(() -> SORTED_REGISTRY = REGISTRY.stream().sorted().toList());
+        RegistryEvents.onRegistriesComplete(() -> SORTED_REGISTRY = REGISTRY.stream().sorted((first, second) -> {
+
+        }).toList());
     }
 
     // init { doesn't work since the class gets loaded too late
@@ -52,12 +53,12 @@ public class BlockStateInfo {
     public Pair<Integer, Integer> get(BlockState state) {
         int r = Block.getId(state);
         if (r != -1) {
-            return CACHE.get().getOrDefault(r, iterateRegistry(state));
+            return CACHE.get().getOrDefault(r, iterateNatureRegistry(state));
         }
         return null;
     }
 
-    private Pair<Integer, Integer> iterateRegistry (BlockState state) {
+    private Pair<Integer, Integer> iterateNatureRegistry (BlockState state) {
         return new Pair<>(
                 SORTED_REGISTRY.stream().findFirst().orElseGet(() -> new NaturalBlocksInfoProvider() {
                 }).getNaturalPower(state),

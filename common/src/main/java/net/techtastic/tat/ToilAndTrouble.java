@@ -3,11 +3,8 @@ package net.techtastic.tat;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.ItemLike;
-import net.techtastic.tat.dataloader.BlockStateInfo;
-import net.techtastic.tat.dataloader.NatureBlocksDataResolver;
+import net.techtastic.tat.dataloader.NatureBlockStateInfo;
 import net.techtastic.tat.integration.TATFuels;
 import net.techtastic.tat.item.TATItemModelPredicates;
 import net.techtastic.tat.screen.CastIronOvenScreen;
@@ -32,8 +29,8 @@ public class ToilAndTrouble {
         TATRecipes.register();
 
         FUELS = TATFuels.getAllFuels();
-        BlockStateInfo.init();
-        TATResourceListeners.register();
+        NatureBlockStateInfo.init();
+        TATExtras.register();
     }
 
     public static void initClient() {

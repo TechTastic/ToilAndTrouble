@@ -50,6 +50,11 @@
     "limit": 50
   },
   {
+    "block": "minecraft:grass",
+    "power": 3,
+    "limit": 50
+  },
+  {
     "block": "minecraft:brown_mushroom",
     "power": 3,
     "limit": 20
@@ -100,7 +105,7 @@
     "limit": 50
   },
   {
-    "block": "minecraft:grass",
+    "block": "minecraft:grass_block",
     "power": 2,
     "limit": 80
   },

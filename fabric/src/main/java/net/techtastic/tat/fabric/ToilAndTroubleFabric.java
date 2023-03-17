@@ -33,7 +33,7 @@ public class ToilAndTroubleFabric implements ModInitializer {
                 .registerReloadListener(new IdentifiableResourceReloadListener() {
                     @Override
                     public ResourceLocation getFabricId() {
-                        return new ResourceLocation(ToilAndTrouble.MOD_ID, "altar_nature_blocks");
+                        return new ResourceLocation(ToilAndTrouble.MOD_ID, "tat_nature_blocks");
                     }
 
 

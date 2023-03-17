@@ -18,23 +18,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 record NatureBlocksInfo (
-        ResourceLocation id, int naturalPower, int limit
+        ResourceLocation id, int priority, int naturalPower, int limit
 ) {}
 
 public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
     private static final HashMap<ResourceLocation, NatureBlocksInfo> map = new HashMap<>();
     public static NatureBlocksDataLoader loader = new NatureBlocksDataLoader();
 
-    public void debugMap() {
-        System.err.println(map);
-        System.err.println(map.isEmpty());
-        System.err.println(map.size());
-        map.forEach((location, info) -> {
-            System.err.println(location);
-            System.err.println(info.id());
-            System.err.println(info.naturalPower());
-            System.err.println(info.limit());
-        });
+    @Override
+    public int getPriority() {
+        return 100;
     }
 
     @Override
@@ -57,14 +50,14 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
         private final List<NatureBlocksInfo> tags = new ArrayList<>();
 
         public NatureBlocksDataLoader() {
-            super(new Gson(), "altar_nature_blocks");
+            super(new Gson(), "tat_nature_blocks");
 
             RegistryEvents.onTagsLoaded(() -> tags.forEach((tagInfo) -> {
                 Optional<HolderSet.Named<Block>> tag =
                         Registry.BLOCK.getTag(TagKey.create(Registry.BLOCK_REGISTRY, tagInfo.id()));
                 if (tag.isPresent()) {
                     tag.get().forEach((it) -> {
-                        add(new NatureBlocksInfo(Registry.BLOCK.getKey(it.value()), tagInfo.naturalPower(), tagInfo.limit()));
+                        add(new NatureBlocksInfo(Registry.BLOCK.getKey(it.value()), tagInfo.priority(), tagInfo.naturalPower(), tagInfo.limit()));
                     });
                 } else {
                     System.err.println("No specified tag " + tagInfo.id() + " doesn't exist!");
@@ -87,7 +80,7 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
                     parse(element, location);
                 } else throw new IllegalArgumentException();
             } catch (Exception e) {
-                System.err.println("Error while loading datapack for altar_nature_blocks " + e);
+                System.err.println("Error while loading datapack for tat_nature_blocks " + e);
             }});
         }
 
@@ -98,12 +91,23 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
         }
 
         private void add(NatureBlocksInfo info) {
-            map.put(info.id(), info);
+            if (map.containsKey(info.id())) {
+                if (map.get(info.id()).priority() < info.priority()) {
+                    map.put(info.id(), info);
+                }
+            } else {
+                map.put(info.id(), info);
+            }
         }
 
         private void parse(JsonElement element, ResourceLocation origin) {
 
             JsonElement tag = element.getAsJsonObject().get("tag");
+
+            int priority = 100;
+            if (element.getAsJsonObject().has("priority")) {
+                priority = element.getAsJsonObject().get("priority").getAsInt();
+            }
 
             int power;
             int limit;
@@ -115,7 +119,7 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
             }
 
             if (tag != null) {
-                addToBeAddedTags(new NatureBlocksInfo(new ResourceLocation(tag.getAsString()), power, limit));
+                addToBeAddedTags(new NatureBlocksInfo(new ResourceLocation(tag.getAsString()), priority, power, limit));
             } else {
                 String block;
                 try {
@@ -124,7 +128,7 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
                     throw new IllegalArgumentException("No block or tag in file " + origin);
                 }
 
-                add(new NatureBlocksInfo(new ResourceLocation(block), power, limit));
+                add(new NatureBlocksInfo(new ResourceLocation(block), priority, power, limit));
             }
         }
     }
