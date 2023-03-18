@@ -1,8 +1,9 @@
-package net.techtastic.tat.dataloader;
+package net.techtastic.tat.dataloader.altar.augment;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -17,13 +18,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-record NatureBlocksInfo (
-        ResourceLocation id, int priority, int naturalPower, int limit
-) {}
-
-public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
-    private static final HashMap<ResourceLocation, NatureBlocksInfo> map = new HashMap<>();
-    public static NatureBlocksDataLoader loader = new NatureBlocksDataLoader();
+public class AltarAugmentDataResolver implements AltarAugmentBlocksInfoProvider {
+    private static final HashMap<ResourceLocation, AltarAugmentBlocksInfo> map = new HashMap<>();
+    public static AltarAugmentDataResolver.AltarAugmentBlocksDataLoader loader = new AltarAugmentDataResolver.AltarAugmentBlocksDataLoader();
 
     @Override
     public int getPriority() {
@@ -31,33 +28,33 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
     }
 
     @Override
-    public int getNaturalPower(BlockState state) {
+    public AugmentType getAugmentType(BlockState state) {
         if (map.containsKey(Registry.BLOCK.getKey(state.getBlock()))) {
-            return map.get(Registry.BLOCK.getKey(state.getBlock())).naturalPower();
+            return map.get(Registry.BLOCK.getKey(state.getBlock())).type();
         }
-        return 0;
+        return AugmentType.NONE;
     }
 
     @Override
-    public int getMaxNaturalLimit(BlockState state) {
+    public int getTypePriority(BlockState state) {
         if (map.containsKey(Registry.BLOCK.getKey(state.getBlock()))) {
-            return map.get(Registry.BLOCK.getKey(state.getBlock())).limit();
+            return map.get(Registry.BLOCK.getKey(state.getBlock())).typePriority();
         }
-        return 0;
+        return 100;
     }
 
-    public static class NatureBlocksDataLoader extends SimpleJsonResourceReloadListener {
-        private final List<NatureBlocksInfo> tags = new ArrayList<>();
+    public static class AltarAugmentBlocksDataLoader extends SimpleJsonResourceReloadListener {
+        private final List<AltarAugmentBlocksInfo> tags = new ArrayList<>();
 
-        public NatureBlocksDataLoader() {
-            super(new Gson(), "tat_nature_blocks");
+        public AltarAugmentBlocksDataLoader() {
+            super(new Gson(), "tat_augment_blocks");
 
             RegistryEvents.onTagsLoaded(() -> tags.forEach((tagInfo) -> {
                 Optional<HolderSet.Named<Block>> tag =
                         Registry.BLOCK.getTag(TagKey.create(Registry.BLOCK_REGISTRY, tagInfo.id()));
                 if (tag.isPresent()) {
                     tag.get().forEach((it) -> {
-                        add(new NatureBlocksInfo(Registry.BLOCK.getKey(it.value()), tagInfo.priority(), tagInfo.naturalPower(), tagInfo.limit()));
+                        add(new AltarAugmentBlocksInfo(Registry.BLOCK.getKey(it.value()), tagInfo.priority(), tagInfo.type(), tagInfo.typePriority()));
                     });
                 } else {
                     System.err.println("No specified tag " + tagInfo.id() + " doesn't exist!");
@@ -71,26 +68,26 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
             map.clear();
             tags.clear();
             object.forEach((location, element) -> {
-            try {
-                if (element.isJsonArray()) {
-                    element.getAsJsonArray().forEach((element1) -> {
+                try {
+                    if (element.isJsonArray()) {
+                        element.getAsJsonArray().forEach((element1) -> {
                             parse(element1, location);
-                    });
-                } else if (element.isJsonObject()) {
-                    parse(element, location);
-                } else throw new IllegalArgumentException();
-            } catch (Exception e) {
-                System.err.println("Error while loading datapack for tat_nature_blocks " + e);
-            }});
+                        });
+                    } else if (element.isJsonObject()) {
+                        parse(element, location);
+                    } else throw new IllegalArgumentException();
+                } catch (Exception e) {
+                    System.err.println("Error while loading datapack for tat_nature_blocks " + e);
+                }});
         }
 
         // so why does this exist? cus for some reason initializes their tags after all the other things
         // idk why, so we note them down and use them later
-        private void addToBeAddedTags(NatureBlocksInfo tag) {
+        private void addToBeAddedTags(AltarAugmentBlocksInfo tag) {
             tags.add(tag);
         }
 
-        private void add(NatureBlocksInfo info) {
+        private void add(AltarAugmentBlocksInfo info) {
             if (map.containsKey(info.id())) {
                 if (map.get(info.id()).priority() < info.priority()) {
                     map.put(info.id(), info);
@@ -101,34 +98,34 @@ public class NatureBlocksDataResolver implements NaturalBlocksInfoProvider {
         }
 
         private void parse(JsonElement element, ResourceLocation origin) {
+            JsonObject object = element.getAsJsonObject();
+            JsonElement tag = object.get("tag");
 
-            JsonElement tag = element.getAsJsonObject().get("tag");
+            int priority = object.has("priority") ? object.get("priority").getAsInt() : 100;
 
-            int priority = 100;
-            if (element.getAsJsonObject().has("priority")) {
-                priority = element.getAsJsonObject().get("priority").getAsInt();
-            }
-
-            int power;
-            int limit;
+            String augmentType = "none";
+            int typePriority = 100;
+            Pair<>
             try {
-                power = element.getAsJsonObject().get("power").getAsInt();
-                limit = element.getAsJsonObject().get("limit").getAsInt();
+                if (object.has("type")) {
+                    augmentType = object.get("type").getAsString();
+                    typePriority = object.get("type_priority").getAsInt();
+                }
             } catch (Exception e) {
                 throw new IllegalArgumentException("No power or limit in file " + origin);
             }
 
             if (tag != null) {
-                addToBeAddedTags(new NatureBlocksInfo(new ResourceLocation(tag.getAsString()), priority, power, limit));
+                addToBeAddedTags(new AltarAugmentBlocksInfo(new ResourceLocation(tag.getAsString()), priority, AugmentType.fromString(augmentType), typePriority));
             } else {
                 String block;
                 try {
-                    block = element.getAsJsonObject().get("block").getAsString();
+                    block = object.get("block").getAsString();
                 } catch (Exception e) {
                     throw new IllegalArgumentException("No block or tag in file " + origin);
                 }
 
-                add(new NatureBlocksInfo(new ResourceLocation(block), priority, power, limit));
+                add(new AltarAugmentBlocksInfo(new ResourceLocation(block), priority, AugmentType.fromString(augmentType), typePriority));
             }
         }
     }

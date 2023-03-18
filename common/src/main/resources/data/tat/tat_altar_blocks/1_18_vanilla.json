@@ -1,0 +1,65 @@
+[
+  {
+    "block": "minecraft:torch",
+    "type": "light",
+    "type_priority": 2,
+    "modify": [
+      {
+        "type": "rate",
+        "method": "add",
+        "amount": 1.0
+      }
+    ]
+  },
+  {
+    "block": "minecraft:head",
+    "type": "head",
+    "type_priority": 1,
+    "modify": [
+      {
+        "type": "rate",
+        "method": "add",
+        "amount": 3.0
+      },
+      {
+        "type": "power",
+        "method": "multiply-add",
+        "amount": 2.5
+      }
+    ]
+  },
+  {
+    "block": "minecraft:wither_skeleton_skull",
+    "type": "head",
+    "type_priority": 2,
+    "modify": [
+      {
+        "type": "rate",
+        "method": "add",
+        "amount": 2.0
+      },
+      {
+        "type": "power",
+        "method": "multiply-add",
+        "amount": 2.0
+      }
+    ]
+  },
+  {
+    "block": "minecraft:skeleton_skull",
+    "type": "head",
+    "type_priority": 3,
+    "modify": [
+      {
+        "type": "rate",
+        "method": "add",
+        "amount": 1.0
+      },
+      {
+        "type": "power",
+        "method": "multiply-add",
+        "amount": 1.0
+      }
+    ]
+  }
+]

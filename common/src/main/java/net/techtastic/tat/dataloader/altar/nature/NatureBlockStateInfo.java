@@ -1,4 +1,4 @@
-package net.techtastic.tat.dataloader;
+package net.techtastic.tat.dataloader.altar.nature;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Lifecycle;
@@ -14,7 +14,6 @@ import net.techtastic.tat.event.RegistryEvents;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.ToIntFunction;
 
 interface NaturalBlocksInfoProvider {
     default int getPriority() {return 0;}

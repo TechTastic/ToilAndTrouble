@@ -4,7 +4,8 @@ import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.ItemLike;
-import net.techtastic.tat.dataloader.NatureBlockStateInfo;
+import net.techtastic.tat.dataloader.altar.augment.AltarAugmentBlockStateInfo;
+import net.techtastic.tat.dataloader.altar.nature.NatureBlockStateInfo;
 import net.techtastic.tat.integration.TATFuels;
 import net.techtastic.tat.item.TATItemModelPredicates;
 import net.techtastic.tat.screen.CastIronOvenScreen;
@@ -30,6 +31,7 @@ public class ToilAndTrouble {
 
         FUELS = TATFuels.getAllFuels();
         NatureBlockStateInfo.init();
+        AltarAugmentBlockStateInfo.init();
         TATExtras.register();
     }
 

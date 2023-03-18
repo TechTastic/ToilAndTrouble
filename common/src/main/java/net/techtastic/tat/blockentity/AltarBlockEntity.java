@@ -1,15 +1,9 @@
 package net.techtastic.tat.blockentity;
 
-import com.mojang.blocklist.BlockListSupplier;
-import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Position;
-import net.minecraft.core.PositionImpl;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -18,16 +12,14 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.techtastic.tat.TATBlockEntities;
 import net.techtastic.tat.TATBlocks;
 import net.techtastic.tat.api.IAltarAugment;
 import net.techtastic.tat.api.IAltarSource;
-import net.techtastic.tat.dataloader.NatureBlocksDataResolver;
+import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -228,11 +220,11 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource {
             natureCount = altar.getNatureCount();
         }
 
-        AtomicReference<Double> natureMaxAltarPower = new AtomicReference<>((double) 0);
+        AtomicReference<Double> natureMaxAltarPower = new AtomicReference<>(0.0);
 
-        natureCount.forEach((block, naturePair) -> {
-            natureMaxAltarPower.updateAndGet(v -> v + naturePair.getA() * naturePair.getB());
-        });
+        natureCount.forEach((block, naturePair) ->
+            natureMaxAltarPower.updateAndGet(v -> v + naturePair.getA() * naturePair.getB())
+        );
 
         return natureMaxAltarPower.get();
     }
