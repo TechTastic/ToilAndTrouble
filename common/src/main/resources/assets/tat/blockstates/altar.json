@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "multiblock=false": { "model": "tat:block/altar" },
+    "multiblock=true": { "model": "tat:block/altar_multiblock" }
+  }
+}
+

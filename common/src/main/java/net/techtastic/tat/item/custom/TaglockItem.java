@@ -81,8 +81,8 @@ public class TaglockItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack itemStack, @Nullable Level level, @NotNull List<Component> list, @NotNull TooltipFlag tooltipFlag) {
-        if (TaglockHelper.isTaglockEmpty(itemStack)) {
-            if (TaglockHelper.isTaglockEmptyOrDecayed(itemStack)) {
+        if (!TaglockHelper.isTaglockEmpty(itemStack)) {
+            if (TaglockHelper.getDecayTicks(itemStack) <= 0) {
                 list.add(new TranslatableComponent("item.tat.taglock.decayed").withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF0000))));
             } else {
                 list.add(new TextComponent(TaglockHelper.getTaglockedNameOrEmpty(itemStack)).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFF00FF))));
@@ -115,7 +115,6 @@ public class TaglockItem extends Item {
         if (TaglockHelper.isTaglockEmpty(itemStack)) {
             int decayTimer = TaglockHelper.getDecayTicks(itemStack);
             if (decayTimer == 0) {
-                TaglockHelper.setDecayed(itemStack, true);
                 TaglockHelper.removeTaglockedEntityData(itemStack);
             } else {
                 decayTimer--;
@@ -130,7 +129,7 @@ public class TaglockItem extends Item {
             return new TranslatableComponent("item.tat.taglock").append(" (").append(new TranslatableComponent("item.tat.taglock.empty")).append(")");
         }
 
-        if (TaglockHelper.getDecayTicks(itemStack) < 1) {
+        if (TaglockHelper.getDecayTicks(itemStack) <= 0) {
             return new TranslatableComponent("item.tat.taglock").append(" (").append(new TranslatableComponent("item.tat.taglock.decayed")).append(")");
         }
 

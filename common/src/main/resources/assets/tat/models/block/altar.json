@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/calcite",
+    "side": "tat:block/altar_side"
+  }
+}

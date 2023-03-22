@@ -2,7 +2,7 @@ package net.techtastic.tat.dataloader.altar.augment;
 
 import net.minecraft.world.level.block.state.BlockState;
 
-interface AltarAugmentBlocksInfoProvider {
+public interface AltarAugmentBlocksInfoProvider {
     default int getPriority() {
         return 0;
     }
@@ -25,5 +25,13 @@ interface AltarAugmentBlocksInfoProvider {
 
     default double modifyRange(BlockState state, double initRange) {
         return initRange;
+    }
+
+    default AltarAugmentBlocksInfo getInfo(BlockState state) {
+        return null;
+    }
+
+    default boolean hasInfo(BlockState state) {
+        return false;
     }
 }

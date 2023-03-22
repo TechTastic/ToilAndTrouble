@@ -46,22 +46,7 @@ public abstract class TaglockHelper {
 
     public static boolean isTaglockEmpty(ItemStack taglock) {
         CompoundTag mainTag = taglock.getOrCreateTag();
-        return mainTag.contains("ToilAndTrouble$taglock");
-    }
-
-    public static boolean isTaglockEmptyOrDecayed(ItemStack taglock) {
-        CompoundTag mainTag = taglock.getOrCreateTag();
-        return !mainTag.contains("ToilAndTrouble$taglock") ||
-                mainTag.getCompound("ToilAndTrouble$taglock").getBoolean("ToilAndTrouble$isDecayed");
-    }
-
-    public static void setDecayed(ItemStack taglock, boolean bool) {
-        CompoundTag lock = taglock.getOrCreateTag();
-        if (TaglockHelper.isTaglockEmpty(taglock)) {
-            CompoundTag tag = lock.getCompound("ToilAndTrouble$taglock");
-            int decayTimer = getDecayTicks(taglock);
-            tag.putBoolean("ToilAndTrouble$isDecayed", bool);
-        }
+        return !mainTag.contains("ToilAndTrouble$taglock");
     }
 
     public static int getDecayTicks(ItemStack taglock) {
@@ -126,7 +111,6 @@ public abstract class TaglockHelper {
 
         CompoundTag tag = new CompoundTag();
         tag.put("ToilAndTrouble$playerProfile", profile);
-        tag.putBoolean("ToilAndTrouble$isDecayed", false);
         tag.putInt("ToilAndTrouble$decayTimer", 100000);
 
         mainTag.put("ToilAndTrouble$taglock", tag);
@@ -144,7 +128,6 @@ public abstract class TaglockHelper {
 
         CompoundTag tag = new CompoundTag();
         tag.put("ToilAndTrouble$playerProfile", profile);
-        tag.putBoolean("ToilAndTrouble$isDecayed", false);
         tag.putInt("ToilAndTrouble$decayTimer", 100000);
 
         mainTag.put("ToilAndTrouble$taglock", tag);
@@ -160,7 +143,6 @@ public abstract class TaglockHelper {
         CompoundTag tag = new CompoundTag();
         tag.putString("ToilAndTrouble$entityName", entity.getDisplayName().getString());
         tag.putUUID("ToilAndTrouble$entityUuid", entity.getUUID());
-        tag.putBoolean("ToilAndTrouble$isDecayed", false);
         tag.putInt("ToilAndTrouble$decayTimer", 100000);
 
         mainTag.put("ToilAndTrouble$taglock", tag);

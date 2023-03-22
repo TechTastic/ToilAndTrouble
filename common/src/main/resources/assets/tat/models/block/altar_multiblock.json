@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minecraft:block/calcite",
+    "side": "tat:block/altar_side_multiblock",
+    "top": "tat:block/altar_base_multiblock"
+  }
+}

@@ -1,9 +1,12 @@
 package net.techtastic.tat.block.custom;
 
+import dev.architectury.registry.menu.ExtendedMenuProvider;
+import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -46,24 +49,24 @@ public class AltarBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult blockHitResult) {
-        AltarBlockEntity altar = (AltarBlockEntity) level.getBlockEntity(blockPos);
-        assert altar != null;
-        if (altar.isMaster()) {
-            player.sendMessage(new TextComponent("Current Nature Power: " + altar.getMaxAltarPowerFromNature(level, blockPos, altar)), player.getUUID());
+        if (!level.isClientSide()) {
+            BlockEntity be = level.getBlockEntity(blockPos);
+            if (be instanceof AltarBlockEntity altar) {
+                if (altar.getMasterPos() == null) {
+                    setupAltarMultiblock(altar, level, blockPos);
+                }
 
-            return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
+                if (blockState.getValue(MULTIBLOCK)) {
+                    MenuProvider menuProvider = this.getMenuProvider(blockState, level, altar.getMasterPos());
+                    if (menuProvider != null) {
+                        MenuRegistry.openExtendedMenu((ServerPlayer) player, (ExtendedMenuProvider) menuProvider);
+                    }
+                    return InteractionResult.sidedSuccess(level.isClientSide());
+                }
+            }
         }
+        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult);
 
-        System.err.println(altar);
-        System.err.println(altar.isMaster() + "");
-        System.err.println(altar.getMasterPos());
-        System.err.println(altar.getBlockPos());
-
-        if (altar.getMasterPos() == null) {
-            setupAltarMultiblock(altar, level, blockPos);
-        }
-
-        return use(level.getBlockState(altar.getMasterPos()), level, altar.getMasterPos(), player, interactionHand, blockHitResult);
     }
 
     @Override

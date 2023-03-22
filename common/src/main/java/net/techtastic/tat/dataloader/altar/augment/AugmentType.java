@@ -1,6 +1,6 @@
 package net.techtastic.tat.dataloader.altar.augment;
 
-enum AugmentType {
+public enum AugmentType {
     LIGHT,
     CHALICE,
     HEAD,
