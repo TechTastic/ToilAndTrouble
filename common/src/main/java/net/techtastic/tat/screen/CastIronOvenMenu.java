@@ -1,15 +1,14 @@
 package net.techtastic.tat.screen;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.techtastic.tat.TATBlocks;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import net.techtastic.tat.screen.slot.TATFuelSlot;
 import net.techtastic.tat.screen.slot.TATJarSlot;
 import net.techtastic.tat.screen.slot.TATOvenInput;

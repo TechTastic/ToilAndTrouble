@@ -20,7 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.techtastic.tat.api.IFumeFunnel;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

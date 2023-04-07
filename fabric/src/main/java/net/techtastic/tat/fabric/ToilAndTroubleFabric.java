@@ -8,7 +8,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.techtastic.tat.ToilAndTrouble;
 import net.fabricmc.api.ModInitializer;
-import net.techtastic.tat.dataloader.altar.augment.AltarAugmentDataResolver;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.event.RegistryEvents;
 
@@ -37,21 +36,6 @@ public class ToilAndTroubleFabric implements ModInitializer {
                     @Override
                     public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
                         return loader.reload(preparationBarrier, resourceManager, profilerFiller, profilerFiller2, executor, executor2);
-                    }
-                });
-
-        AltarAugmentDataResolver.AltarAugmentBlocksDataLoader loader2 = AltarAugmentDataResolver.loader;
-        ResourceManagerHelper.get(SERVER_DATA)
-                .registerReloadListener(new IdentifiableResourceReloadListener() {
-                    @Override
-                    public ResourceLocation getFabricId() {
-                        return new ResourceLocation(ToilAndTrouble.MOD_ID, "tat_augment_blocks");
-                    }
-
-
-                    @Override
-                    public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
-                        return loader2.reload(preparationBarrier, resourceManager, profilerFiller, profilerFiller2, executor, executor2);
                     }
                 });
         CommonLifecycleEvents.TAGS_LOADED.register(RegistryEvents::tagsAreLoaded);

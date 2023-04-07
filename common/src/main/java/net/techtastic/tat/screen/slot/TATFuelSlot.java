@@ -6,7 +6,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.techtastic.tat.TATTags;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class TATFuelSlot extends Slot {

@@ -1,4 +1,4 @@
-package net.techtastic.tat;
+package net.techtastic.tat.item;
 
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.item.custom.*;
 
 public class TATItems {

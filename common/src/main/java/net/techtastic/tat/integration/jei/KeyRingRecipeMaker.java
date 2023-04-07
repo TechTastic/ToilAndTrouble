@@ -4,13 +4,12 @@ import mezz.jei.api.constants.ModIds;
 import mezz.jei.api.helpers.IStackHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.api.KeyHelper;
 
 import java.util.List;

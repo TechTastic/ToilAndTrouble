@@ -3,7 +3,7 @@ package net.techtastic.tat.screen.slot;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.item.TATItems;
 
 public class TATJarSlot extends Slot {
     public TATJarSlot(Container container, int i, int j, int k) {

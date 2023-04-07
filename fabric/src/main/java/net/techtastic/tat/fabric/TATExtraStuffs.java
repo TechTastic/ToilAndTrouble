@@ -2,8 +2,8 @@ package net.techtastic.tat.fabric;
 
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
-import net.techtastic.tat.TATBlocks;
-import net.techtastic.tat.TATStairBlocks;
+import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.block.TATStairBlocks;
 
 public class TATExtraStuffs {
     public static void register() {

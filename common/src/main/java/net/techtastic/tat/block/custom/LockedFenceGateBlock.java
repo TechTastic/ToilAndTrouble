@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.techtastic.tat.blockentity.BaseLockedBlockEntity;
+import net.techtastic.tat.block.entity.BaseLockedBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

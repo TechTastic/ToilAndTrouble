@@ -6,8 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.techtastic.tat.TATBlocks;
-import net.techtastic.tat.blockentity.AltarBlockEntity;
+import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.block.entity.AltarBlockEntity;
 
 public class AltarMenu extends AbstractContainerMenu {
     private final AltarBlockEntity altar;

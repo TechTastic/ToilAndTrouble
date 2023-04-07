@@ -26,8 +26,8 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 public class CastIronOvenBlock extends BaseEntityBlock {

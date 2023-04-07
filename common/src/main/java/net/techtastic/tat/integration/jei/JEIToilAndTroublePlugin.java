@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.techtastic.tat.TATBlocks;
+import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.recipe.CastIronOvenRecipe;
 

@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.util.ITaglockedBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

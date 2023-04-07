@@ -4,7 +4,7 @@ import dev.architectury.registry.item.ItemPropertiesRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.api.TaglockHelper;
 
 public class TATItemModelPredicates {
     public static void registerModelPredicates() {
@@ -33,13 +33,9 @@ public class TATItemModelPredicates {
     private static void registerTaglock() {
         ItemPropertiesRegistry.register(TATItems.TAGLOCK.get(), new ResourceLocation("contents"),
                 (stack, clientLevel, livingEntity, i) -> {
-                    CompoundTag taglock = stack.getOrCreateTag();
-                    if (taglock.contains("ToilAndTrouble$taglock")) {
-                        CompoundTag tag = taglock.getCompound("ToilAndTrouble$taglock");
-                        return tag.getBoolean("ToilAndTrouble$isDecayed") ? 0.5f : 1.0f;
-                    } else {
-                        return 0.0f;
-                    }
+                    if (TaglockHelper.isTaglockEmpty(stack)) return 0.0f;
+                    if (TaglockHelper.getDecayTicks(stack) > 0) return 1.0f;
+                    return 0.5f;
                 });
     }
 }

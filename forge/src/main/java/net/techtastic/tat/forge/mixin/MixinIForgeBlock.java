@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.extensions.IForgeBlock;
-import net.techtastic.tat.TATBlocks;
+import net.techtastic.tat.block.TATBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

@@ -1,4 +1,4 @@
-package net.techtastic.tat.blockentity;
+package net.techtastic.tat.block.entity;
 
 import dev.architectury.registry.fuel.FuelRegistry;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
@@ -24,8 +24,8 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.api.IFumeFunnel;
 import net.techtastic.tat.block.custom.FumeFunnelBlock;
 import net.techtastic.tat.recipe.CastIronOvenRecipe;

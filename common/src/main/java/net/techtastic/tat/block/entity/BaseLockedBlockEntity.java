@@ -1,4 +1,4 @@
-package net.techtastic.tat.blockentity;
+package net.techtastic.tat.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -7,8 +7,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.api.KeyHelper;
 
 import java.util.UUID;

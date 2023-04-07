@@ -1,15 +1,13 @@
 package net.techtastic.tat.recipe;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.TATRecipes;
 import net.techtastic.tat.api.KeyHelper;
 import org.jetbrains.annotations.NotNull;

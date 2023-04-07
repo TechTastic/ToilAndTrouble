@@ -1,4 +1,4 @@
-package net.techtastic.tat.blockentity;
+package net.techtastic.tat.block.entity;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.TATBlocks;
+import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.api.IAltarSource;
 import net.techtastic.tat.dataloader.altar.augment.AltarAugmentBlocksInfo;
 import net.techtastic.tat.dataloader.altar.augment.AltarAugmentDataResolver;

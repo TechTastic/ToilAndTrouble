@@ -1,11 +1,8 @@
 package net.techtastic.tat.integration.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.architectury.registry.fuel.FuelRegistry;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -16,11 +13,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.techtastic.tat.TATBlocks;
-import net.techtastic.tat.TATItems;
+import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.recipe.CastIronOvenRecipe;
 

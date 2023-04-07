@@ -1,13 +1,15 @@
-package net.techtastic.tat;
+package net.techtastic.tat.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.techtastic.tat.blockentity.AltarBlockEntity;
-import net.techtastic.tat.blockentity.BaseLockedBlockEntity;
-import net.techtastic.tat.blockentity.BaseTaglockedBlockEntity;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.ToilAndTrouble;
+import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.block.entity.AltarBlockEntity;
+import net.techtastic.tat.block.entity.BaseLockedBlockEntity;
+import net.techtastic.tat.block.entity.BaseTaglockedBlockEntity;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 
 public class TATBlockEntities {
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_ENTITY_TYPE_REGISTRY);

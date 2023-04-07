@@ -1,4 +1,4 @@
-package net.techtastic.tat.blockentity;
+package net.techtastic.tat.block.entity;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
@@ -7,15 +7,10 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.TATItems;
-import net.techtastic.tat.api.KeyHelper;
+import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.util.ITaglockedBlock;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package net.techtastic.tat;
+package net.techtastic.tat.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
+import net.techtastic.tat.item.TATItems;
+import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.block.custom.*;
 import net.techtastic.tat.world.feature.tree.AlderTreeGrower;
 import net.techtastic.tat.world.feature.tree.HawthornTreeGrower;

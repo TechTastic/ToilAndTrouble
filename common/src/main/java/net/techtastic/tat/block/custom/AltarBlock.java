@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.techtastic.tat.TATBlockEntities;
-import net.techtastic.tat.blockentity.AltarBlockEntity;
+import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.block.entity.AltarBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

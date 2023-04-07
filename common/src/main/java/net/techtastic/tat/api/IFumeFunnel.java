@@ -2,7 +2,7 @@ package net.techtastic.tat.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.techtastic.tat.blockentity.CastIronOvenBlockEntity;
+import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 
 public interface IFumeFunnel {
     default double getChance() {

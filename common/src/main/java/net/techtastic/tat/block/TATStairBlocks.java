@@ -1,4 +1,4 @@
-package net.techtastic.tat;
+package net.techtastic.tat.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.techtastic.tat.item.TATItems;
+import net.techtastic.tat.ToilAndTrouble;
 
 public class TATStairBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);

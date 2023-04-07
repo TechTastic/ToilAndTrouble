@@ -9,9 +9,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.TATItems;
-import net.techtastic.tat.api.KeyHelper;
-import net.techtastic.tat.blockentity.BaseLockedBlockEntity;
+import net.techtastic.tat.block.entity.BaseLockedBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
