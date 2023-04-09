@@ -1,4 +1,4 @@
-package net.techtastic.tat.util;
+package net.techtastic.tat.api;
 
 import net.minecraft.world.entity.Entity;
 

@@ -161,13 +161,13 @@ public class TATItems {
     public static final RegistrySupplier<Item> WOOD_ASH = registerItem("wood_ash",
             new Item(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> QUICKLIME = registerItem("quicklime",
+    public static final RegistrySupplier<Item> QUICKLIME = registerItem("quicklime",
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> GYPSUM = registerItem("gypsum",
             new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> ICY_NEEDLE = registerItem("icy_needle",
+    /*public static final RegistrySupplier<Item> ICY_NEEDLE = registerItem("icy_needle",
             new Item(new Item.Properties().tab(TAB)));*/
 
     public static final RegistrySupplier<Item> MUTANDIS = registerItem("mutandis",
@@ -177,7 +177,7 @@ public class TATItems {
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WAYSTONE = registerItem("waystone",
-            new Item(new Item.Properties().tab(TAB)));
+            new Item(new Item.Properties().tab(TAB)));*/
 
     public static final RegistrySupplier<Item> BONE_NEEDLE = registerItem("bone_needle",
             new Item(new Item.Properties().tab(TAB)));
@@ -188,7 +188,7 @@ public class TATItems {
     public static final RegistrySupplier<Item> ATTUNED_STONE_CHARGED = registerItem("attuned_stone_charged",
             new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> WITCHS_LADDER = registerItem("witchs_ladder",
+    /*public static final RegistrySupplier<Item> WITCHS_LADDER = registerItem("witchs_ladder",
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WITCHS_LADDER_SHRIEKING = registerItem("witchs_ladder_shrieking",
@@ -196,6 +196,9 @@ public class TATItems {
 
     public static final RegistrySupplier<Item> REFINED_EVIL = registerItem("refined_evil",
             new Item(new Item.Properties().tab(TAB)));*/
+
+    public static final RegistrySupplier<Item> FUME_FILTER = registerItem("fume_filter",
+            new Item(new Item.Properties().tab(TAB)));
 
     /* BOTTLES */
 

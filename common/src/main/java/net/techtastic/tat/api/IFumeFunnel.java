@@ -5,18 +5,9 @@ import net.minecraft.world.level.Level;
 import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 
 public interface IFumeFunnel {
-    default double getChance() {
-        return FunnelValues.chance;
-    }
-    default void setChance(double newChance) {
-        FunnelValues.chance = newChance;
-    }
+    double getChance();
+    default void setChance(double newChance) {}
 
-    default boolean canUtilize(CastIronOvenBlockEntity oven, Level level, BlockPos funnelPos) {
-        return false;
-    }
-}
+    boolean canUtilize(CastIronOvenBlockEntity oven, Level level, BlockPos funnelPos);
 
-class FunnelValues {
-    public static double chance = 0.0;
 }

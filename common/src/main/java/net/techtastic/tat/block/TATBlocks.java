@@ -41,6 +41,10 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> BLODDY_ROSE = registerBlock("bloody_rose",
             new BloodyRoseBlock(BlockBehaviour.Properties.copy(Blocks.DANDELION)));
 
+    public static final RegistrySupplier<Block> DISTILLERY = registerBlock("distillery",
+            new DistilleryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
+                    .noOcclusion().lightLevel(state -> state.getValue(DistilleryBlock.POWERED) ? 15 : 0)));
+
     //////////////////////////
     //                      //
     //  ROWAN WOOD STUFFS   //

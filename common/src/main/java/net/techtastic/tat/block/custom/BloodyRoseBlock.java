@@ -38,10 +38,15 @@ public class BloodyRoseBlock extends BaseEntityBlock {
     public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
         super.entityInside(blockState, level, blockPos, entity);
 
-        if (!(entity instanceof LivingEntity)) return;
+
+
+        if (!(entity instanceof LivingEntity) || level.isClientSide)
+            return;
+
         BlockEntity be = level.getBlockEntity(blockPos);
         if (be instanceof BaseTaglockedBlockEntity taglocked) {
-            if (taglocked.getTaggedEntity() != null && taglocked.getTaggedEntity().equals(entity)) return;
+            if (taglocked.getTaggedEntity() != null && taglocked.getTaggedEntity().equals(entity))
+                return;
             entity.hurt(DamageSource.CACTUS, 0.0f);
             taglocked.setTaggedEntity(entity);
             level.setBlockAndUpdate(blockPos, blockState.setValue(BLOOD, true));

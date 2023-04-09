@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BN"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:glass_bottle"
+    },
+    "N": {
+      "item": "tat:bone_needle"
+    }
+  },
+  "result": {
+    "item": "tat:taglock",
+    "count": 3
+  }
+}

@@ -20,12 +20,11 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
+import net.techtastic.tat.api.AltarAugments;
+import net.techtastic.tat.api.IAltarAugment;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.api.IAltarSource;
-import net.techtastic.tat.dataloader.altar.augment.AltarAugmentBlocksInfo;
-import net.techtastic.tat.dataloader.altar.augment.AltarAugmentDataResolver;
-import net.techtastic.tat.dataloader.altar.augment.AugmentType;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.screen.AltarMenu;
 import org.jetbrains.annotations.NotNull;
@@ -47,9 +46,8 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
     private BlockPattern innerAltarShape;
     private int ticks = 0;
     private final NatureBlocksDataResolver nature = new NatureBlocksDataResolver();
-    private final AltarAugmentDataResolver augment = new AltarAugmentDataResolver();
     private final HashMap<Block, Pair<Integer, Integer>> natureCount = new HashMap<>();
-    private final List<BlockState> augmentList = new ArrayList<>();
+    private final HashMap<String, IAltarAugment> augmentList = new HashMap<>();
     private final ContainerData data;
 
     public AltarBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -230,38 +228,44 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
     }
 
     @Override
-    public boolean drawPowerFromAltar(double amount) {
-        return IAltarSource.super.drawPowerFromAltar(amount);
+    public boolean drawPowerFromAltar(Level level, BlockPos sink, BlockPos source, double amount) {
+        double curr = this.getCurrentPower();
+
+        if (curr < amount || sink.distSqr(source) > this.getRange())
+            return false;
+
+        this.setCurrentPower(curr - amount);
+        return true;
     }
 
     private void populateNatureCount() {
-        natureCount.clear();
+        this.natureCount.clear();
 
         double range = getRange();
         assert level != null;
         Stream<BlockState> stream = level.getBlockStates(AABB.of(
                 BoundingBox.fromCorners(getMasterPos().offset(-range, -range, -range), getMasterPos().offset(range, range, range))));
         stream.forEach((testState) -> {
-            int power = nature.getNaturalPower(testState);
-            int limit = nature.getMaxNaturalLimit(testState);
+            int power = this.nature.getNaturalPower(testState);
+            int limit = this.nature.getMaxNaturalLimit(testState);
             if (power != 0 || limit != 0) {
-                if (!natureCount.containsKey(testState.getBlock())) {
-                    natureCount.put(testState.getBlock(), new Pair<>(1, power));
-                } else if (natureCount.get(testState.getBlock()).getA() < limit) {
-                    natureCount.put(testState.getBlock(), new Pair<>(natureCount.get(testState.getBlock()).getA() + 1, power));
+                if (!this.natureCount.containsKey(testState.getBlock())) {
+                    this.natureCount.put(testState.getBlock(), new Pair<>(1, power));
+                } else if (this.natureCount.get(testState.getBlock()).getA() < limit) {
+                    this.natureCount.put(testState.getBlock(), new Pair<>(this.natureCount.get(testState.getBlock()).getA() + 1, power));
                 }
             }
         });
     }
 
     private void updateMaxAltarPowerFromNature() {
-        if (natureCount.isEmpty()) {
+        if (this.natureCount.isEmpty()) {
             populateNatureCount();
         }
 
         AtomicReference<Double> natureMaxAltarPower = new AtomicReference<>(0.0);
 
-        natureCount.forEach((block, naturePair) ->
+        this.natureCount.forEach((block, naturePair) ->
             natureMaxAltarPower.updateAndGet(v -> v + naturePair.getA() * naturePair.getB())
         );
 
@@ -269,7 +273,7 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
     }
 
     private void populateAugmentsList() {
-        augmentList.clear();
+        this.augmentList.clear();
 
         assert level != null;
         BlockPattern.BlockPatternMatch match = getOrCreateAltarShape().find(level, worldPosition);
@@ -282,85 +286,64 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
             for (int j = 0; j <= height - 1; j++) {
                 BlockInWorld biw = match.getBlock(i, j, 1);
 
-                System.err.println(biw.getState());
-                System.err.println(augment.hasInfo(biw.getState()));
-                System.err.println(augment.getInfo(biw.getState()));
-                System.err.println(augment.getAugmentType(biw.getState()));
+                IAltarAugment augment = AltarAugments.testForAltarAugment(this.level, biw.getPos());
+                if (augment == null) continue;
 
-                if (!augment.hasInfo(biw.getState())) continue;
-
-                System.err.println("This block has info!");
-
-                if (augmentList.isEmpty()) {
-                    System.err.println("List is Empty!");
-
-                    augmentList.add(biw.getState());
+                if (this.augmentList.isEmpty()) {
+                    this.augmentList.put(augment.getType(), augment);
                     continue;
                 }
 
-                AltarAugmentBlocksInfo newInfo = augment.getInfo(biw.getState());
-                for (BlockState state : augmentList) {
-                    System.err.println("Testing Info Types...");
-
-                    AltarAugmentBlocksInfo info = augment.getInfo(state);
-                    if (info.type() == newInfo.type()) {
-                        System.err.println("Rivaling Types!");
-
-                        if (info.type() == AugmentType.NONE) {
-                            System.err.println("JK, it was a NONE");
-
-                            augmentList.add(biw.getState());
-                            continue;
-                        }
-
-                        if (newInfo.typePriority() < info.typePriority()) {
-                            System.err.println("New Info has higher priority!");
-
-                            augmentList.remove(state);
-                            augmentList.add(biw.getState());
-                        }
-                    }
+                if (!this.augmentList.containsKey(augment.getType())) {
+                    this.augmentList.put(augment.getType(), augment);
+                    continue;
                 }
+
+                if (this.augmentList.get(augment.getType()).getTypePriority() > augment.getTypePriority())
+                    this.augmentList.put(augment.getType(), augment);
             }
         }
     }
 
     private void updateRange() {
-        if (augmentList.isEmpty()) {
-            populateAugmentsList();
+        double baseRange = 16;
+
+        for (IAltarAugment augment : this.augmentList.values()) {
+            baseRange = augment.boostAltarRange(baseRange);
+        }
+        for (IAltarAugment augment : this.augmentList.values()) {
+            baseRange = augment.modifyAltarRange(baseRange);
         }
 
-        for (BlockState state : augmentList) {
-            setRange(augment.modifyRange(state, getRange()));
-        }
+        setRange(baseRange);
     }
 
     private void updateRate() {
-        if (augmentList.isEmpty()) {
-            populateAugmentsList();
-        }
-
         double baseRate = 1;
 
-        for (BlockState state : augmentList) {
-            baseRate = augment.modifyRate(state, baseRate);
-
-            System.err.println("New Rate: " + baseRate);
+        for (IAltarAugment augment : this.augmentList.values()) {
+            baseRate = augment.boostAltarRechargeRate(baseRate);
+        }
+        for (IAltarAugment augment : this.augmentList.values()) {
+            baseRate = augment.modifyAltarRechargeRate(baseRate);
         }
 
         setRate(baseRate);
-
-        System.err.println("Total Rate: " + getRate());
     }
 
     private void updateMaxPower() {
-        if (augmentList.isEmpty()) {
-            populateAugmentsList();
+        updateMaxAltarPowerFromNature();
+
+        double basePower = getMaxPower();
+
+        for (IAltarAugment augment : this.augmentList.values()) {
+            basePower = augment.boostMaxAltarPower(basePower);
+        }
+        for (IAltarAugment augment : this.augmentList.values()) {
+            basePower = augment.modifyMaxAltarPower(basePower);
         }
 
-        for (BlockState state : augmentList) {
-            setMaxPower(augment.modifyPower(state, getMaxPower()));
-        }
+        setMaxPower(basePower);
     }
 
     private void updateCurrentPower() {
@@ -382,7 +365,7 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
 
     @Override
     public void saveExtraData(FriendlyByteBuf buf) {
-        buf.writeBlockPos(worldPosition);
+        buf.writeBlockPos(this.worldPosition);
     }
 
     @Override

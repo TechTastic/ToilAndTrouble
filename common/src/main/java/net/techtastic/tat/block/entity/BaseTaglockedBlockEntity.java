@@ -8,10 +8,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.block.TATBlockEntities;
-import net.techtastic.tat.util.ITaglockedBlock;
+import net.techtastic.tat.api.ITaglockedBlock;
 
 import java.util.UUID;
 
@@ -51,10 +52,14 @@ public class BaseTaglockedBlockEntity extends BlockEntity implements ITaglockedB
 
     @Override
     public Entity getTaggedEntity() {
-        if (isPlayer) {
-            return getLevel().getPlayerByUUID(profile.getId());
-        }
-        return ((ServerLevel) getLevel()).getEntity(uuid);
+        Level level = this.getLevel();
+        if (level.isClientSide())
+            return null;
+
+        ServerLevel sLevel = (ServerLevel) level;
+        if (this.isPlayer)
+            return sLevel.getPlayerByUUID(this.profile.getId());
+        return sLevel.getEntity(this.uuid);
     }
 
     @Override
@@ -62,22 +67,22 @@ public class BaseTaglockedBlockEntity extends BlockEntity implements ITaglockedB
         if (!(entity instanceof LivingEntity)) return;
 
         if (entity instanceof Player player) {
-            isPlayer = true;
-            profile = player.getGameProfile();
+            this.isPlayer = true;
+            this.profile = player.getGameProfile();
         } else {
-            isPlayer = false;
-            uuid = entity.getUUID();
+            this.isPlayer = false;
+            this.uuid = entity.getUUID();
         }
 
-        setChanged();
+        this.setChanged();
     }
 
     @Override
     public void resetTaggedEntity() {
-        isPlayer = false;
-        profile = null;
-        uuid = null;
+        this.isPlayer = false;
+        this.profile = null;
+        this.uuid = null;
 
-        setChanged();
+        this.setChanged();
     }
 }

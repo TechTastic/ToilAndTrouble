@@ -80,20 +80,25 @@ public class FumeFunnelBlock extends Block implements IFumeFunnel {
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         super.neighborChanged(blockState, level, blockPos, block, blockPos2, bl);
 
-        BlockState ovenState = level.getBlockState(blockPos2);
-        if (block instanceof CastIronOvenBlock) {
-            if (ovenState.getBlock() instanceof CastIronOvenBlock) {
-                if (ovenState.getValue(FACING).equals(blockState.getValue(FACING))) {
-                    blockState.setValue(LIT, ovenState.getValue(LIT));
-                } else {
-                    blockState.setValue(LIT, false);
-                }
-            } else {
-                blockState.setValue(LIT, false);
-            }
+        System.err.println("BlockState: " + blockState);
+        System.err.println("Level: " + level);
+        System.err.println("BlockPos: " + blockPos);
+        System.err.println("Block: " + block);
+        System.err.println("BlockPos2: " + blockPos2);
+        System.err.println("Boolean: " + bl);
 
-            level.setBlockAndUpdate(blockPos, blockState);
-        }
+        BlockState ovenState = level.getBlockState(blockPos2);
+        System.err.println("OvenState: " + ovenState);
+        if (ovenState.getBlock() instanceof CastIronOvenBlock) {
+            if (ovenState.getValue(FACING).equals(blockState.getValue(FACING))) {
+                System.err.println("Both Face the same Direction");
+                System.err.println("Funnel is Lit: " + blockState.getValue(LIT));
+                System.err.println("Oven is Lit: " + ovenState.getValue(LIT));
+                level.setBlockAndUpdate(blockPos, blockState.setValue(LIT, ovenState.getValue(LIT)));
+            } else
+                level.setBlockAndUpdate(blockPos, blockState.setValue(LIT, false));
+        } else
+            level.setBlockAndUpdate(blockPos, blockState.setValue(LIT, false));
     }
 
     @Override

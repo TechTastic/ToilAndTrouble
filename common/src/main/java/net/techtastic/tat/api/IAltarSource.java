@@ -1,5 +1,8 @@
 package net.techtastic.tat.api;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+
 public interface IAltarSource {
     default double getRange() {
         return 0.0;
@@ -25,11 +28,5 @@ public interface IAltarSource {
     default void setRate(double newRate) {
     }
 
-    default boolean drawPowerFromAltar(double amount) {
-        if (amount < getCurrentPower()) {
-            setCurrentPower(getCurrentPower() - amount);
-            return true;
-        }
-        return false;
-    }
+    boolean drawPowerFromAltar(Level level, BlockPos sink, BlockPos source, double amount);
 }

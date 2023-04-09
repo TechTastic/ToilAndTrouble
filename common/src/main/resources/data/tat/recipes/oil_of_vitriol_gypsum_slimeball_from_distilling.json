@@ -1,0 +1,23 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:foul_fume"
+    },
+    {
+      "item": "tat:quicklime"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:gypsum"
+    },
+    {
+      "item": "tat:oil_of_vitriol"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    }
+  ],
+  "jars": 1
+}

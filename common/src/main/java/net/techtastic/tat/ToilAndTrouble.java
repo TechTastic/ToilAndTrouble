@@ -16,9 +16,7 @@ import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.integration.TATFuels;
 import net.techtastic.tat.item.TATItemModelPredicates;
 import net.techtastic.tat.item.TATItems;
-import net.techtastic.tat.screen.AltarScreen;
-import net.techtastic.tat.screen.CastIronOvenScreen;
-import net.techtastic.tat.screen.TATMenuTypes;
+import net.techtastic.tat.screen.*;
 import net.techtastic.tat.world.feature.TATConfiguredFeatures;
 
 import java.util.List;
@@ -59,6 +57,7 @@ public class ToilAndTrouble {
 
     public static void initClient() {
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.CAST_IRON_OVEN.get());
+        RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.DISTILLERY.get());
 
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_LEAVES.get());
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_SAPLING.get());
@@ -68,6 +67,7 @@ public class ToilAndTrouble {
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ALDER_SAPLING.get());
 
         MenuRegistry.registerScreenFactory(TATMenuTypes.CAST_IRON_OVEN_MENU.get(), CastIronOvenScreen::new);
+        MenuRegistry.registerScreenFactory(TATMenuTypes.DISTILLERY_MENU.get(), DistilleryScreen::new);
         MenuRegistry.registerScreenFactory(TATMenuTypes.ALTAR_MENU.get(), AltarScreen::new);
 
         TATItemModelPredicates.registerModelPredicates();

@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer, ExtendedMenuProvider {
     public NonNullList<ItemStack> inventory;
@@ -115,16 +116,16 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     }
 
     public void drops() {
+        assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, this);
     }
 
     public SimpleContainer getContainer() {
         SimpleContainer container = new SimpleContainer(5);
 
-        for (ItemStack stack : this.inventory) {
-            int index = this.inventory.indexOf(stack);
-            container.setItem(index, stack);
-        }
+        this.inventory.forEach(stack ->
+            container.setItem(this.inventory.indexOf(stack), stack)
+        );
 
         return container;
     }
@@ -142,18 +143,22 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
                 updateAllFumeFunnels(pLevel, pPos, pState);
             }
         }
-        if(hasRecipe(entity)) {
-            if(hasFuelInFuelSlot(entity) && !entity.isConsumingFuel(entity)) {
-                entity.consumeFuel(entity);
-            }
-            if(entity.isConsumingFuel(entity)) {
-                entity.progress++;
-                if (entity.progress > entity.maxProgress) {
-                    craftItem(entity);
-                    entity.resetProgress();
-                }
-            }
-        } else {
+
+        if (!hasRecipe(entity)) {
+            entity.resetProgress();
+            setChanged(pLevel, pPos, pState);
+            return;
+        }
+
+        if(hasFuelInFuelSlot(entity) && !entity.isConsumingFuel(entity))
+            entity.consumeFuel(entity);
+
+        if (!entity.isConsumingFuel(entity))
+            return;
+
+        entity.progress++;
+        if (entity.progress > entity.maxProgress) {
+            craftItem(entity);
             entity.resetProgress();
         }
 
@@ -161,50 +166,45 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     }
 
     private static void updateAllFumeFunnels(Level level, BlockPos pos, BlockState state) {
-        HashMap<BlockState, BlockPos> list = getAllFumeFunnels(level, state, pos);
         BooleanProperty LIT = BlockStateProperties.LIT;
 
-        if (!list.isEmpty()) {
-            for (BlockState funnelState : list.keySet()) {
-                if (!funnelState.getValue(LIT).equals(state.getValue(LIT))) {
-                    funnelState.setValue(LIT, state.getValue(LIT));
-                    level.setBlockAndUpdate(list.get(funnelState), funnelState);
-                }
-            }
-        }
+        getAllFumeFunnels(level, state, pos).forEach((testState, testPos) -> {
+            if (testState.getValue(LIT).equals(state.getValue(LIT)))
+                return;
+
+            testState.setValue(LIT, state.getValue(LIT));
+            level.setBlockAndUpdate(testPos, testState);
+        });
     }
 
     private static boolean hasRecipe(CastIronOvenBlockEntity entity) {
         Level level = entity.level;
 
+        assert level != null;
         Optional<CastIronOvenRecipe> match = level.getRecipeManager()
                 .getRecipeFor(CastIronOvenRecipe.Type.INSTANCE, entity.getContainer(), level);
 
-        if (match.isPresent()) {
-            int defaultMaxProgress = 200;
+        if (match.isEmpty())
+            return false;
 
-            //If the recipe is food or charcoal, 10% quicker
-            Ingredient input = match.get().getIngredients().get(0);
-            ItemStack stack = input.getItems()[0];
-            if (stack.isEdible() || stack.is(ItemTags.LOGS)) {
-                defaultMaxProgress -= 20;
-            }
+        int defaultMaxProgress = 200;
+
+        //If the recipe is food or charcoal, 10% quicker
+        Ingredient input = match.get().getIngredients().get(0);
+        ItemStack stack = input.getItems()[0];
+        if (stack.isEdible() || stack.is(ItemTags.LOGS))
+            defaultMaxProgress -= 20;
 
 
-            //For all funnels, 10% quicker
-            List<IFumeFunnel> list = getAllFunnels(entity);
-            if (!list.isEmpty()) {
-                defaultMaxProgress -= (20 * list.size());
-            }
+        //For all funnels, 10% quicker
+        defaultMaxProgress -= (20 * getAllFunnels(entity).size());
 
-            if (entity.maxProgress != defaultMaxProgress) {
-                entity.maxProgress = defaultMaxProgress;
-                entity.setChanged();
-            }
+        if (entity.maxProgress != defaultMaxProgress) {
+            entity.maxProgress = defaultMaxProgress;
+            entity.setChanged();
         }
 
-        return match.isPresent() && canInsertAmountIntoOutputSlot(entity)
-                && canInsertItemIntoOutputSlot(entity, match.get().getResultItem());
+        return canInsertAmountIntoOutputSlot(entity) && canInsertItemIntoOutputSlot(entity, match.get().getResultItem());
     }
 
     private static boolean hasJarInSlot(CastIronOvenBlockEntity entity) {
@@ -217,43 +217,28 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     }
 
     private static double jarChance(CastIronOvenBlockEntity entity) {
-        double totalChance = 10.0;
+        AtomicReference<Double> totalChance = new AtomicReference<>(10.0);
 
-        List<IFumeFunnel> list = getAllFunnels(entity);
+        getAllFunnels(entity).forEach(funnel ->
+            totalChance.updateAndGet(v -> v + funnel.getChance())
+        );
 
-        for (IFumeFunnel funnel : list) {
-            totalChance += funnel.getChance();
-        }
-
-        return totalChance;
+        return totalChance.get();
     }
 
     public static List<IFumeFunnel> getAllFunnels(CastIronOvenBlockEntity oven) {
         Level level = oven.level;
         Direction init = oven.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-        BlockPos leftBlock = oven.worldPosition.relative(init.getCounterClockWise());
-        BlockPos rightBlock = oven.worldPosition.relative(init.getClockWise());
-        BlockPos upBlock = oven.worldPosition.relative(Direction.UP);
-
         List<IFumeFunnel> list = new ArrayList<>(3);
 
-        if (level.getBlockState(leftBlock).getBlock() instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        } else if (level.getBlockEntity(leftBlock) instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        }
-
-        if (level.getBlockState(rightBlock).getBlock() instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        } else if (level.getBlockEntity(rightBlock) instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        }
-
-        if (level.getBlockState(upBlock).getBlock() instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        } else if (level.getBlockEntity(upBlock) instanceof IFumeFunnel funnel) {
-            list.add(funnel);
-        }
+        List.of(init.getCounterClockWise(), init.getClockWise(), Direction.UP).forEach(direction -> {
+            BlockPos testBlock = oven.worldPosition.relative(direction);
+            assert level != null;
+            if (level.getBlockState(testBlock).getBlock() instanceof IFumeFunnel funnel)
+                list.add(funnel);
+            else if (level.getBlockEntity(testBlock) instanceof IFumeFunnel funnel)
+                list.add(funnel);
+        });
 
         return list;
     }
@@ -262,23 +247,15 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
         HashMap<BlockState, BlockPos> list = new HashMap<>(3);
         Direction init = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
-        BlockPos leftBlock = pos.relative(init.getCounterClockWise());
-        BlockState leftState = level.getBlockState(leftBlock);
-        if (leftState.getBlock() instanceof FumeFunnelBlock) {
-            if (leftState.getValue(BlockStateProperties.HORIZONTAL_FACING).equals(init)) list.put(leftState, leftBlock);
-        }
-
-        BlockPos rightBlock = pos.relative(init.getClockWise());
-        BlockState rightState = level.getBlockState(rightBlock);
-        if (rightState.getBlock() instanceof FumeFunnelBlock) {
-            if (rightState.getValue(BlockStateProperties.HORIZONTAL_FACING).equals(init)) list.put(rightState, rightBlock);
-        }
-
-        BlockPos upBlock = pos.relative(Direction.UP);
-        BlockState upState = level.getBlockState(upBlock);
-        if (upState.getBlock() instanceof FumeFunnelBlock) {
-                if (upState.getValue(BlockStateProperties.HORIZONTAL_FACING).equals(init)) list.put(upState, upBlock);
-        }
+        List.of(init.getCounterClockWise(), init.getClockWise(), Direction.UP).forEach(direction -> {
+            BlockPos testBlock = pos.relative(direction);
+            BlockState testState = level.getBlockState(testBlock);
+            if (!(testState.getBlock() instanceof FumeFunnelBlock))
+                return;
+            if (!testState.getValue(BlockStateProperties.HORIZONTAL_FACING).equals(init))
+                return;
+            list.put(testState, testBlock);
+        });
 
         return list;
     }
@@ -286,29 +263,33 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     private static void craftItem(CastIronOvenBlockEntity entity) {
         Level level = entity.level;
 
+        assert level != null;
         Optional<CastIronOvenRecipe> match = level.getRecipeManager()
                 .getRecipeFor(CastIronOvenRecipe.Type.INSTANCE, entity.getContainer(), level);
 
-        if(match.isPresent()) {
-            entity.removeItem(0, 1);
+        if (match.isEmpty()) return;
 
-            entity.setItem(3, new ItemStack(match.get().getResultItem().getItem(),
-                    entity.getItem(3).getCount() + 1));
+        entity.removeItem(0, 1);
 
-            double ran = new Random().nextDouble(100);
-            if (hasJarInSlot(entity) && jarChance(entity) > ran && canFitInJarOutput(entity, match.get().getSecondOutput())) {
-                entity.removeItem(2, 1);
-                entity.setItem(4, new ItemStack(match.get().getSecondOutput().getItem(),
-                        entity.getItem(4).getCount() + 1));
-            }
-        }
+        entity.setItem(3, new ItemStack(match.get().getResultItem().getItem(),
+                entity.getItem(3).getCount() + 1));
+
+        double ran = new Random().nextDouble(100);
+        if (!(hasJarInSlot(entity) && jarChance(entity) > ran && canFitInJarOutput(entity, match.get().getSecondOutput())))
+            return;
+
+        entity.removeItem(2, 1);
+        entity.setItem(4, new ItemStack(match.get().getSecondOutput().getItem(),
+                entity.getItem(4).getCount() + 1));
     }
 
     private void consumeFuel(CastIronOvenBlockEntity entity) {
-        if(!entity.getItem(1).isEmpty()) {
-            this.fuelTime = FuelRegistry.get(entity.removeItem(1, 1));
-            this.maxFuelTime = this.fuelTime;
-        }
+        if (entity.getItem(1).isEmpty())
+            return;
+
+        this.fuelTime = FuelRegistry.get(entity.removeItem(1, 1));
+        this.maxFuelTime = this.fuelTime;
+        this.setChanged();
     }
 
     private static boolean hasFuelInFuelSlot(CastIronOvenBlockEntity entity) {
@@ -339,7 +320,8 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     @Override
     public boolean isEmpty() {
         for (ItemStack stack : this.inventory) {
-            if (!stack.isEmpty()) return false;
+            if (!stack.isEmpty())
+                return false;
         }
         return true;
     }
@@ -352,27 +334,30 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     @Override
     public ItemStack removeItem(int i, int j) {
         ItemStack itemStack = ContainerHelper.removeItem(this.inventory, i, j);
-        if (!itemStack.isEmpty()) this.setChanged();
+        if (!itemStack.isEmpty())
+            this.setChanged();
         return itemStack;
     }
 
     @Override
     public ItemStack removeItemNoUpdate(int i) {
         ItemStack itemStack = this.inventory.get(i);
-        if (itemStack.isEmpty()) return ItemStack.EMPTY;
+        if (itemStack.isEmpty())
+            return ItemStack.EMPTY;
         this.inventory.set(i, ItemStack.EMPTY);
         return itemStack;
     }
 
     @Override
-    public void setItem(int i, ItemStack itemStack) {
+    public void setItem(int i, @NotNull ItemStack itemStack) {
         this.inventory.set(i, itemStack);
-        if (!itemStack.isEmpty() && itemStack.getCount() > this.getMaxStackSize()) itemStack.setCount(this.getMaxStackSize());
+        if (!itemStack.isEmpty() && itemStack.getCount() > this.getMaxStackSize())
+            itemStack.setCount(this.getMaxStackSize());
         this.setChanged();
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         return true;
     }
 
@@ -391,7 +376,7 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int i, ItemStack itemStack, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int i, @NotNull ItemStack itemStack, @Nullable Direction direction) {
         return switch (i) {
             case 0 -> true;
             case 1 -> FuelRegistry.get(itemStack) > 0;
@@ -401,7 +386,7 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int i, ItemStack itemStack, Direction direction) {
+    public boolean canTakeItemThroughFace(int i, @NotNull ItemStack itemStack, @NotNull Direction direction) {
         return switch (i) {
             case 3, 4 -> true;
             default -> false;
@@ -410,11 +395,7 @@ public class CastIronOvenBlockEntity extends BaseContainerBlockEntity implements
 
     @Override
     public void fillStackedContents(StackedContents stackedContents) {
-        stackedContents.accountStack(this.getItem(0));
-        stackedContents.accountStack(this.getItem(1));
-        stackedContents.accountStack(this.getItem(2));
-        stackedContents.accountStack(this.getItem(3));
-        stackedContents.accountStack(this.getItem(4));
+        this.inventory.forEach(stackedContents::accountStack);
     }
 
     @Override

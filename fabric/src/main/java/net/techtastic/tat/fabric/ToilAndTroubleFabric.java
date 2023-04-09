@@ -1,8 +1,11 @@
 package net.techtastic.tat.fabric;
 
+import dev.architectury.registry.registries.Registries;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
+import net.minecraft.resources.RegistryLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;

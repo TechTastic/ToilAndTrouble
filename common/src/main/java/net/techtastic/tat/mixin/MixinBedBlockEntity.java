@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BedBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.util.ITaglockedBlock;
+import net.techtastic.tat.api.ITaglockedBlock;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.Objects;

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W"
+  ],
+  "key": {
+    "W": {
+      "item": "tat:wood_ash"
+    }
+  },
+  "result": {
+    "item": "tat:quicklime"
+  }
+}
