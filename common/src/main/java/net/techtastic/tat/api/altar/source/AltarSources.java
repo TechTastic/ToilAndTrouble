@@ -16,14 +16,18 @@ public class AltarSources {
     }
 
     public static IAltarSource testForAltarSource(Level level, BlockPos pos) {
-        AtomicReference<IAltarSource> altar = new AtomicReference<>();
+        if (pos == null) return null;
 
-        if (pos == null) return altar.get();
+        List<IAltarSourceProvider> currentProviders = new ArrayList<>(providers);
 
-        providers.forEach(provider ->
-            provider.getAltarSource(level, pos).ifPresent(altar::getAndSet)
-        );
+        System.err.println("Providers: " + currentProviders);
 
-        return altar.get();
+        for (IAltarSourceProvider provider : currentProviders) {
+            Optional<IAltarSource> source = provider.getAltarSource(level, pos.immutable());
+            if (source.isPresent())
+                return source.get();
+        }
+
+        return null;
     }
 }

@@ -146,13 +146,11 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
         if (ticks % 5 == 0 || AltarSources.testForAltarSource(pLevel, entity.altarPos) == null) {
             System.err.println("Uh Oh Spaghetti-o! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
             entity.altarPos = findNearestAltar(pLevel, pPos);
-            entity.hasAltar = entity.altarPos != null;
+            entity.hasAltar = AltarSources.testForAltarSource(pLevel, entity.altarPos) != null;
             System.err.println("Uh Oh Spaghetti-o 2! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
             entity.resetTicks();
             entity.setChanged();
         }
-
-        System.err.println("Reaches Outside of ticks/altar test");
 
         int jars = getJarCount(entity);
         if (pState.getValue(DistilleryBlock.JARS) != jars) {
@@ -161,8 +159,6 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
                 default -> 4;
             });
             entity.setChanged();
-
-            System.err.println("Finishes Jar Changes!");
         }
 
         if (!hasRecipe(entity) || !entity.hasAltar) {
@@ -220,23 +216,32 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
     }
 
     public static BlockPos findNearestAltar(Level level, BlockPos center) {
-        Stream<BlockPos> allPositions =
-                BlockPos.betweenClosedStream(center.offset(-15, -15, -15), center.offset(15, 15, 15));
+        center = center.immutable();
+        List<BlockPos> allPositions =
+                BlockPos.betweenClosedStream(
+                        BoundingBox.fromCorners(
+                                center.immutable().offset(-15, -15, -15),
+                                center.immutable().offset(15, 15, 15))).toList();
 
-        AtomicReference<BlockPos> closest = new AtomicReference<>();
+        System.err.println("All Positions: " + allPositions);
+        System.err.println("All Positions Size: " + allPositions.size());
 
-        allPositions.forEach(pos -> {
-            if (AltarSources.testForAltarSource(level, pos) == null)
-                return;
+        BlockPos closest = null;
 
-            if (closest.get() == null)
-                closest.set(pos);
+        for (BlockPos pos : allPositions) {
+            System.err.println("Position being Tested: " + pos);
+            System.err.println("Index in AllPositions: " + allPositions.indexOf(pos));
 
-            if (center.distSqr(closest.get()) > center.distSqr(pos))
-                closest.set(pos);
-        });
+            if (AltarSources.testForAltarSource(level, pos.immutable()) == null)
+                continue;
 
-        return closest.get();
+            System.err.println("This block is an Altar! " + pos);
+
+            if (closest == null || center.distSqr(closest) > center.distSqr(pos))
+                closest = pos;
+        }
+
+        return closest;
     }
 
     private static boolean hasRecipe(DistilleryBlockEntity entity) {
