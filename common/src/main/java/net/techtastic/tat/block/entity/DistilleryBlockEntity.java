@@ -1,6 +1,5 @@
 package net.techtastic.tat.block.entity;
 
-import dev.architectury.registry.fuel.FuelRegistry;
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,7 +8,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
@@ -21,30 +19,23 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.phys.AABB;
-import net.techtastic.tat.api.IAltarSource;
-import net.techtastic.tat.api.IFumeFunnel;
+import net.techtastic.tat.api.altar.source.AltarSources;
+import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.custom.DistilleryBlock;
-import net.techtastic.tat.block.custom.FumeFunnelBlock;
 import net.techtastic.tat.item.TATItems;
-import net.techtastic.tat.recipe.CastIronOvenRecipe;
 import net.techtastic.tat.recipe.DistilleryRecipe;
-import net.techtastic.tat.screen.CastIronOvenMenu;
 import net.techtastic.tat.screen.DistilleryMenu;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class DistilleryBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer, ExtendedMenuProvider {
@@ -147,13 +138,21 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
     }
 
     public static void tick(Level pLevel, BlockPos pPos, BlockState pState, DistilleryBlockEntity entity) {
+        if (pLevel.isClientSide) return;
+
+        System.err.println("This is Ticking!");
         int ticks = entity.getTicks();
 
-        if (ticks % 5 == 0 || !confirmAltarLocation(pLevel, entity.altarPos)) {
+        if (ticks % 5 == 0 || AltarSources.testForAltarSource(pLevel, entity.altarPos) == null) {
+            System.err.println("Uh Oh Spaghetti-o! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
             entity.altarPos = findNearestAltar(pLevel, pPos);
-            entity.hasAltar = confirmAltarLocation(pLevel, entity.altarPos);
+            entity.hasAltar = entity.altarPos != null;
+            System.err.println("Uh Oh Spaghetti-o 2! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
             entity.resetTicks();
+            entity.setChanged();
         }
+
+        System.err.println("Reaches Outside of ticks/altar test");
 
         int jars = getJarCount(entity);
         if (pState.getValue(DistilleryBlock.JARS) != jars) {
@@ -161,9 +160,13 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
                 case 0, 1, 2, 3, 4 -> jars;
                 default -> 4;
             });
+            entity.setChanged();
+
+            System.err.println("Finishes Jar Changes!");
         }
 
         if (!hasRecipe(entity) || !entity.hasAltar) {
+            System.err.println("Has No Recipe or No Altar? " + hasRecipe(entity) + " : " + entity.hasAltar);
             if (pState.getValue(DistilleryBlock.POWERED))
                 pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, false));
             entity.resetCraftProgress();
@@ -172,10 +175,14 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
             return;
         }
 
-        IAltarSource altar = getAltar(pLevel, entity.altarPos);
+        IAltarSource altar = AltarSources.testForAltarSource(pLevel, entity.altarPos);
+        System.err.println("Altar? " + altar);
         if (altar == null) return;
 
+        System.err.println("Altar Source is not null!");
+
         boolean pullPower = altar.drawPowerFromAltar(pLevel, pPos, entity.altarPos, 2);
+        System.err.println("Can we pull power? " + pullPower);
         if (!pullPower) {
             if (pState.getValue(DistilleryBlock.POWERED))
                 pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, false));
@@ -213,38 +220,23 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
     }
 
     public static BlockPos findNearestAltar(Level level, BlockPos center) {
-        Iterable<BlockPos> allPositions = BlockPos.betweenClosed(center.offset(-15, -15, -15), center.offset(15, 15, 15));
+        Stream<BlockPos> allPositions =
+                BlockPos.betweenClosedStream(center.offset(-15, -15, -15), center.offset(15, 15, 15));
 
-        final BlockPos[] closest = {null};
+        AtomicReference<BlockPos> closest = new AtomicReference<>();
 
         allPositions.forEach(pos -> {
-            if (!confirmAltarLocation(level, center))
+            if (AltarSources.testForAltarSource(level, pos) == null)
                 return;
 
-            if (closest[0] == null)
-                closest[0] = pos;
+            if (closest.get() == null)
+                closest.set(pos);
 
-            if (center.distSqr(closest[0]) > center.distSqr(pos))
-                closest[0] = pos;
+            if (center.distSqr(closest.get()) > center.distSqr(pos))
+                closest.set(pos);
         });
 
-        return closest[0];
-    }
-
-    public static boolean confirmAltarLocation(Level level, BlockPos pos) {
-        return pos != null &&
-                level.getBlockState(pos).getBlock() instanceof IAltarSource &&
-                level.getBlockEntity(pos) instanceof IAltarSource;
-    }
-
-    public static IAltarSource getAltar(Level level, BlockPos pos) {
-        if (pos == null)
-            return null;
-        if (level.getBlockState(pos).getBlock() instanceof IAltarSource altar)
-            return altar;
-        if (level.getBlockEntity(pos) instanceof IAltarSource altar)
-            return altar;
-        return null;
+        return closest.get();
     }
 
     private static boolean hasRecipe(DistilleryBlockEntity entity) {

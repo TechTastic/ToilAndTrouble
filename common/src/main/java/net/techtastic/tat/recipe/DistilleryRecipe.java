@@ -1,6 +1,7 @@
 package net.techtastic.tat.recipe;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class DistilleryRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
@@ -27,8 +30,7 @@ public class DistilleryRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(@NotNull SimpleContainer container, Level level) {
-        if (level.isClientSide) { return false; }
-
+        if (level.isClientSide) return false;
 
         for (int i = 0; i < recipeItems.size(); i++) {
             if (!recipeItems.get(i).test(container.getItem(i))) {
@@ -69,7 +71,7 @@ public class DistilleryRecipe implements Recipe<SimpleContainer> {
 
     public NonNullList<ItemStack> getOutputs() {
         NonNullList<ItemStack> outputs = NonNullList.create();
-        outputItems.forEach(ing -> outputs.add(ing.getItems()[0]));
+        outputItems.forEach(ing -> outputs.add(Arrays.stream(ing.getItems()).findAny().orElse(ItemStack.EMPTY)));
 
         return outputs;
     }
@@ -108,22 +110,22 @@ public class DistilleryRecipe implements Recipe<SimpleContainer> {
             // INPUTS
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(json, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.create();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(2, Ingredient.EMPTY);
 
-            ingredients.forEach(element ->
-                inputs.add(Ingredient.fromJson(element))
+            inputs.replaceAll(ignored ->
+                ingredients.size() <= inputs.indexOf(ignored) ?
+                        Ingredient.EMPTY : Ingredient.fromJson(ingredients.get(inputs.indexOf(ignored)))
             );
-
-            while (inputs.size() < 4) {
-                inputs.add(Ingredient.of(ItemStack.EMPTY));
-            }
 
             // OUTPUTS
 
             JsonArray outputs = GsonHelper.getAsJsonArray(json, "results");
-            NonNullList<Ingredient> results = NonNullList.create();
+            NonNullList<Ingredient> results = NonNullList.withSize(4, Ingredient.EMPTY);
 
-            outputs.forEach(element -> {
+            results.replaceAll(ignored -> {
+                if (outputs.size() <= results.indexOf(ignored)) return Ingredient.EMPTY;
+
+                JsonElement element = outputs.get(results.indexOf(ignored));
                 Ingredient ing = Ingredient.fromJson(element);
 
                 if (element.getAsJsonObject().has("count")) {
@@ -133,31 +135,21 @@ public class DistilleryRecipe implements Recipe<SimpleContainer> {
                     ing = Ingredient.of(stack);
                 }
 
-                results.add(ing);
+                return ing;
             });
-
-            while (outputs.size() < 4) {
-                inputs.add(Ingredient.of(ItemStack.EMPTY));
-            }
 
             return new DistilleryRecipe(id, inputs, results, jarCount);
         }
 
         @Override
         public DistilleryRecipe fromNetwork(@NotNull ResourceLocation id, FriendlyByteBuf buf) {
-            int inputSize = buf.readInt();
-            NonNullList<Ingredient> inputs = NonNullList.create();
+            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
 
-            for (int i = 0; i < inputSize; i++) {
-                inputs.set(i, Ingredient.fromNetwork(buf));
-            }
+            inputs.replaceAll(ignored -> Ingredient.fromNetwork(buf));
 
-            int outputSize = buf.readInt();
-            NonNullList<Ingredient> results = NonNullList.create();
+            NonNullList<Ingredient> results = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
 
-            for (int i = 0; i < outputSize; i++) {
-                results.set(i, Ingredient.fromNetwork(buf));
-            }
+            results.replaceAll(ignored -> Ingredient.fromNetwork(buf));
 
             int jarCount = buf.readInt();
 

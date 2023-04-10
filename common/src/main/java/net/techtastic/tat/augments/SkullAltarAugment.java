@@ -1,10 +1,9 @@
 package net.techtastic.tat.augments;
 
 import net.minecraft.world.level.block.AbstractSkullBlock;
-import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.api.IAltarAugment;
+import net.techtastic.tat.api.altar.augment.IAltarAugment;
 
 public class SkullAltarAugment implements IAltarAugment {
     private final BlockState state;

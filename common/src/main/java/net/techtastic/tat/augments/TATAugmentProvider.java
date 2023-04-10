@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.techtastic.tat.api.IAltarAugment;
-import net.techtastic.tat.api.IAltarAugmentProvider;
+import net.techtastic.tat.api.altar.augment.IAltarAugment;
+import net.techtastic.tat.api.altar.augment.IAltarAugmentProvider;
 
 import java.util.Optional;
 

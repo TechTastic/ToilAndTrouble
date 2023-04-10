@@ -1,6 +1,4 @@
-package net.techtastic.tat.api;
-
-import net.minecraft.core.BlockPos;
+package net.techtastic.tat.api.altar.augment;
 
 public interface IAltarAugment {
     String getType();

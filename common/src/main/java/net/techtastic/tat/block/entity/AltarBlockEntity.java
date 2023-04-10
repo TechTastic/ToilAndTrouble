@@ -20,11 +20,10 @@ import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.predicate.BlockStatePredicate;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-import net.techtastic.tat.api.AltarAugments;
-import net.techtastic.tat.api.IAltarAugment;
+import net.techtastic.tat.api.altar.augment.AltarAugments;
+import net.techtastic.tat.api.altar.augment.IAltarAugment;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
-import net.techtastic.tat.api.IAltarSource;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.screen.AltarMenu;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-public class AltarBlockEntity extends BlockEntity implements IAltarSource, ExtendedMenuProvider {
+public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvider {
     private double altarPower = 0;
     private double maxAltarPower = 0;
     private double altarRange = 16;
@@ -82,10 +81,7 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
         compoundTag.putDouble("ToilAndTrouble$altarRange", this.altarRange);
         compoundTag.putDouble("ToilAndTrouble$altarRate", this.altarRate);
         compoundTag.putBoolean("ToilAndTrouble$isMaster", this.isMaster);
-
-        if (this.masterPos != null) {
-            compoundTag.putLong("ToilAndTrouble$masterPos", this.masterPos.asLong());
-        }
+        compoundTag.putLong("ToilAndTrouble$masterPos", this.masterPos.asLong());
 
         super.saveAdditional(compoundTag);
     }
@@ -99,8 +95,7 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
         this.altarRange = compoundTag.getDouble("ToilAndTrouble$altarRange");
         this.altarRate = compoundTag.getDouble("ToilAndTrouble$altarRate");
         this.isMaster = compoundTag.getBoolean("ToilAndTrouble$isMaster");
-        if (compoundTag.contains("ToilAndTrouble$masterPos"))
-            this.masterPos = BlockPos.of(compoundTag.getLong("ToilAndTrouble$masterPos"));
+        this.masterPos = BlockPos.of(compoundTag.getLong("ToilAndTrouble$masterPos"));
     }
 
     public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, AltarBlockEntity entity) {
@@ -189,46 +184,38 @@ public class AltarBlockEntity extends BlockEntity implements IAltarSource, Exten
         return this.masterPos;
     }
 
-    @Override
     public double getRange() {
         return this.altarRange;
     }
-    @Override
     public void setRange(double newRange) {
         this.altarRange = newRange;
         this.setChanged();
     }
 
-    @Override
     public double getCurrentPower() {
         return this.altarPower;
     }
-    @Override
     public void setCurrentPower(double newPower) {
         this.altarPower = newPower;
     }
 
-    @Override
     public double getMaxPower() {
         return this.maxAltarPower;
     }
-
-    @Override
     public void setMaxPower(double newMaxPower) {
         this.maxAltarPower = newMaxPower;
     }
 
-    @Override
     public double getRate() {
         return this.altarRate;
     }
-    @Override
     public void setRate(double newRate) {
         this.altarRate = newRate;
     }
 
-    @Override
     public boolean drawPowerFromAltar(Level level, BlockPos sink, BlockPos source, double amount) {
+        if (!this.isMaster()) source = this.masterPos;
+
         double curr = this.getCurrentPower();
 
         if (curr < amount || sink.distSqr(source) > this.getRange())

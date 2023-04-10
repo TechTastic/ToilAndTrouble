@@ -2,7 +2,7 @@ package net.techtastic.tat.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.techtastic.tat.api.altar.source.IAltarSource;
 
 public interface IAltarSink {
     default boolean drawPowerFromAltar(Level level, BlockPos sink, BlockPos source, double amount) {

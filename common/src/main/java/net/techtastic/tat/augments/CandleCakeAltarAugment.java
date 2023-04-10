@@ -3,7 +3,7 @@ package net.techtastic.tat.augments;
 import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.techtastic.tat.api.IAltarAugment;
+import net.techtastic.tat.api.altar.augment.IAltarAugment;
 
 public class CandleCakeAltarAugment implements IAltarAugment {
     private final BlockState state;

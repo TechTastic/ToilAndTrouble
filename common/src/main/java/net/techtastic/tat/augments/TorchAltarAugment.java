@@ -1,10 +1,8 @@
 package net.techtastic.tat.augments;
 
-import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.techtastic.tat.api.IAltarAugment;
+import net.techtastic.tat.api.altar.augment.IAltarAugment;
 
 public class TorchAltarAugment implements IAltarAugment {
     private final BlockState state;

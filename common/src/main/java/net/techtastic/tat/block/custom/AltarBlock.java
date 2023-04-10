@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class AltarBlock extends BaseEntityBlock {
-    private static final BooleanProperty MULTIBLOCK = BooleanProperty.create("multiblock");
+    public static final BooleanProperty MULTIBLOCK = BooleanProperty.create("multiblock");
 
     public AltarBlock(Properties properties) {
         super(properties);

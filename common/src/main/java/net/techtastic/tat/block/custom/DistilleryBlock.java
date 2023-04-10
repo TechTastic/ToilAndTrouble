@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import net.techtastic.tat.block.entity.DistilleryBlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -112,6 +113,6 @@ public class DistilleryBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return super.getTicker(level, blockState, blockEntityType);
+        return createTickerHelper(blockEntityType, TATBlockEntities.DISTILLERY_BLOCK_ENTITY.get(), DistilleryBlockEntity::tick);
     }
 }
