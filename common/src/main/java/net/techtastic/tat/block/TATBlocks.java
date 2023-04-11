@@ -45,6 +45,10 @@ public class TATBlocks {
             new DistilleryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(DistilleryBlock.POWERED) ? 15 : 0)));
 
+    public static final RegistrySupplier<Block> KETTLE = registerBlock("kettle",
+            new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
+                    .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
+
     //////////////////////////
     //                      //
     //  ROWAN WOOD STUFFS   //

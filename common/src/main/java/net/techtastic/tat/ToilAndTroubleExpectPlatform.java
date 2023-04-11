@@ -1,7 +1,14 @@
 package net.techtastic.tat;
 
+import com.ibm.icu.impl.Assert;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.techtastic.tat.block.entity.KettleBlockEntity;
 
 import java.nio.file.Path;
 
@@ -22,6 +29,21 @@ public class ToilAndTroubleExpectPlatform {
     @ExpectPlatform
     public static Path getConfigDirectory() {
         // Just throw an error, the content should get replaced at runtime.
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntity getKettleBlockEntity(BlockPos blockPos, BlockState blockState) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntityType.BlockEntitySupplier<KettleBlockEntity> getKettleBlockEntitySupplier() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
         throw new AssertionError();
     }
 }

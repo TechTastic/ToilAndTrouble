@@ -139,15 +139,11 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
 
     public static void tick(Level pLevel, BlockPos pPos, BlockState pState, DistilleryBlockEntity entity) {
         if (pLevel.isClientSide) return;
-
-        System.err.println("This is Ticking!");
         int ticks = entity.getTicks();
 
-        if (ticks % 5 == 0 || AltarSources.testForAltarSource(pLevel, entity.altarPos) == null) {
-            System.err.println("Uh Oh Spaghetti-o! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
+        if (ticks % 20 == 0 || entity.altarPos == null) {
             entity.altarPos = findNearestAltar(pLevel, pPos);
             entity.hasAltar = AltarSources.testForAltarSource(pLevel, entity.altarPos) != null;
-            System.err.println("Uh Oh Spaghetti-o 2! " + ticks + ", " + entity.altarPos + ", " + entity.hasAltar);
             entity.resetTicks();
             entity.setChanged();
         }
@@ -158,11 +154,9 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
                 case 0, 1, 2, 3, 4 -> jars;
                 default -> 4;
             });
-            entity.setChanged();
         }
 
-        if (!hasRecipe(entity) || !entity.hasAltar) {
-            System.err.println("Has No Recipe or No Altar? " + hasRecipe(entity) + " : " + entity.hasAltar);
+        if (!hasRecipe(entity)) {
             if (pState.getValue(DistilleryBlock.POWERED))
                 pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, false));
             entity.resetCraftProgress();
@@ -171,32 +165,34 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
             return;
         }
 
-        IAltarSource altar = AltarSources.testForAltarSource(pLevel, entity.altarPos);
-        System.err.println("Altar? " + altar);
-        if (altar == null) return;
+        if (ticks % 5 == 0) {
+            IAltarSource altar = AltarSources.testForAltarSource(pLevel, entity.altarPos);
+            if (altar == null)
+                return;
 
-        System.err.println("Altar Source is not null!");
+            boolean pullPower = altar.drawPowerFromAltar(pLevel, pPos, entity.altarPos, 2);
+            if (!pullPower) {
+                if (pState.getValue(DistilleryBlock.POWERED))
+                    pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, false));
+                entity.hasAltar = false;
+                entity.incrementTicks();
+                entity.setChanged();
+                return;
+            }
 
-        boolean pullPower = altar.drawPowerFromAltar(pLevel, pPos, entity.altarPos, 2);
-        System.err.println("Can we pull power? " + pullPower);
-        if (!pullPower) {
-            if (pState.getValue(DistilleryBlock.POWERED))
-                pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, false));
-            return;
-        }
+            if (!pState.getValue(DistilleryBlock.POWERED))
+                pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, true));
 
-        if (!pState.getValue(DistilleryBlock.POWERED))
-            pLevel.setBlockAndUpdate(pPos, pState.setValue(DistilleryBlock.POWERED, true));
+            entity.powerProgress++;
+            if (entity.powerProgress > entity.maxPowerProgress) {
+                entity.craftProgress++;
+                entity.resetPowerProgress();
+            }
 
-        entity.powerProgress++;
-        if (entity.powerProgress > entity.maxPowerProgress) {
-            entity.craftProgress++;
-            entity.resetPowerProgress();
-        }
-
-        if (entity.craftProgress > entity.maxCraftProgress) {
-            craftItem(entity);
-            entity.resetPowerProgress();
+            if (entity.craftProgress > entity.maxCraftProgress) {
+                craftItem(entity);
+                entity.resetCraftProgress();
+            }
         }
 
         entity.incrementTicks();
@@ -221,21 +217,13 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
                 BlockPos.betweenClosedStream(
                         BoundingBox.fromCorners(
                                 center.immutable().offset(-15, -15, -15),
-                                center.immutable().offset(15, 15, 15))).toList();
-
-        System.err.println("All Positions: " + allPositions);
-        System.err.println("All Positions Size: " + allPositions.size());
+                                center.immutable().offset(15, 15, 15))).map(BlockPos::immutable).toList();
 
         BlockPos closest = null;
 
         for (BlockPos pos : allPositions) {
-            System.err.println("Position being Tested: " + pos);
-            System.err.println("Index in AllPositions: " + allPositions.indexOf(pos));
-
             if (AltarSources.testForAltarSource(level, pos.immutable()) == null)
                 continue;
-
-            System.err.println("This block is an Altar! " + pos);
 
             if (closest == null || center.distSqr(closest) > center.distSqr(pos))
                 closest = pos;
@@ -253,7 +241,7 @@ public class DistilleryBlockEntity extends BaseContainerBlockEntity implements S
 
         return match.isPresent() &&
                 canInsertItemsIntoOutputSlots(entity, match.get().getOutputs()) &&
-                hasJarInSlot(entity, match.get().getJarCount());
+                hasJarInSlot(entity, match.get().getJarCount()) && entity.hasAltar;
     }
 
     private static boolean hasJarInSlot(DistilleryBlockEntity entity, int required) {

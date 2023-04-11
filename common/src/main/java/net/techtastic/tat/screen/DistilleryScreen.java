@@ -28,15 +28,14 @@ public class DistilleryScreen extends AbstractContainerScreen<DistilleryMenu> {
         this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 
         if (menu.isCrafting()) {
-            blit(poseStack, x + 35, y + 23, 176, 28, 11, menu.getScaledPowerProgress());
-            blit(poseStack, x + 68, y + 22, 194, 6, menu.getScaledCraftingProgress(), 7);
-            blit(poseStack, x + 68, y + 32, 194, 6, menu.getScaledCraftingProgress(), 7);
-            blit(poseStack, x + 68, y + 42, 194, 6, menu.getScaledCraftingProgress(), 7);
+            blit(poseStack, x + 34, y + 25 + 27 - menu.getScaledPowerProgress(), 176, 29 - menu.getScaledPowerProgress(), 11, menu.getScaledPowerProgress());
+            blit(poseStack, x + 68, y + 21, 194, 0, menu.getScaledCraftingProgress(), 7);
+            blit(poseStack, x + 68, y + 31, 194, 0, menu.getScaledCraftingProgress(), 7);
+            blit(poseStack, x + 68, y + 41, 194, 0, menu.getScaledCraftingProgress(), 7);
         }
 
-        if (!menu.hasPower()) {
-            blit(poseStack, x + 35, y + 29, 187, 6, 7, 7);
-        }
+        if (!menu.hasPower())
+            blit(poseStack, x + 35, y + 56, 187, 0, 7, 7);
     }
 
     @Override

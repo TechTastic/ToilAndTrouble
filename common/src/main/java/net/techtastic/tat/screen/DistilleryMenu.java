@@ -55,16 +55,16 @@ public class DistilleryMenu extends AbstractContainerMenu {
     }
 
     public int getScaledPowerProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);  // Max Progress
+        int progress = this.data.get(2);
+        int maxProgress = this.data.get(3);  // Max Progress
         int progressArrowSize = 29; // This is the height in pixels of your arrow
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
     public int getScaledCraftingProgress() {
-        int progress = this.data.get(2);
-        int maxProgress = this.data.get(3);  // Max Progress
+        int progress = this.data.get(0);
+        int maxProgress = this.data.get(1);  // Max Progress
         int progressArrowSize = 37; // This is the height in pixels of your arrow
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;

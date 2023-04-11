@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.techtastic.tat.ToilAndTrouble;
+import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.block.entity.*;
 
@@ -18,6 +19,10 @@ public class TATBlockEntities {
     public static final RegistrySupplier<BlockEntityType<DistilleryBlockEntity>> DISTILLERY_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("distillery", () ->
                     BlockEntityType.Builder.of(DistilleryBlockEntity::new, TATBlocks.DISTILLERY.get()).build(null));
+
+    public static final RegistrySupplier<BlockEntityType<KettleBlockEntity>> KETTLE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("kettle", () ->
+                    BlockEntityType.Builder.of(ToilAndTroubleExpectPlatform.getKettleBlockEntitySupplier(), TATBlocks.KETTLE.get()).build(null));
 
     public static final RegistrySupplier<BlockEntityType<BaseLockedBlockEntity>> BASE_LOCKED_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("base_locked_block_entity", () ->

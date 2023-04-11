@@ -16,9 +16,7 @@ public class TATAltarSourceProvider implements IAltarSourceProvider {
     public Optional<IAltarSource> getAltarSource(Level level, BlockPos pos) {
         BlockEntity be = level.getBlockEntity(pos);
         BlockState state = level.getBlockState(pos);
-        System.err.println("Testing " + pos + "and it has " + state + " and " + be);
         if (be instanceof AltarBlockEntity altar && altar.isMaster()) {
-            System.err.println("This is an Altar and is th Master Altar!");
             return Optional.of(new AltarBlockEntitySource(altar));
         }
         else

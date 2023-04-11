@@ -20,8 +20,6 @@ public class AltarSources {
 
         List<IAltarSourceProvider> currentProviders = new ArrayList<>(providers);
 
-        System.err.println("Providers: " + currentProviders);
-
         for (IAltarSourceProvider provider : currentProviders) {
             Optional<IAltarSource> source = provider.getAltarSource(level, pos.immutable());
             if (source.isPresent())
