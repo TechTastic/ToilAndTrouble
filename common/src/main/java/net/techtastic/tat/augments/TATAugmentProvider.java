@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.api.altar.augment.IAltarAugment;
 import net.techtastic.tat.api.altar.augment.IAltarAugmentProvider;
+import net.techtastic.tat.block.custom.ArthanaBlock;
 
 import java.util.Optional;
 
@@ -21,6 +22,8 @@ public class TATAugmentProvider implements IAltarAugmentProvider {
             return Optional.of(new TorchAltarAugment(state));
         else if (state.getBlock() instanceof AbstractSkullBlock)
             return Optional.of(new SkullAltarAugment(state));
+        else if (state.getBlock() instanceof ArthanaBlock)
+            return Optional.of(new ArthanaAltarAugment());
         else
             return Optional.empty();
     }

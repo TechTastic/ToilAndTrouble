@@ -52,6 +52,9 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> ARTHANA = registerBlockWithoutItem("arthana",
             new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
 
+    public static final RegistrySupplier<Block> CANDELABRA = registerBlock("candelabra",
+            new CandelabraBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops()));
+
     //////////////////////////
     //                      //
     //  ROWAN WOOD STUFFS   //
