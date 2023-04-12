@@ -26,7 +26,6 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     private int craftProgress = 0;
     private final int maxCraftProgress = 0;
 
-
     public KettleBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), blockPos, blockState);
     }
@@ -43,16 +42,6 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     }
 
     @Override
-    protected Component getDefaultName() {
-        return new TranslatableComponent("block.tat.kettle");
-    }
-
-    @Override
-    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return null;
-    }
-
-    @Override
     public void load(CompoundTag compoundTag) {
         super.load(compoundTag);
 
@@ -60,6 +49,16 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         ContainerHelper.loadAllItems(compoundTag, this.inventory);
 
         this.craftProgress = compoundTag.getInt("ToilAndTrouble$craftProgress");
+    }
+
+    @Override
+    protected Component getDefaultName() {
+        return new TranslatableComponent("block.tat.kettle");
+    }
+
+    @Override
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
+        return null;
     }
 
     @Override
@@ -79,7 +78,7 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
     @Override
     public int getContainerSize() {
-        return 0;
+        return 6;
     }
 
     @Override

@@ -1,0 +1,26 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:brew_of_flowing_spirit"
+    },
+    {
+      "item": "tat:oil_of_vitriol"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:focused_will"
+    },
+    {
+      "item": "tat:condensed_fear"
+    },
+    {
+      "item": "tat:brew_of_hollow_tears"
+    },
+    {
+      "item": "tat:brew_of_hollow_tears"
+    }
+  ],
+  "jars": 2
+}

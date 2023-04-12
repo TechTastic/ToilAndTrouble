@@ -10,8 +10,26 @@
   "item.tat.reek_of_misfortune": "Reek of Misfortune",
   "item.tat.odor_of_purity": "Odor of Purity",
   "item.tat.oil_of_vitriol": "Oil of Vitriol",
+  "item.tat.tear_of_the_goddess": "Tear of the Goddess",
+  "item.tat.diamond_vapor": "Diamond Vapor",
+  "item.tat.demonic_blood": "Demonic Blood",
+  "item.tat.ender_dew": "Ender Dew",
+  "item.tat.focused_will": "Focused Will",
+  "item.tat.condensed_fear": "Condensed Fear",
+  "item.tat.drop_of_luck": "Drop of Luck",
+
+  "item.tat.gypsum": "Gypsum",
+  "item.tat.quicklime": "Quicklime",
+  "item.tat.refined_evil": "Refined Evil",
   "item.tat.wood_ash": "Wood Ash",
   "item.tat.mutandis": "Mutandis",
+  "item.tat.bone_needle": "Bone Needle",
+  "item.tat.attuned_stone": "Attuned Stone",
+  "item.tat.attuned_stone_charged": "Attuned Stone (Charged)",
+  "item.tat.fume_filter": "Fume Filter",
+
+  "item.tat.brew_of_flowing_spirit": "Brew of Flowing Spirit",
+  "item.tat.brew_of_hollow_tears": "Brew of Hollow Tears",
 
   "item.tat.key": "Key",
   "item.tat.key.tooltip": "Locked At:",
@@ -26,13 +44,18 @@
   "item.tat.taglock.tag_failed": "You have failed and the other player has been notified!",
   "item.tat.taglock.tag_failed_victim": "Someone is trying ot taglock you!",
 
+  "item.tat.debug_item": "Debug Item",
+
   "block.tat.cast_iron_oven": "Cast Iron Oven",
   "block.tat.distillery": "Distillery",
   "block.tat.kettle": "Kettle",
   "block.tat.fume_funnel": "Fume Funnel",
   "block.tat.filtered_fume_funnel": "Filtered Fume Funnel",
-
   "block.tat.altar": "Altar",
+
+  "block.tat.bloody_rose": "Bloody Rose",
+  "block.tat.demon_heart": "Demon Heart",
+  "block.tat.arthana": "Arthana",
 
   "block.tat.rowan_log": "Rowan Log",
   "block.tat.rowan_wood": "Rowan Wood",

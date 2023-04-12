@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.entity.AltarBlockEntity;
+import net.techtastic.tat.item.TATItems;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,8 +49,8 @@ public class AltarBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult blockHitResult) {
-        if (!level.isClientSide()) {
+    public InteractionResult use(@NotNull BlockState blockState, Level level, @NotNull BlockPos blockPos, @NotNull Player player, @NotNull InteractionHand interactionHand, @NotNull BlockHitResult blockHitResult) {
+        if (!level.isClientSide() && player.getItemInHand(interactionHand).isEmpty()) {
             BlockEntity be = level.getBlockEntity(blockPos);
             if (be instanceof AltarBlockEntity altar) {
                 if (altar.getMasterPos() == null) {

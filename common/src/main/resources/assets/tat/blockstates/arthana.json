@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model": "tat:block/arthana"},
+    "facing=east": {"model": "tat:block/arthana", "y": 90},
+    "facing=south": {"model": "tat:block/arthana", "y": 180},
+    "facing=west": {"model": "tat:block/arthana", "y": 270}
+  }
+}

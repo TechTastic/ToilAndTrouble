@@ -1,0 +1,25 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:ender_dew",
+      "count": 2
+    },
+    {
+      "item": "tat:ender_dew",
+      "count": 2
+    },
+    {
+      "item": "tat:ender_dew"
+    },
+    {
+      "item": "tat:whiff_of_magic"
+    }
+  ],
+  "jars": 6
+}

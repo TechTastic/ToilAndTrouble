@@ -1,0 +1,25 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:demon_heart"
+    },
+    {
+      "item": "tat:diamond_vapor"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:demonic_blood",
+      "count": 2
+    },
+    {
+      "item": "tat:demonic_blood",
+      "count": 2
+    },
+    {
+      "item": "tat:refined_evil"
+    }
+  ],
+  "jars": 4
+}

@@ -43,6 +43,10 @@ public class TATBlockEntities {
             BLOCK_ENTITIES.register("altar", () ->
                     BlockEntityType.Builder.of(AltarBlockEntity::new, TATBlocks.ALTAR.get()).build(null));
 
+    public static final RegistrySupplier<BlockEntityType<ArthanaBlockEntity>> ARTHANA_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("arthana", () ->
+                    BlockEntityType.Builder.of(ArthanaBlockEntity::new, TATBlocks.ARTHANA.get()).build(null));
+
     public static final RegistrySupplier<BlockEntityType<BaseTaglockedBlockEntity>> BASE_TAGLOCKED_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("taglocked", () ->
                     BlockEntityType.Builder.of(BaseTaglockedBlockEntity::new, TATBlocks.BLODDY_ROSE.get()).build(null));

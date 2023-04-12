@@ -1,0 +1,23 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:demon_heart"
+    },
+    {
+      "item": "minecraft:netherrack"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "tat:demonic_blood"
+    },
+    {
+      "item": "tat:demonic_blood"
+    }
+  ],
+  "jars": 2
+}

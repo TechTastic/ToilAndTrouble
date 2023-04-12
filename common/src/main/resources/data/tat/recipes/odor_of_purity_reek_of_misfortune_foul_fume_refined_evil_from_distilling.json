@@ -1,0 +1,26 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:diamond_vapor"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:odor_of_purity"
+    },
+    {
+      "item": "tat:reek_of_misfortune"
+    },
+    {
+      "item": "tat:foul_fume"
+    },
+    {
+      "item": "tat:refined_evil"
+    }
+  ],
+  "jars": 3
+}

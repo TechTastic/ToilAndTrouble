@@ -1,0 +1,23 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "tat:oil_of_vitriol"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:diamond_vapor"
+    },
+    {
+      "item": "tat:diamond_vapor"
+    },
+    {
+      "item": "tat:odor_of_purity"
+    }
+  ],
+  "jars": 3
+}

@@ -1,0 +1,26 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "tat:breath_of_the_goddess"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
+  "results": [
+    {
+      "item": "tat:tear_of_the_goddess"
+    },
+    {
+      "item": "tat:whiff_of_magic"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "tat:foul_fume"
+    }
+  ],
+  "jars": 3
+}

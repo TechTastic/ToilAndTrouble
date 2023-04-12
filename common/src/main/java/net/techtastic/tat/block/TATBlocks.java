@@ -49,6 +49,9 @@ public class TATBlocks {
             new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
+    public static final RegistrySupplier<Block> ARTHANA = registerBlockWithoutItem("arthana",
+            new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
+
     //////////////////////////
     //                      //
     //  ROWAN WOOD STUFFS   //
@@ -498,6 +501,9 @@ public class TATBlocks {
 
     public static final RegistrySupplier<Block> ALDER_SAPLING = registerBlock("alder_sapling",
             new SaplingBlock(new AlderTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+
+    public static final RegistrySupplier<Block> DEMON_HEART = registerBlock("demon_heart",
+            new DemonHeartBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
 
     private static RegistrySupplier<Block> registerBlock(String name, Block block) {
         TATItems.registerItem(name, new BlockItem(block, new Item.Properties().tab(TATItems.TAB)));

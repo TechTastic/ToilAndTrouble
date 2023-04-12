@@ -1,0 +1,23 @@
+{
+  "type": "tat:distilling",
+  "ingredients": [
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "tat:reek_of_misfortune"
+    }
+  ],
+  "jars": 1
+}

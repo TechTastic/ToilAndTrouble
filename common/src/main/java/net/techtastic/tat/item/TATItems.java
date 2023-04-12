@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.item.custom.*;
 
@@ -31,8 +32,8 @@ public class TATItems {
     public static final RegistrySupplier<Item> ARTHANA = registerItem("arthana",
         new ArthanaSwordItem(ToolMaterials.GOLD, 4, 4.0f, new FabricItemSettings().group(ModItemGroup.WITCHERYRESTITCHED).maxDamage(251)));*/
 
-    /*public static final RegistrySupplier<Item> ARTHANA = registerItem("arthana",
-            new Item(new Item.Properties().tab(TAB)));*/
+    public static final RegistrySupplier<Item> ARTHANA = registerItem("arthana",
+            new ArthanaSwordItem(Tiers.GOLD, 4, 4.0f,new Item.Properties().tab(TAB).defaultDurability(251)));
 
     /* BOOKS */
 
@@ -95,7 +96,7 @@ public class TATItems {
     public static final RegistrySupplier<Item> OIL_OF_VITRIOL = registerItem("oil_of_vitriol",
             new Item(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> TEAR_OF_THE_GODDESS = registerItem("tear_of_the_goddess",
+    public static final RegistrySupplier<Item> TEAR_OF_THE_GODDESS = registerItem("tear_of_the_goddess",
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> DIAMOND_VAPOR = registerItem("diamond_vapor",
@@ -110,8 +111,8 @@ public class TATItems {
     public static final RegistrySupplier<Item> DROP_OF_LUCK = registerItem("drop_of_luck",
             new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> PURIFIED_MILK = registerItem("purified_milk",
-            new Item(new Item.Properties().tab(TAB)));
+    /*public static final RegistrySupplier<Item> PURIFIED_MILK = registerItem("purified_milk",
+            new Item(new Item.Properties().tab(TAB)));*/
 
     public static final RegistrySupplier<Item> FOCUSED_WILL = registerItem("focused_will",
             new Item(new Item.Properties().tab(TAB)));
@@ -119,7 +120,7 @@ public class TATItems {
     public static final RegistrySupplier<Item> CONDENSED_FEAR = registerItem("condensed_fear",
             new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> MELLIFLUOUS_HUNGER = registerItem("mellifluous_hunger",
+    /*public static final RegistrySupplier<Item> MELLIFLUOUS_HUNGER = registerItem("mellifluous_hunger",
             new Item(new Item.Properties().tab(TAB)));*/
 
     /* PLANTS */
@@ -192,10 +193,10 @@ public class TATItems {
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WITCHS_LADDER_SHRIEKING = registerItem("witchs_ladder_shrieking",
-            new Item(new Item.Properties().tab(TAB)));
+            new Item(new Item.Properties().tab(TAB)));*/
 
     public static final RegistrySupplier<Item> REFINED_EVIL = registerItem("refined_evil",
-            new Item(new Item.Properties().tab(TAB)));*/
+            new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> FUME_FILTER = registerItem("fume_filter",
             new Item(new Item.Properties().tab(TAB)));
@@ -248,6 +249,14 @@ public class TATItems {
 
     public static final RegistrySupplier<Item> HEART_OF_GOLD = registerItem("heart_of_gold",
             new Item(new Item.Properties().tab(TAB)));*/
+
+    /* BREWS */
+
+    public static final RegistrySupplier<Item> BREW_OF_FLOWING_SPIRIT = registerItem("brew_of_flowing_spirit",
+            new Item(new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> BREW_OF_HOLLOW_TEARS = registerItem("brew_of_hollow_tears",
+            new Item(new Item.Properties().tab(TAB)));
 
     public static RegistrySupplier<Item> registerItem(String name, Item item) {
         return ITEMS.register(name, () -> item);
