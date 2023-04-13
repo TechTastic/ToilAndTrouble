@@ -40,7 +40,7 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
     private double altarRange = 16;
     private double altarRate = 1;
     private boolean isMaster = false;
-    private BlockPos masterPos;
+    private BlockPos masterPos = this.worldPosition;
     private BlockPattern altarShape;
     private BlockPattern innerAltarShape;
     private int ticks = 0;
@@ -112,10 +112,14 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
 
             entity.updateRate();
 
+            System.err.println(entity.getCurrentPower() + " / " + entity.getMaxPower() + " (" + entity.getRate() + "x)");
+            System.err.println(entity.getRange() + "");
+
             entity.resetTicks();
         }
 
         entity.incrementTicks();
+        entity.setChanged();
     }
 
     public BlockPattern getOrCreateAltarShapeWithBoundaries() {
@@ -170,7 +174,6 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
 
     public void isMaster(boolean bool) {
         this.isMaster = bool;
-        this.setChanged();
     }
     public boolean isMaster() {
         return this.isMaster;
@@ -178,7 +181,6 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
 
     public void setMasterPos(BlockPos pos) {
         this.masterPos = pos;
-        this.setChanged();
     }
     public BlockPos getMasterPos() {
         return this.masterPos;
@@ -189,7 +191,6 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
     }
     public void setRange(double newRange) {
         this.altarRange = newRange;
-        this.setChanged();
     }
 
     public double getCurrentPower() {
@@ -228,7 +229,7 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
     private void populateNatureCount() {
         this.natureCount.clear();
 
-        double range = getRange();
+        double range = this.getRange();
         assert level != null;
         Stream<BlockState> stream = level.getBlockStates(AABB.of(
                 BoundingBox.fromCorners(getMasterPos().offset(-range, -range, -range), getMasterPos().offset(range, range, range))));
@@ -246,9 +247,8 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
     }
 
     private void updateMaxAltarPowerFromNature() {
-        if (this.natureCount.isEmpty()) {
-            populateNatureCount();
-        }
+        if (this.natureCount.isEmpty())
+            this.populateNatureCount();
 
         AtomicReference<Double> natureMaxAltarPower = new AtomicReference<>(0.0);
 
@@ -256,7 +256,7 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
             natureMaxAltarPower.updateAndGet(v -> v + naturePair.getA() * naturePair.getB())
         );
 
-        setMaxPower(natureMaxAltarPower.get());
+        this.setMaxPower(natureMaxAltarPower.get());
     }
 
     private void populateAugmentsList() {
@@ -276,17 +276,9 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
                 IAltarAugment augment = AltarAugments.testForAltarAugment(this.level, biw.getPos());
                 if (augment == null) continue;
 
-                if (this.augmentList.isEmpty()) {
-                    this.augmentList.put(augment.getType(), augment);
-                    continue;
-                }
-
-                if (!this.augmentList.containsKey(augment.getType())) {
-                    this.augmentList.put(augment.getType(), augment);
-                    continue;
-                }
-
-                if (this.augmentList.get(augment.getType()).getTypePriority() > augment.getTypePriority())
+                if (this.augmentList.isEmpty() ||
+                        !this.augmentList.containsKey(augment.getType()) ||
+                        this.augmentList.get(augment.getType()).getTypePriority() > augment.getTypePriority())
                     this.augmentList.put(augment.getType(), augment);
             }
         }
@@ -302,7 +294,7 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
             baseRange = augment.modifyAltarRange(baseRange);
         }
 
-        setRange(baseRange);
+        this.setRange(baseRange);
     }
 
     private void updateRate() {
@@ -315,13 +307,13 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
             baseRate = augment.modifyAltarRechargeRate(baseRate);
         }
 
-        setRate(baseRate);
+        this.setRate(baseRate);
     }
 
     private void updateMaxPower() {
         updateMaxAltarPowerFromNature();
 
-        double basePower = getMaxPower();
+        double basePower = this.getMaxPower();
 
         for (IAltarAugment augment : this.augmentList.values()) {
             basePower = augment.boostMaxAltarPower(basePower);
@@ -330,24 +322,20 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
             basePower = augment.modifyMaxAltarPower(basePower);
         }
 
-        setMaxPower(basePower);
+        this.setMaxPower(basePower);
     }
 
     private void updateCurrentPower() {
-        double curr = getCurrentPower();
-        double max = getMaxPower();
+        double curr = this.getCurrentPower();
+        double max = this.getMaxPower();
 
-        if (curr >= max) {
-            setCurrentPower(max);
-            return;
-        }
-        double newCurr = curr + (10 * getRate());
+        double newCurr = curr + (10 * this.getRate());
         if (newCurr >= max) {
-            setCurrentPower(max);
+            this.setCurrentPower(max);
             return;
         }
 
-        setCurrentPower(newCurr);
+        this.setCurrentPower(newCurr);
     }
 
     @Override

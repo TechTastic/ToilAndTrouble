@@ -53,15 +53,13 @@ public class AltarBlock extends BaseEntityBlock {
         if (!level.isClientSide() && player.getItemInHand(interactionHand).isEmpty()) {
             BlockEntity be = level.getBlockEntity(blockPos);
             if (be instanceof AltarBlockEntity altar) {
-                if (altar.getMasterPos() == null) {
+                if (altar.getMasterPos() == null)
                     setupAltarMultiblock(altar, level, blockPos);
-                }
 
                 if (blockState.getValue(MULTIBLOCK)) {
                     MenuProvider menuProvider = this.getMenuProvider(blockState, level, altar.getMasterPos());
-                    if (menuProvider != null) {
+                    if (menuProvider != null)
                         MenuRegistry.openExtendedMenu((ServerPlayer) player, (ExtendedMenuProvider) menuProvider);
-                    }
                     return InteractionResult.sidedSuccess(level.isClientSide());
                 }
             }
