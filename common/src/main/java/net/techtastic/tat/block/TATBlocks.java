@@ -20,41 +20,43 @@ import net.techtastic.tat.world.feature.tree.AlderTreeGrower;
 import net.techtastic.tat.world.feature.tree.HawthornTreeGrower;
 import net.techtastic.tat.world.feature.tree.RowanTreeGrower;
 
+import java.util.function.Supplier;
+
 public class TATBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.ITEM_REGISTRY);
 
     public static final RegistrySupplier<Block> CAST_IRON_OVEN = registerBlock("cast_iron_oven",
-            new CastIronOvenBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
+            () -> new CastIronOvenBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
     public static final RegistrySupplier<Block> FUME_FUNNEL = registerBlock("fume_funnel",
-            new FumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
+            () -> new FumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
                     .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
     public static final RegistrySupplier<Block> FILTERED_FUME_FUNNEL = registerBlock("filtered_fume_funnel",
-            new FilteredFumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
+            () -> new FilteredFumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
                     .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
     public static final RegistrySupplier<Block> ALTAR = registerBlock("altar",
-            new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0f).requiresCorrectToolForDrops()));
+            () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0f).requiresCorrectToolForDrops()));
 
     public static final RegistrySupplier<Block> BLODDY_ROSE = registerBlock("bloody_rose",
-            new BloodyRoseBlock(BlockBehaviour.Properties.copy(Blocks.DANDELION)));
+            () -> new BloodyRoseBlock(BlockBehaviour.Properties.copy(Blocks.DANDELION)));
 
     public static final RegistrySupplier<Block> DISTILLERY = registerBlock("distillery",
-            new DistilleryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
+            () -> new DistilleryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(DistilleryBlock.POWERED) ? 15 : 0)));
 
     public static final RegistrySupplier<Block> KETTLE = registerBlock("kettle",
-            new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
+            () -> new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> ARTHANA = registerBlockWithoutItem("arthana",
-            new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
+    public static final RegistrySupplier<Block> ARTHANA = registerBlock("arthana",
+            () -> new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
 
     public static final RegistrySupplier<Block> CANDELABRA = registerBlock("candelabra",
-            new CandelabraBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops()
+            () -> new CandelabraBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops()
                     .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
 
     //////////////////////////
@@ -64,7 +66,7 @@ public class TATBlocks {
     //////////////////////////
 
     public static RegistrySupplier<Block> ROWAN_LOG = registerBlock("rowan_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -79,7 +81,7 @@ public class TATBlocks {
             });
 
     public static RegistrySupplier<Block> ROWAN_WOOD = registerBlock("rowan_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -94,7 +96,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_ROWAN_LOG = registerBlock("stripped_rowan_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -109,7 +111,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_ROWAN_WOOD = registerBlock("stripped_rowan_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -124,7 +126,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_PLANKS = registerBlock("rowan_planks",
-            new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -139,7 +141,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_STAIRS = registerBlock("rowan_stairs",
-            new StairBlock(ROWAN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+            () -> new StairBlock(ROWAN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -154,7 +156,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_LEAVES = registerBlock("rowan_leaves",
-            new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
+            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -169,16 +171,16 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_SAPLING = registerBlock("rowan_sapling",
-            new SaplingBlock(new RowanTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
+            () -> new SaplingBlock(new RowanTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
 
     public static final RegistrySupplier<Block> ROWAN_PRESSURE_PLATE = registerBlock("rowan_pressure_plate",
-            new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
+            () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
 
     public static final RegistrySupplier<Block> ROWAN_BUTTON = registerBlock("rowan_button",
-            new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
+            () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
 
     public static final RegistrySupplier<Block> ROWAN_FENCE = registerBlock("rowan_fence",
-            new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
+            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -193,7 +195,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_FENCE_GATE = registerBlock("rowan_fence_gate",
-            new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -208,7 +210,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ROWAN_SLAB = TATBlocks.registerBlock("rowan_slab",
-            new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -229,13 +231,13 @@ public class TATBlocks {
     /////////////////////////////
 
     public static final RegistrySupplier<Block> HAWTHORN_PRESSURE_PLATE = registerBlock("hawthorn_pressure_plate",
-            new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
+            () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
 
     public static final RegistrySupplier<Block> HAWTHORN_BUTTON = registerBlock("hawthorn_button",
-            new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
+            () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
 
     public static final RegistrySupplier<Block> HAWTHORN_FENCE = registerBlock("hawthorn_fence",
-            new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
+            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -250,7 +252,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_FENCE_GATE = registerBlock("hawthorn_fence_gate",
-            new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -265,7 +267,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_SLAB = TATBlocks.registerBlock("hawthorn_slab",
-            new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -280,7 +282,7 @@ public class TATBlocks {
             });
 
     public static RegistrySupplier<Block> HAWTHORN_LOG = registerBlock("hawthorn_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -295,7 +297,7 @@ public class TATBlocks {
             });
 
     public static RegistrySupplier<Block> HAWTHORN_WOOD = registerBlock("hawthorn_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -310,7 +312,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_LOG = registerBlock("stripped_hawthorn_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -325,7 +327,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_WOOD = registerBlock("stripped_hawthorn_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -340,7 +342,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_PLANKS = registerBlock("hawthorn_planks",
-            new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -355,7 +357,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_STAIRS = registerBlock("hawthorn_stairs",
-            new StairBlock(HAWTHORN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+            () -> new StairBlock(HAWTHORN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -370,7 +372,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_LEAVES = registerBlock("hawthorn_leaves",
-            new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
+            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -385,7 +387,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> HAWTHORN_SAPLING = registerBlock("hawthorn_sapling",
-            new SaplingBlock(new HawthornTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
+            () -> new SaplingBlock(new HawthornTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
 
     //////////////////////////
     //                      //
@@ -394,13 +396,13 @@ public class TATBlocks {
     //////////////////////////
 
     public static final RegistrySupplier<Block> ALDER_PRESSURE_PLATE = registerBlock("alder_pressure_plate",
-            new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
+            () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
 
     public static final RegistrySupplier<Block> ALDER_BUTTON = registerBlock("alder_button",
-            new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
+            () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
 
     public static final RegistrySupplier<Block> ALDER_FENCE = registerBlock("alder_fence",
-            new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
+            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -415,7 +417,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_FENCE_GATE = registerBlock("alder_fence_gate",
-            new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -430,7 +432,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_SLAB = TATBlocks.registerBlock("alder_slab",
-            new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -445,7 +447,7 @@ public class TATBlocks {
             });
 
     public static RegistrySupplier<Block> ALDER_LOG = registerBlock("alder_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -460,7 +462,7 @@ public class TATBlocks {
             });
 
     public static RegistrySupplier<Block> ALDER_WOOD = registerBlock("alder_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -475,7 +477,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_ALDER_LOG = registerBlock("stripped_alder_log",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -490,7 +492,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> STRIPPED_ALDER_WOOD = registerBlock("stripped_alder_wood",
-            new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -505,7 +507,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_PLANKS = registerBlock("alder_planks",
-            new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -520,7 +522,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_STAIRS = registerBlock("alder_stairs",
-            new StairBlock(ALDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+            () -> new StairBlock(ALDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -535,7 +537,7 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_LEAVES = registerBlock("alder_leaves",
-            new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
+            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                     return true;
                 }
@@ -550,26 +552,25 @@ public class TATBlocks {
             });
 
     public static final RegistrySupplier<Block> ALDER_SAPLING = registerBlock("alder_sapling",
-            new SaplingBlock(new AlderTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+            () -> new SaplingBlock(new AlderTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
     public static final RegistrySupplier<Block> DEMON_HEART = registerBlock("demon_heart",
-            new DemonHeartBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
+            () -> new DemonHeartBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
 
-    private static RegistrySupplier<Block> registerBlock(String name, Block block) {
-        registerBlockItem(name, block);
-        return BLOCKS.register(name, () -> block);
-    }
-
-    private static RegistrySupplier<Block> registerBlockWithoutItem(String name, Block block) {
-        return BLOCKS.register(name, () -> block);
-    }
-
-    private static RegistrySupplier<Item> registerBlockItem(String name, Block block) {
-        return ITEMS.register(name, () -> new BlockItem(block, new Item.Properties().tab(TATItems.TAB)));
+    private static RegistrySupplier<Block> registerBlock(String name, Supplier<Block> block) {
+        return BLOCKS.register(name, block);
     }
 
     public static void register() {
         BLOCKS.register();
+
+        for (RegistrySupplier<Block> block : BLOCKS) {
+            if (block.equals(ARTHANA)) continue;
+
+            ITEMS.register(block.getId(),
+                    () -> new BlockItem(block.get(), new Item.Properties().tab(TATItems.TAB)));
+        }
+
         ITEMS.register();
     }
 }

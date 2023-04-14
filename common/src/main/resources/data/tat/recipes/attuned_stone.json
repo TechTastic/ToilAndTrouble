@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "W",
+    "A",
+    "L"
+  ],
+  "key": {
+    "W": {
+      "item": "tat:whiff_of_magic"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "L": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "item": "tat:attuned_stone"
+  }
+}
