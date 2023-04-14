@@ -22,6 +22,7 @@ import net.techtastic.tat.world.feature.tree.RowanTreeGrower;
 
 public class TATBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);
+    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.ITEM_REGISTRY);
 
     public static final RegistrySupplier<Block> CAST_IRON_OVEN = registerBlock("cast_iron_oven",
             new CastIronOvenBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
@@ -134,6 +135,21 @@ public class TATBlocks {
 
                 public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
                     return 20;
+                }
+            });
+
+    public static final RegistrySupplier<Block> ROWAN_STAIRS = registerBlock("rowan_stairs",
+            new StairBlock(ROWAN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+
+                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+                    return 5;
                 }
             });
 
@@ -338,6 +354,21 @@ public class TATBlocks {
                 }
             });
 
+    public static final RegistrySupplier<Block> HAWTHORN_STAIRS = registerBlock("hawthorn_stairs",
+            new StairBlock(HAWTHORN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+
+                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+                    return 5;
+                }
+            });
+
     public static final RegistrySupplier<Block> HAWTHORN_LEAVES = registerBlock("hawthorn_leaves",
             new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
@@ -488,6 +519,21 @@ public class TATBlocks {
                 }
             });
 
+    public static final RegistrySupplier<Block> ALDER_STAIRS = registerBlock("alder_stairs",
+            new StairBlock(ALDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+
+                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
+                    return 5;
+                }
+            });
+
     public static final RegistrySupplier<Block> ALDER_LEAVES = registerBlock("alder_leaves",
             new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
                 public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
@@ -510,7 +556,7 @@ public class TATBlocks {
             new DemonHeartBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
 
     private static RegistrySupplier<Block> registerBlock(String name, Block block) {
-        TATItems.registerItem(name, new BlockItem(block, new Item.Properties().tab(TATItems.TAB)));
+        registerBlockItem(name, block);
         return BLOCKS.register(name, () -> block);
     }
 
@@ -518,8 +564,12 @@ public class TATBlocks {
         return BLOCKS.register(name, () -> block);
     }
 
+    private static RegistrySupplier<Item> registerBlockItem(String name, Block block) {
+        return ITEMS.register(name, () -> new BlockItem(block, new Item.Properties().tab(TATItems.TAB)));
+    }
+
     public static void register() {
         BLOCKS.register();
-        TATStairBlocks.register();
+        ITEMS.register();
     }
 }

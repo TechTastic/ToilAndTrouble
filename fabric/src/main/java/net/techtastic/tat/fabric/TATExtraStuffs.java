@@ -3,7 +3,6 @@ package net.techtastic.tat.fabric;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.techtastic.tat.block.TATBlocks;
-import net.techtastic.tat.block.TATStairBlocks;
 
 public class TATExtraStuffs {
     public static void register() {
@@ -14,7 +13,7 @@ public class TATExtraStuffs {
     private static void registerFlammables() {
         FlammableBlockRegistry flame = FlammableBlockRegistry.getDefaultInstance();
 
-        flame.add(TATStairBlocks.ROWAN_STAIRS.get(), 5, 20);
+        flame.add(TATBlocks.ROWAN_STAIRS.get(), 5, 20);
         flame.add(TATBlocks.ROWAN_SLAB.get(), 5, 20);
         flame.add(TATBlocks.ROWAN_PLANKS.get(), 5, 20);
         flame.add(TATBlocks.ROWAN_FENCE.get(), 5, 20);
@@ -25,7 +24,7 @@ public class TATExtraStuffs {
         flame.add(TATBlocks.STRIPPED_ROWAN_WOOD.get(), 5, 5);
         flame.add(TATBlocks.ROWAN_LEAVES.get(), 30, 60);
 
-        flame.add(TATStairBlocks.HAWTHORN_STAIRS.get(), 5, 20);
+        flame.add(TATBlocks.HAWTHORN_STAIRS.get(), 5, 20);
         flame.add(TATBlocks.HAWTHORN_SLAB.get(), 5, 20);
         flame.add(TATBlocks.HAWTHORN_PLANKS.get(), 5, 20);
         flame.add(TATBlocks.HAWTHORN_FENCE.get(), 5, 20);
@@ -36,7 +35,7 @@ public class TATExtraStuffs {
         flame.add(TATBlocks.STRIPPED_HAWTHORN_WOOD.get(), 5, 5);
         flame.add(TATBlocks.HAWTHORN_LEAVES.get(), 30, 60);
 
-        flame.add(TATStairBlocks.ALDER_STAIRS.get(), 5, 20);
+        flame.add(TATBlocks.ALDER_STAIRS.get(), 5, 20);
         flame.add(TATBlocks.ALDER_SLAB.get(), 5, 20);
         flame.add(TATBlocks.ALDER_PLANKS.get(), 5, 20);
         flame.add(TATBlocks.ALDER_FENCE.get(), 5, 20);

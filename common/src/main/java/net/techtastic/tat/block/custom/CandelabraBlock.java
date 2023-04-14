@@ -26,11 +26,11 @@ public class CandelabraBlock extends AbstractCandleBlock {
     @Override
     protected Iterable<Vec3> getParticleOffsets(@NotNull BlockState blockState) {
         return List.of(
-                new Vec3(0.5, 1.1, 0.5),
-                new Vec3(0.5, 1.05, 0.2),
-                new Vec3(0.5, 1.05, 0.8),
-                new Vec3(0.2, 1.05, 0.5),
-                new Vec3(0.8, 1.05, 0.5)
+                new Vec3(0.5, 1.05, 0.5),
+                new Vec3(0.5, 1.0, 0.2),
+                new Vec3(0.5, 1.0, 0.8),
+                new Vec3(0.2, 1.0, 0.5),
+                new Vec3(0.8, 1.0, 0.5)
         );
 
         /*double d = (double) pos.getX() + 0.5;

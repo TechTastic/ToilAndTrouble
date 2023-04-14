@@ -31,7 +31,7 @@ public class CastIronOvenRecipeCategory implements IRecipeCategory<CastIronOvenR
     private final IDrawable icon;
 
     public CastIronOvenRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 0, 0, 176, 85);
+        this.background = helper.createDrawable(TEXTURE, 4, 3, 169, 82);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(TATBlocks.CAST_IRON_OVEN.get()));
     }
 
@@ -52,7 +52,7 @@ public class CastIronOvenRecipeCategory implements IRecipeCategory<CastIronOvenR
 
     @Override
     public Component getTitle() {
-        return new TranslatableComponent("block.tat.cast_iron_oven");
+        return new TranslatableComponent("block.tat.cast_iron_oven.jei");
     }
 
     @Override
