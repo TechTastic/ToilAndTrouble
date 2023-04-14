@@ -111,8 +111,8 @@ public class TATItems {
     public static final RegistrySupplier<Item> DROP_OF_LUCK = registerItem("drop_of_luck",
             new Item(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> PURIFIED_MILK = registerItem("purified_milk",
-            new Item(new Item.Properties().tab(TAB)));*/
+    public static final RegistrySupplier<Item> PURIFIED_MILK = registerItem("purified_milk",
+            new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> FOCUSED_WILL = registerItem("focused_will",
             new Item(new Item.Properties().tab(TAB)));
@@ -120,8 +120,8 @@ public class TATItems {
     public static final RegistrySupplier<Item> CONDENSED_FEAR = registerItem("condensed_fear",
             new Item(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> MELLIFLUOUS_HUNGER = registerItem("mellifluous_hunger",
-            new Item(new Item.Properties().tab(TAB)));*/
+    public static final RegistrySupplier<Item> MELLIFLUOUS_HUNGER = registerItem("mellifluous_hunger",
+            new Item(new Item.Properties().tab(TAB)));
 
     /* PLANTS */
 
