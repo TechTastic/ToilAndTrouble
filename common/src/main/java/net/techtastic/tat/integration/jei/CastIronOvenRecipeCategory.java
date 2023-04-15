@@ -1,8 +1,13 @@
 package net.techtastic.tat.integration.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import io.netty.util.SuppressForbidden;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableAnimated;
+import mezz.jei.api.gui.drawable.IDrawableStatic;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -19,6 +24,7 @@ import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.recipe.CastIronOvenRecipe;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nonnull;
 
@@ -30,9 +36,19 @@ public class CastIronOvenRecipeCategory implements IRecipeCategory<CastIronOvenR
     private final IDrawable background;
     private final IDrawable icon;
 
+    private final IDrawableStatic flame;
+    private final IDrawableAnimated flameAnim;
+    private final IDrawableStatic progress;
+    private final IDrawableAnimated progressAnim;
+
     public CastIronOvenRecipeCategory(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 4, 3, 169, 82);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM, new ItemStack(TATBlocks.CAST_IRON_OVEN.get()));
+
+        this.flame = helper.createDrawable(TEXTURE, 176, 0, 14, 14);
+        this.flameAnim = helper.createAnimatedDrawable(flame, 300, IDrawableAnimated.StartDirection.TOP, false);
+        this.progress = helper.createDrawable(TEXTURE, 176, 14, 48, 10);
+        this.progressAnim = helper.createAnimatedDrawable(progress, 200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
     @Override
@@ -67,15 +83,21 @@ public class CastIronOvenRecipeCategory implements IRecipeCategory<CastIronOvenR
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull CastIronOvenRecipe recipe, @Nonnull IFocusGroup focusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 44, 19).addIngredients(recipe.getIngredients().get(0));
-        if (ToilAndTrouble.FUELS != null) {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 44, 54).addIngredients(Ingredient.of(ToilAndTrouble.FUELS.toArray(new ItemLike[0])));
-        } else {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 44, 54).addIngredients(Ingredient.of(ItemTags.COALS));
-        }
-        builder.addSlot(RecipeIngredientRole.INPUT, 80, 54).addIngredients(Ingredient.of(TATItems.CLAY_JAR.get()));
+        builder.addSlot(RecipeIngredientRole.INPUT, 40, 16).addIngredients(recipe.getIngredients().get(0));
+        builder.addSlot(RecipeIngredientRole.CATALYST, 40, 51).addIngredients(
+                ToilAndTrouble.FUELS != null ? Ingredient.of(ToilAndTrouble.FUELS.toArray(new ItemLike[0])) : Ingredient.of(ItemTags.COALS)
+        );
+        builder.addSlot(RecipeIngredientRole.INPUT, 76, 51).addIngredients(Ingredient.of(TATItems.CLAY_JAR.get()));
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 116, 19).addItemStack(recipe.getResultItem());
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 116, 54).addItemStack(recipe.getSecondOutput());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 112, 16).addItemStack(recipe.getResultItem());
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 112, 51).addItemStack(recipe.getSecondOutput());
+    }
+
+    @Override
+    public void draw(CastIronOvenRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+        flameAnim.draw(stack, 41, 34);
+        progressAnim.draw(stack, 58, 19);
+
+        IRecipeCategory.super.draw(recipe, recipeSlotsView, stack, mouseX, mouseY);
     }
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "item": "tat:odor_of_purity"
+    },
+    {
+      "item": "tat:clay_jar"
+    },
+    {
+      "item": "tat:clay_jar"
+    },
+    {
+      "item": "tat:clay_jar"
+    }
+  ],
+  "result": {
+    "item": "tat:purified_milk",
+    "count": 3
+  }
+}

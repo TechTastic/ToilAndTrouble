@@ -92,7 +92,7 @@ public class DistilleryRecipeCategory implements IRecipeCategory<DistilleryRecip
 
     @Override
     public void draw(DistilleryRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
-        powerProgressAnim.draw(stack, 30, 22);
+        powerProgressAnim.draw(stack, 30, 20);
         craftProgressAnim.draw(stack, 64, 18);
         craftProgressAnim.draw(stack, 64, 28);
         craftProgressAnim.draw(stack, 64, 38);

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.techtastic.tat.block.entity.CauldronBlockEntity;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
 
 import java.nio.file.Path;
@@ -44,6 +45,21 @@ public class ToilAndTroubleExpectPlatform {
 
     @ExpectPlatform
     public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntity getCauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntityType.BlockEntitySupplier<CauldronBlockEntity> getCauldronBlockEntitySupplier() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static BlockEntityTicker<? super CauldronBlockEntity> getCauldronBlockEntityTicker() {
         throw new AssertionError();
     }
 }

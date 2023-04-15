@@ -24,6 +24,10 @@ public class TATBlockEntities {
             BLOCK_ENTITIES.register("kettle", () ->
                     BlockEntityType.Builder.of(ToilAndTroubleExpectPlatform.getKettleBlockEntitySupplier(), TATBlocks.KETTLE.get()).build(null));
 
+    public static final RegistrySupplier<BlockEntityType<CauldronBlockEntity>> CAULDRON_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("cauldron", () ->
+                    BlockEntityType.Builder.of(ToilAndTroubleExpectPlatform.getCauldronBlockEntitySupplier(), TATBlocks.CAULDRON.get()).build(null));
+
     public static final RegistrySupplier<BlockEntityType<BaseLockedBlockEntity>> BASE_LOCKED_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("base_locked_block_entity", () ->
                     BlockEntityType.Builder.of(

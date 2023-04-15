@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "TST",
-    "SAS",
-    "LCL"
+    "TTT",
+    "HCH",
+    "LAL"
   ],
   "key": {
     "T": {
       "item": "minecraft:stick"
     },
-    "S": {
-      "item": "minecraft:string"
+    "H": {
+      "item": "minecraft:chain"
     },
     "L": {
       "item": "minecraft:oak_log"

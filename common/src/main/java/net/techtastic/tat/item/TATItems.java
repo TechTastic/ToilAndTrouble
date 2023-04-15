@@ -10,6 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.techtastic.tat.ToilAndTrouble;
+import net.techtastic.tat.api.RitualType;
+import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.item.custom.*;
 
 public class TATItems {
@@ -20,6 +22,20 @@ public class TATItems {
 
     public static final RegistrySupplier<Item> DEBUG_ITEM = registerItem("debug_item",
             new DebugItem(new Item.Properties().tab(TAB)));
+
+    /* CHALKS */
+
+    public static final RegistrySupplier<Item> RITUAL_CHALK = registerItem("ritual_chalk",
+            new ChalkBlockItem(RitualType.NORMAL, TATBlocks.RITUAL_CHALK.get(), new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> GOLDEN_CHALK = registerItem("golden_chalk",
+            new ChalkBlockItem(RitualType.GOLDEN, TATBlocks.GOLDEN_CHALK.get(), new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> OTHERWHERE_CHALK = registerItem("otherwhere_chalk",
+            new ChalkBlockItem(RitualType.OTHERWHERE, TATBlocks.OTHERWHERE_CHALK.get(), new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> INFERAL_CHALK = registerItem("infernal_chalk",
+            new ChalkBlockItem(RitualType.INFERNAL, TATBlocks.INFERNAL_CHALK.get(), new Item.Properties().tab(TAB)));
 
     /*public static final RegistrySupplier<Item> ROWAN_BERRIES = registerItem("rowan_berries",
             new Item(new Item.Properties().food(new FoodProperties.Builder().build()).tab(TAB)));
@@ -125,7 +141,7 @@ public class TATItems {
 
     /* PLANTS */
 
-    /*public static final RegistrySupplier<Item> BELLADONNA_FLOWER = registerItem("belladonna_flower",
+    public static final RegistrySupplier<Item> BELLADONNA_FLOWER = registerItem("belladonna_flower",
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> BELLADONNA_SEEDS = registerItem("belladonna_seeds",
@@ -140,14 +156,23 @@ public class TATItems {
     public static final RegistrySupplier<Item> WATER_ARTICHOKE_GLOBE = registerItem("water_artichoke_globe",
             new Item(new Item.Properties().tab(TAB)));
 
+    public static final RegistrySupplier<Item> WATER_ARTICHOKE_SEEDS = registerItem("water_artichoke_seeds",
+            new Item(new Item.Properties().tab(TAB)));
+
     public static final RegistrySupplier<Item> GARLIC = registerItem("garlic",
             new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WOLFSBANE_FLOWER = registerItem("wolfsbane_flower",
             new Item(new Item.Properties().tab(TAB)));
 
+    public static final RegistrySupplier<Item> WOLFSBANE_SEEDS = registerItem("wolfsbane_seeds",
+            new Item(new Item.Properties().tab(TAB)));
+
     public static final RegistrySupplier<Item> WORMWOOD = registerItem("wormwood",
-            new Item(new Item.Properties().tab(TAB)));*/
+            new Item(new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> WORMWOOD_SEEDS = registerItem("wormwood_seeds",
+            new Item(new Item.Properties().tab(TAB)));
 
     /* KEYS */
 

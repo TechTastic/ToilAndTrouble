@@ -16,7 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class LockedFenceGateBlock extends FenceGateBlock implements EntityBlock {
+public class LockedFenceGateBlock extends FlammableFenceGateBlock implements EntityBlock {
+    public LockedFenceGateBlock(Properties properties, int flammability, int firespreadspeed) {
+        super(properties, flammability, firespreadspeed);
+    }
+
     public LockedFenceGateBlock(Properties properties) {
         super(properties);
     }

@@ -13,9 +13,13 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.techtastic.tat.api.RitualType;
+import net.techtastic.tat.block.custom.CauldronBlock;
 import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.block.custom.*;
+import net.techtastic.tat.item.custom.ChalkBlockItem;
 import net.techtastic.tat.world.feature.tree.AlderTreeGrower;
 import net.techtastic.tat.world.feature.tree.HawthornTreeGrower;
 import net.techtastic.tat.world.feature.tree.RowanTreeGrower;
@@ -24,39 +28,106 @@ import java.util.function.Supplier;
 
 public class TATBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);
+    private static final DeferredRegister<Block> BLOCKS_WITHOUT_ITEMS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.ITEM_REGISTRY);
 
-    public static final RegistrySupplier<Block> CAST_IRON_OVEN = registerBlock("cast_iron_oven",
+    public static final RegistrySupplier<Block> CAST_IRON_OVEN = BLOCKS.register("cast_iron_oven",
             () -> new CastIronOvenBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> FUME_FUNNEL = registerBlock("fume_funnel",
+    public static final RegistrySupplier<Block> FUME_FUNNEL = BLOCKS.register("fume_funnel",
             () -> new FumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
                     .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> FILTERED_FUME_FUNNEL = registerBlock("filtered_fume_funnel",
+    public static final RegistrySupplier<Block> FILTERED_FUME_FUNNEL = BLOCKS.register("filtered_fume_funnel",
             () -> new FilteredFumeFunnelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()
                     .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> ALTAR = registerBlock("altar",
+    public static final RegistrySupplier<Block> ALTAR = BLOCKS.register("altar",
             () -> new AltarBlock(BlockBehaviour.Properties.of(Material.STONE).strength(2.0f).requiresCorrectToolForDrops()));
 
-    public static final RegistrySupplier<Block> BLODDY_ROSE = registerBlock("bloody_rose",
+    public static final RegistrySupplier<Block> BLODDY_ROSE = BLOCKS.register("bloody_rose",
             () -> new BloodyRoseBlock(BlockBehaviour.Properties.copy(Blocks.DANDELION)));
 
-    public static final RegistrySupplier<Block> DISTILLERY = registerBlock("distillery",
+    public static final RegistrySupplier<Block> DISTILLERY = BLOCKS.register("distillery",
             () -> new DistilleryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(DistilleryBlock.POWERED) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> KETTLE = registerBlock("kettle",
+    public static final RegistrySupplier<Block> KETTLE = BLOCKS.register("kettle",
             () -> new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
                     .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
 
-    public static final RegistrySupplier<Block> ARTHANA = registerBlock("arthana",
+    public static final RegistrySupplier<Block> CAULDRON = BLOCKS.register("cauldron",
+            () -> new CauldronBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));
+
+    public static final RegistrySupplier<Block> ARTHANA = BLOCKS_WITHOUT_ITEMS.register("arthana",
             () -> new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
 
-    public static final RegistrySupplier<Block> CANDELABRA = registerBlock("candelabra",
-            () -> new CandelabraBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops()
+    ///////////
+    //       //
+    // CROPS //
+    //       //
+    ///////////
+
+    public static final RegistrySupplier<Block> MANDRAKE_ROOT = BLOCKS_WITHOUT_ITEMS.register("mandrake_root",
+            () -> new CropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
+
+    /////////////////
+    //             //
+    // CANDELABRAS //
+    //             //
+    /////////////////
+
+    public static final RegistrySupplier<Block> CANDELABRA = BLOCKS.register("candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.SAND).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> WHITE_CANDELABRA = BLOCKS.register("white_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.WOOL).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> ORANGE_CANDELABRA = BLOCKS.register("orange_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> MAGENTA_CANDELABRA = BLOCKS.register("magenta_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> LIGHT_BLUE_CANDELABRA = BLOCKS.register("light_blue_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_LIGHT_BLUE).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> YELLOW_CANDELABRA = BLOCKS.register("yellow_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_YELLOW).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> LIME_CANDELABRA = BLOCKS.register("lime_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_LIGHT_GREEN).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> PINK_CANDELABRA = BLOCKS.register("pink_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_PINK).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> GRAY_CANDELABRA = BLOCKS.register("gray_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> LIGHT_GRAY_CANDELABRA = BLOCKS.register("light_gray_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_LIGHT_GRAY).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> CYAN_CANDELABRA = BLOCKS.register("cyan_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_CYAN).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> PURPLE_CANDELABRA = BLOCKS.register("purple_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> BLUE_CANDELABRA = BLOCKS.register("blue_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> BROWN_CANDELABRA = BLOCKS.register("brown_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> GREEN_CANDELABRA = BLOCKS.register("green_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_GREEN).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> RED_CANDELABRA = BLOCKS.register("red_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_RED).requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
+    public static final RegistrySupplier<Block> BLACK_CANDELABRA = BLOCKS.register("black_candelabra",
+            () -> new CandelabraBlock(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops()
                     .lightLevel(state -> state.getValue(AbstractCandleBlock.LIT) ? 15 : 0)));
 
     //////////////////////////
@@ -65,164 +136,32 @@ public class TATBlocks {
     //                      //
     //////////////////////////
 
-    public static RegistrySupplier<Block> ROWAN_LOG = registerBlock("rowan_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static RegistrySupplier<Block> ROWAN_WOOD = registerBlock("rowan_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_ROWAN_LOG = registerBlock("stripped_rowan_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_ROWAN_WOOD = registerBlock("stripped_rowan_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_PLANKS = registerBlock("rowan_planks",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 20;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_STAIRS = registerBlock("rowan_stairs",
-            () -> new StairBlock(ROWAN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_LEAVES = registerBlock("rowan_leaves",
-            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 60;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 30;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_SAPLING = registerBlock("rowan_sapling",
+    public static RegistrySupplier<Block> ROWAN_LOG = BLOCKS.register("rowan_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)));
+    public static RegistrySupplier<Block> ROWAN_WOOD = BLOCKS.register("rowan_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)));
+    public static final RegistrySupplier<Block> STRIPPED_ROWAN_LOG = BLOCKS.register("stripped_rowan_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)));
+    public static final RegistrySupplier<Block> STRIPPED_ROWAN_WOOD = BLOCKS.register("stripped_rowan_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
+    public static final RegistrySupplier<Block> ROWAN_PLANKS = BLOCKS.register("rowan_planks",
+            () -> new FlammableBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
+    public static final RegistrySupplier<Block> ROWAN_STAIRS = BLOCKS.register("rowan_stairs",
+            () -> new FlammableStairBlock(ROWAN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)));
+    public static final RegistrySupplier<Block> ROWAN_LEAVES = BLOCKS.register("rowan_leaves",
+            () -> new FlammableLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()));
+    public static final RegistrySupplier<Block> ROWAN_SAPLING = BLOCKS.register("rowan_sapling",
             () -> new SaplingBlock(new RowanTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
-
-    public static final RegistrySupplier<Block> ROWAN_PRESSURE_PLATE = registerBlock("rowan_pressure_plate",
+    public static final RegistrySupplier<Block> ROWAN_PRESSURE_PLATE = BLOCKS.register("rowan_pressure_plate",
             () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
-
-    public static final RegistrySupplier<Block> ROWAN_BUTTON = registerBlock("rowan_button",
+    public static final RegistrySupplier<Block> ROWAN_BUTTON = BLOCKS.register("rowan_button",
             () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
-
-    public static final RegistrySupplier<Block> ROWAN_FENCE = registerBlock("rowan_fence",
-            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_FENCE_GATE = registerBlock("rowan_fence_gate",
-            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ROWAN_SLAB = TATBlocks.registerBlock("rowan_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
+    public static final RegistrySupplier<Block> ROWAN_FENCE = BLOCKS.register("rowan_fence",
+            () -> new FlammableFenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)));
+    public static final RegistrySupplier<Block> ROWAN_FENCE_GATE = BLOCKS.register("rowan_fence_gate",
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)));
+    public static final RegistrySupplier<Block> ROWAN_SLAB = TATBlocks.BLOCKS.register("rowan_slab",
+            () -> new FlammableSlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)));
 
     /////////////////////////////
     //                         //
@@ -230,163 +169,31 @@ public class TATBlocks {
     //                         //
     /////////////////////////////
 
-    public static final RegistrySupplier<Block> HAWTHORN_PRESSURE_PLATE = registerBlock("hawthorn_pressure_plate",
+    public static final RegistrySupplier<Block> HAWTHORN_PRESSURE_PLATE = BLOCKS.register("hawthorn_pressure_plate",
             () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
-
-    public static final RegistrySupplier<Block> HAWTHORN_BUTTON = registerBlock("hawthorn_button",
+    public static final RegistrySupplier<Block> HAWTHORN_BUTTON = BLOCKS.register("hawthorn_button",
             () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
-
-    public static final RegistrySupplier<Block> HAWTHORN_FENCE = registerBlock("hawthorn_fence",
-            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_FENCE_GATE = registerBlock("hawthorn_fence_gate",
-            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_SLAB = TATBlocks.registerBlock("hawthorn_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static RegistrySupplier<Block> HAWTHORN_LOG = registerBlock("hawthorn_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static RegistrySupplier<Block> HAWTHORN_WOOD = registerBlock("hawthorn_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_LOG = registerBlock("stripped_hawthorn_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_WOOD = registerBlock("stripped_hawthorn_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_PLANKS = registerBlock("hawthorn_planks",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_STAIRS = registerBlock("hawthorn_stairs",
-            () -> new StairBlock(HAWTHORN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_LEAVES = registerBlock("hawthorn_leaves",
-            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 60;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 30;
-                }
-            });
-
-    public static final RegistrySupplier<Block> HAWTHORN_SAPLING = registerBlock("hawthorn_sapling",
+    public static final RegistrySupplier<Block> HAWTHORN_FENCE = BLOCKS.register("hawthorn_fence",
+            () -> new FlammableFenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE), 20, 5));
+    public static final RegistrySupplier<Block> HAWTHORN_FENCE_GATE = BLOCKS.register("hawthorn_fence_gate",
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)));
+    public static final RegistrySupplier<Block> HAWTHORN_SLAB = TATBlocks.BLOCKS.register("hawthorn_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)));
+    public static RegistrySupplier<Block> HAWTHORN_LOG = BLOCKS.register("hawthorn_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)));
+    public static RegistrySupplier<Block> HAWTHORN_WOOD = BLOCKS.register("hawthorn_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)));
+    public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_LOG = BLOCKS.register("stripped_hawthorn_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)));
+    public static final RegistrySupplier<Block> STRIPPED_HAWTHORN_WOOD = BLOCKS.register("stripped_hawthorn_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
+    public static final RegistrySupplier<Block> HAWTHORN_PLANKS = BLOCKS.register("hawthorn_planks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
+    public static final RegistrySupplier<Block> HAWTHORN_STAIRS = BLOCKS.register("hawthorn_stairs",
+            () -> new StairBlock(HAWTHORN_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)));
+    public static final RegistrySupplier<Block> HAWTHORN_LEAVES = BLOCKS.register("hawthorn_leaves",
+            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()));
+    public static final RegistrySupplier<Block> HAWTHORN_SAPLING = BLOCKS.register("hawthorn_sapling",
             () -> new SaplingBlock(new HawthornTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
 
     //////////////////////////
@@ -395,178 +202,59 @@ public class TATBlocks {
     //                      //
     //////////////////////////
 
-    public static final RegistrySupplier<Block> ALDER_PRESSURE_PLATE = registerBlock("alder_pressure_plate",
+    public static final RegistrySupplier<Block> ALDER_PRESSURE_PLATE = BLOCKS.register("alder_pressure_plate",
             () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
-
-    public static final RegistrySupplier<Block> ALDER_BUTTON = registerBlock("alder_button",
+    public static final RegistrySupplier<Block> ALDER_BUTTON = BLOCKS.register("alder_button",
             () -> new LockedStoneButtonBlock(BlockBehaviour.Properties.copy(Blocks.OAK_BUTTON).noCollission()));
-
-    public static final RegistrySupplier<Block> ALDER_FENCE = registerBlock("alder_fence",
-            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_FENCE_GATE = registerBlock("alder_fence_gate",
-            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_SLAB = TATBlocks.registerBlock("alder_slab",
-            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static RegistrySupplier<Block> ALDER_LOG = registerBlock("alder_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static RegistrySupplier<Block> ALDER_WOOD = registerBlock("alder_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_ALDER_LOG = registerBlock("stripped_alder_log",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> STRIPPED_ALDER_WOOD = registerBlock("stripped_alder_wood",
-            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 5;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_PLANKS = registerBlock("alder_planks",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_STAIRS = registerBlock("alder_stairs",
-            () -> new StairBlock(ALDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 20;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 5;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_LEAVES = registerBlock("alder_leaves",
-            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)) {
-                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return true;
-                }
-
-                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-                    return 60;
-                }
-
-                public int getFireSpreadSpeed(BlockState state, BlockGetter world, BlockPos pos, Direction face) {
-                    return 30;
-                }
-            });
-
-    public static final RegistrySupplier<Block> ALDER_SAPLING = registerBlock("alder_sapling",
+    public static final RegistrySupplier<Block> ALDER_FENCE = BLOCKS.register("alder_fence",
+            () -> new FenceBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE)));
+    public static final RegistrySupplier<Block> ALDER_FENCE_GATE = BLOCKS.register("alder_fence_gate",
+            () -> new LockedFenceGateBlock(BlockBehaviour.Properties.copy(Blocks.OAK_FENCE_GATE)));
+    public static final RegistrySupplier<Block> ALDER_SLAB = TATBlocks.BLOCKS.register("alder_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.OAK_SLAB)));
+    public static RegistrySupplier<Block> ALDER_LOG = BLOCKS.register("alder_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LOG)));
+    public static RegistrySupplier<Block> ALDER_WOOD = BLOCKS.register("alder_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD)));
+    public static final RegistrySupplier<Block> STRIPPED_ALDER_LOG = BLOCKS.register("stripped_alder_log",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_LOG)));
+    public static final RegistrySupplier<Block> STRIPPED_ALDER_WOOD = BLOCKS.register("stripped_alder_wood",
+            () -> new FlammableRotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
+    public static final RegistrySupplier<Block> ALDER_PLANKS = BLOCKS.register("alder_planks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
+    public static final RegistrySupplier<Block> ALDER_STAIRS = BLOCKS.register("alder_stairs",
+            () -> new StairBlock(ALDER_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.OAK_STAIRS)));
+    public static final RegistrySupplier<Block> ALDER_LEAVES = BLOCKS.register("alder_leaves",
+            () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
+    public static final RegistrySupplier<Block> ALDER_SAPLING = BLOCKS.register("alder_sapling",
             () -> new SaplingBlock(new AlderTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
-    public static final RegistrySupplier<Block> DEMON_HEART = registerBlock("demon_heart",
+    ////////////
+    //        //
+    //  MISC  //
+    //        //
+    ////////////
+
+    public static final RegistrySupplier<Block> DEMON_HEART = BLOCKS.register("demon_heart",
             () -> new DemonHeartBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
 
-    private static RegistrySupplier<Block> registerBlock(String name, Supplier<Block> block) {
-        return BLOCKS.register(name, block);
-    }
+    public static final RegistrySupplier<Block> RITUAL_CHALK = BLOCKS_WITHOUT_ITEMS.register("ritual_chalk",
+            () -> new ChalkBlock(RitualType.NORMAL, BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
+
+    public static final RegistrySupplier<Block> GOLDEN_CHALK = BLOCKS_WITHOUT_ITEMS.register("golden_chalk",
+            () -> new GoldenChalkBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
+
+    public static final RegistrySupplier<Block> OTHERWHERE_CHALK = BLOCKS_WITHOUT_ITEMS.register("otherwhere_chalk",
+            () -> new ChalkBlock(RitualType.OTHERWHERE, BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
+
+    public static final RegistrySupplier<Block> INFERNAL_CHALK = BLOCKS_WITHOUT_ITEMS.register("infernal_chalk",
+            () -> new ChalkBlock(RitualType.INFERNAL, BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS)));
 
     public static void register() {
         BLOCKS.register();
+        BLOCKS_WITHOUT_ITEMS.register();
 
         for (RegistrySupplier<Block> block : BLOCKS) {
-            if (block.equals(ARTHANA)) continue;
-
             ITEMS.register(block.getId(),
                     () -> new BlockItem(block.get(), new Item.Properties().tab(TATItems.TAB)));
         }

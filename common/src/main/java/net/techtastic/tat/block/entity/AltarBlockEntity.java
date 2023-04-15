@@ -112,9 +112,6 @@ public class AltarBlockEntity extends BlockEntity implements ExtendedMenuProvide
 
             entity.updateRate();
 
-            System.err.println(entity.getCurrentPower() + " / " + entity.getMaxPower() + " (" + entity.getRate() + "x)");
-            System.err.println(entity.getRange() + "");
-
             entity.resetTicks();
         }
 
