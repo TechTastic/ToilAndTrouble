@@ -7,11 +7,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.techtastic.tat.api.RitualType;
@@ -70,31 +72,25 @@ public class TATBlocks {
     ///////////
 
     public static final RegistrySupplier<Block> BELLADONNA_PLANT = BLOCKS_WITHOUT_ITEMS.register("belladonna_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.BELLADONNA_SEEDS.get()));
+            () -> new BelladonnaCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> MANDRAKE_PLANT = BLOCKS_WITHOUT_ITEMS.register("mandrake_plant",
             () -> new MandrakeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> WATER_ARTICHOKE_PLANT = BLOCKS_WITHOUT_ITEMS.register("water_artichoke_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.WATER_ARTICHOKE_SEEDS.get()));
+            () -> new WaterArtichokeCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> SNOWBELL_PLANT = BLOCKS_WITHOUT_ITEMS.register("snowbell_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.SNOWBELL_SEEDS.get()));
+            () -> new SnowbellCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> WOLFSBANE_PLANT = BLOCKS_WITHOUT_ITEMS.register("wolfsbane_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.WOLFSBANE_SEEDS.get()));
+            () -> new WolfsbaneCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> GARLIC_PLANT = BLOCKS_WITHOUT_ITEMS.register("garlic_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.GARLIC.get()));
+            () -> new GarlicCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     public static final RegistrySupplier<Block> WORMWOOD_PLANT = BLOCKS_WITHOUT_ITEMS.register("wormwood_plant",
-            () -> new CustomCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion(),
-                    BlockStateProperties.AGE_7, 7, TATItems.WORMWOOD_SEEDS.get()));
+            () -> new WormwoodCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
 
     /////////////////
     //             //

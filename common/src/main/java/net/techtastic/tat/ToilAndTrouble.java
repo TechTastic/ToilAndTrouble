@@ -28,8 +28,8 @@ public class ToilAndTrouble {
     public static List<ItemLike> FUELS;
     
     public static void init() {
-        TATItems.register();
         TATBlocks.register();
+        TATItems.register();
 
         TATBlockEntities.register();
         TATMenuTypes.register();

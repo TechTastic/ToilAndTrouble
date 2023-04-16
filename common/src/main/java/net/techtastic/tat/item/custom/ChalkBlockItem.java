@@ -1,5 +1,6 @@
 package net.techtastic.tat.item.custom;
 
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;

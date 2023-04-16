@@ -53,7 +53,7 @@ public class TATBlockEntities {
 
     public static final RegistrySupplier<BlockEntityType<BaseTaglockedBlockEntity>> BASE_TAGLOCKED_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("taglocked", () ->
-                    BlockEntityType.Builder.of(BaseTaglockedBlockEntity::new, TATBlocks.BLODDY_ROSE.get()).build(null));
+                    BlockEntityType.Builder.of(BaseTaglockedBlockEntity::new, TATBlocks.BLOODY_ROSE.get()).build(null));
 
     public static void register() {
         BLOCK_ENTITIES.register();
