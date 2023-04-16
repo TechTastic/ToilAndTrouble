@@ -54,6 +54,20 @@
   "item.tat.chalk.otherwhere": "Otherwhere",
   "item.tat.chalk.infernal": "Infernal",
 
+  "item.tat.belladonna_seeds": "Belladonna Seeds",
+  "item.tat.mandrake_seeds": "Mandrake Seeds",
+  "item.tat.water_artichoke_seeds": "Water Artichoke Seeds",
+  "item.tat.snowbell_seeds": "Snowbell Seeds",
+  "item.tat.garlic": "Garlic",
+  "item.tat.wolfsbane_seeds": "Wolfsbane Seeds",
+  "item.tat.wormwood_seeds": "Wormwood Seeds",
+  "item.tat.belladonna_flower": "Belladonna Flower",
+  "item.tat.mandrake_root": "Mandrake Root",
+  "item.tat.water_artichoke_globe": "Water Artichoke Globe",
+  "item.tat.icy_needle": "Icy Needle",
+  "item.tat.wolfsbane_flower": "Wolfsbane Flower",
+  "item.tat.wormwood": "Wormwood",
+
   "block.tat.cast_iron_oven": "Cast Iron Oven",
   "block.tat.cast_iron_oven.jei": "Oven Fumigation",
   "block.tat.distillery": "Distillery",
@@ -123,5 +137,13 @@
   "block.tat.alder_fence": "Alder Fence",
   "block.tat.alder_fence_gate": "Alder Fence Gate",
   "block.tat.alder_stairs": "Alder Stairs",
-  "block.tat.alder_slab": "Alder Slab"
+  "block.tat.alder_slab": "Alder Slab",
+  
+  "block.tat.belladonna_plant": "Belladonna Plant",
+  "block.tat.mandrake_plant": "Mandrake Plant",
+  "block.tat.water_artichoke_plant": "Water Artichoke Plant",
+  "block.tat.snowbell_plant": "Snowbell Plant",
+  "block.tat.garlic": "Garlic Plant",
+  "block.tat.wolfsbane_plant": "Wolfsbane Plant",
+  "block.tat.wormwood_plant": "Wormwood Plant"
 }

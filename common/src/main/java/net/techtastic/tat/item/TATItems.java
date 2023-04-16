@@ -5,10 +5,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.api.RitualType;
 import net.techtastic.tat.block.TATBlocks;
@@ -145,34 +142,40 @@ public class TATItems {
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> BELLADONNA_SEEDS = ITEMS.register("belladonna_seeds",
-            () -> new Item(new Item.Properties().tab(TAB)));
+            () -> new ItemNameBlockItem(TATBlocks.BELLADONNA_PLANT.get(), new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> MANDRAKE_ROOT = ITEMS.register("mandrake_root",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> MANDRAKE_SEEDS = ITEMS.register("mandrake_seeds",
-            () -> new Item(new Item.Properties().tab(TAB)));
+            () -> new ItemNameBlockItem(TATBlocks.MANDRAKE_PLANT.get(), new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WATER_ARTICHOKE_GLOBE = ITEMS.register("water_artichoke_globe",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WATER_ARTICHOKE_SEEDS = ITEMS.register("water_artichoke_seeds",
-            () -> new Item(new Item.Properties().tab(TAB)));
+            () -> new ItemNameBlockItem(TATBlocks.WATER_ARTICHOKE_PLANT.get(), new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> GARLIC = ITEMS.register("garlic",
-            () -> new Item(new Item.Properties().tab(TAB)));
+            () -> new ItemNameBlockItem(TATBlocks.GARLIC_PLANT.get(), new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WOLFSBANE_FLOWER = ITEMS.register("wolfsbane_flower",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WOLFSBANE_SEEDS = ITEMS.register("wolfsbane_seeds",
-            () -> new Item(new Item.Properties().tab(TAB)));
+            () -> new ItemNameBlockItem(TATBlocks.WOLFSBANE_PLANT.get(), new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WORMWOOD = ITEMS.register("wormwood",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> WORMWOOD_SEEDS = ITEMS.register("wormwood_seeds",
+            () -> new ItemNameBlockItem(TATBlocks.WORMWOOD_PLANT.get(), new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> ICY_NEEDLE = ITEMS.register("icy_needle",
             () -> new Item(new Item.Properties().tab(TAB)));
+
+    public static final RegistrySupplier<Item> SNOWBELL_SEEDS = ITEMS.register("snowbell_seeds",
+            () -> new ItemNameBlockItem(TATBlocks.SNOWBELL_PLANT.get(), new Item.Properties().tab(TAB)));
 
     /* KEYS */
 
