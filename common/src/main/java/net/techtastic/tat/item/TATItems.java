@@ -39,11 +39,8 @@ public class TATItems {
 
     /* ALTAR AUGMENTS */
 
-    /*public static final RegistrySupplier<Item> CHALICE = ITEMS.register("chalice",
-            () -> new Item(new Item.Properties().tab(TAB)));
-
-    public static final RegistrySupplier<Item> ARTHANA = ITEMS.register("arthana",
-        new ArthanaSwordItem(ToolMaterials.GOLD, 4, 4.0f, new FabricItemSettings().group(ModItemGroup.WITCHERYRESTITCHED).maxDamage(251)));*/
+    public static final RegistrySupplier<Item> CHALICE = ITEMS.register("chalice",
+            () -> new ChaliceBlockItem(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> ARTHANA = ITEMS.register("arthana",
             () -> new ArthanaSwordItem(Tiers.GOLD, 4, 4.0f,new Item.Properties().tab(TAB).defaultDurability(251)));
@@ -196,9 +193,6 @@ public class TATItems {
     public static final RegistrySupplier<Item> GYPSUM = ITEMS.register("gypsum",
             () -> new Item(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> ICY_NEEDLE = ITEMS.register("icy_needle",
-            () -> new Item(new Item.Properties().tab(TAB)));*/
-
     public static final RegistrySupplier<Item> MUTANDIS = ITEMS.register("mutandis",
             () -> new MutandisItem(new Item.Properties().tab(TAB)));
 
@@ -234,10 +228,10 @@ public class TATItems {
     public static final RegistrySupplier<Item> TAGLOCK = ITEMS.register("taglock",
             () -> new TaglockItem(new Item.Properties().tab(TAB)));
 
-    /*public static final RegistrySupplier<Item> REDSTONE_SOUP = ITEMS.register("redstone_soup",
+    public static final RegistrySupplier<Item> REDSTONE_SOUP = ITEMS.register("redstone_soup",
             () -> new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> FLYING_OINTMENT = ITEMS.register("flying_ointment",
+    /*public static final RegistrySupplier<Item> FLYING_OINTMENT = ITEMS.register("flying_ointment",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> GHOST_OF_THE_LIGHT = ITEMS.register("ghost_of_the_light",

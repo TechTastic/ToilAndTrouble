@@ -5,11 +5,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.techtastic.tat.api.TaglockHelper;
+import net.techtastic.tat.block.TATBlocks;
 
 public class TATItemModelPredicates {
     public static void registerModelPredicates() {
         registerKeyRing();
         registerTaglock();
+        registerChalice();
     }
 
     private static void registerKeyRing() {
@@ -36,6 +38,16 @@ public class TATItemModelPredicates {
                     if (TaglockHelper.isTaglockEmpty(stack)) return 0.0f;
                     if (TaglockHelper.getDecayTicks(stack) > 0) return 1.0f;
                     return 0.5f;
+                });
+    }
+
+    private static void registerChalice() {
+        ItemPropertiesRegistry.register(TATBlocks.CHALICE.get().asItem(), new ResourceLocation("soup"),
+                (stack, clientLevel, livingEntity, i) -> {
+                    CompoundTag tag = stack.getOrCreateTag();
+                    return !tag.contains("ToilAndTrouble$soup") ||
+                            !tag.getBoolean("ToilAndTrouble$soup")
+                            ? 0.0f : 1.0f;
                 });
     }
 }

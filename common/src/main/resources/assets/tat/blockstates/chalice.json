@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "soup=false": {"model": "tat:block/chalice"},
+    "soup=true": {"model": "tat:block/chalice_filled"}
+  }
+}

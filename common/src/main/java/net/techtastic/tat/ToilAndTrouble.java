@@ -59,6 +59,8 @@ public class ToilAndTrouble {
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.CAST_IRON_OVEN.get());
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.DISTILLERY.get());
 
+        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.CHALICE.get());
+
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_LEAVES.get());
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_SAPLING.get());
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.HAWTHORN_LEAVES.get());

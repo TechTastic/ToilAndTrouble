@@ -65,6 +65,9 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> ARTHANA = BLOCKS_WITHOUT_ITEMS.register("arthana",
             () -> new ArthanaBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion().instabreak().noDrops()));
 
+    public static final RegistrySupplier<Block> CHALICE = BLOCKS_WITHOUT_ITEMS.register("chalice",
+            () -> new ChaliceBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion()));
+
     ///////////
     //       //
     // CROPS //

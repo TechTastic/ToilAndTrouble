@@ -1,0 +1,47 @@
+{
+  "type": "minecraft:block",
+  "functions": [
+    {
+      "function": "minecraft:explosion_decay"
+    }
+  ],
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tat:chalice",
+          "functions": [
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"ToilAndTrouble$soup\":1}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "tat:chalice",
+                  "properties": {
+                    "soup": "true"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{\"ToilAndTrouble$soup\":0}",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "tat:chalice",
+                  "properties": {
+                    "soup": "false"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

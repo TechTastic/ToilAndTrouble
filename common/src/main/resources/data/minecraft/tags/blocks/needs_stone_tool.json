@@ -3,6 +3,9 @@
   "values": [
     "tat:cast_iron_oven",
     "tat:fume_funnel",
-    "tat:filtered_fume_funnel"
+    "tat:filtered_fume_funnel",
+    "tat:distillery",
+    "tat:candelabra",
+    "tat:chalice"
   ]
 }

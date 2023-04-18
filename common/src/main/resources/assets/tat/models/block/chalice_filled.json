@@ -1,0 +1,6 @@
+{
+	"parent": "tat:block/chalice",
+	"textures": {
+		"0": "tat:block/chalice_filled"
+	}
+}

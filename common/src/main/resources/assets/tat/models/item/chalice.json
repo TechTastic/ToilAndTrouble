@@ -1,0 +1,9 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "tat:item/chalice"
+  },
+  "overrides": [
+    {"model": "tat:item/chalice_filled", "predicate": {"soup": 1.0}}
+  ]
+}
