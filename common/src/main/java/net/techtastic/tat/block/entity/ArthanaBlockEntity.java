@@ -8,10 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.item.TATItems;
 import org.jetbrains.annotations.NotNull;
 
 public class ArthanaBlockEntity extends BlockEntity {
-    private ItemStack arthana = ItemStack.EMPTY;
+    private ItemStack arthana = new ItemStack(TATItems.ARTHANA.get());
 
     public ArthanaBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.ARTHANA_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -19,8 +20,7 @@ public class ArthanaBlockEntity extends BlockEntity {
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag compoundTag) {
-        if (!this.arthana.isEmpty())
-            ContainerHelper.saveAllItems(compoundTag, NonNullList.of(ItemStack.EMPTY, this.arthana));
+        ContainerHelper.saveAllItems(compoundTag, NonNullList.of(ItemStack.EMPTY, this.arthana));
 
         super.saveAdditional(compoundTag);
     }
@@ -39,6 +39,7 @@ public class ArthanaBlockEntity extends BlockEntity {
     }
 
     public void setArthana(ItemStack arthana) {
-        this.arthana = arthana;
+        this.arthana.setTag(arthana.getOrCreateTag());
+        this.setChanged();
     }
 }

@@ -66,13 +66,25 @@ public class ArthanaBlock extends BaseEntityBlock {
         builder.add(FACING);
     }
 
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        BlockEntity be = blockGetter.getBlockEntity(blockPos);
+        System.err.println("BlockEntity: " + be);
+        if (be instanceof ArthanaBlockEntity arthana) {
+            ItemStack dagger = arthana.getArthana();
+            System.err.println("ItemStack: " + dagger);
+            return dagger;
+        }
+
+        return super.getCloneItemStack(blockGetter, blockPos, blockState);
+    }
+
     public static void placeArthana(Level level, BlockPos pos, BlockState state, ItemStack stack) {
         level.setBlockAndUpdate(pos, state);
 
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof ArthanaBlockEntity arthana) {
             arthana.setArthana(stack);
-            arthana.setChanged();
         }
     }
 

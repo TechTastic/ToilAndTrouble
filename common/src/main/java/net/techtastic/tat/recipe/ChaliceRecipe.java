@@ -55,12 +55,15 @@ public class ChaliceRecipe extends CustomRecipe {
 
         ItemStack itemStack1 = itemStacks.get(0);
         ItemStack itemStack2 = itemStacks.get(1);
-        CompoundTag tag = itemStack1.getOrCreateTag();
 
         if (!(itemStack1.is(TATItems.CHALICE.get()) &&
-                itemStack2.is(TATItems.REDSTONE_SOUP.get()) &&
-                (!tag.contains("ToilAndTrouble$soup") ||
-                        tag.getBoolean("ToilAndTrouble$soup"))))
+                itemStack2.is(TATItems.REDSTONE_SOUP.get())))
+            return null;
+
+        CompoundTag tag = itemStack1.getOrCreateTag();
+
+        if (!tag.contains("ToilAndTrouble$soup") ||
+                tag.getBoolean("ToilAndTrouble$soup"))
             return null;
 
         ItemStack filled = itemStack1.copy();
