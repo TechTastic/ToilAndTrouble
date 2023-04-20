@@ -1,0 +1,15 @@
+
+{
+  "type": "tat:chalice",
+  "ingredients": [
+    {
+      "item": "tat:chalice"
+    },
+    {
+      "item": "tat:redstone_soup"
+    }
+  ],
+  "output": {
+    "item": "tat:chalice"
+  }
+}

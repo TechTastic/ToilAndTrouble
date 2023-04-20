@@ -40,6 +40,16 @@ public class ChaliceBlock extends Block {
     }
 
     @Override
+    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        ItemStack chalice = new ItemStack(TATItems.CHALICE.get());
+
+        if (blockState.getValue(SOUP))
+            chalice.getOrCreateTag().putBoolean("ToilAndTrouble$soup", true);
+
+        return chalice;
+    }
+
+    @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
         ItemStack stack = player.getItemInHand(interactionHand);
         if (!level.isClientSide) {

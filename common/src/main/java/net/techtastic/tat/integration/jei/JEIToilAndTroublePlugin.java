@@ -44,6 +44,7 @@ public class JEIToilAndTroublePlugin implements IModPlugin {
         registration.addRecipes(DISTILLING, distilleryRecipes);
 
         registration.addRecipes(RecipeTypes.CRAFTING, KeyRingRecipeMaker.createRecipes(registration.getJeiHelpers().getStackHelper()));
+        registration.addRecipes(RecipeTypes.CRAFTING, ChaliceRecipeMaker.createRecipes(registration.getJeiHelpers().getStackHelper()));
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.world.item.crafting.*;
 import net.techtastic.tat.recipe.CastIronOvenRecipe;
+import net.techtastic.tat.recipe.ChaliceRecipe;
 import net.techtastic.tat.recipe.DistilleryRecipe;
 import net.techtastic.tat.recipe.KeyRingRecipe;
 
@@ -30,6 +31,9 @@ public class TATRecipes {
 
     public static final RegistrySupplier<SimpleRecipeSerializer<KeyRingRecipe>> KEY_RING_SERIALIZER =
             SERIALIZERS.register("key_ring", () -> new SimpleRecipeSerializer<>(KeyRingRecipe::new));
+
+    public static final RegistrySupplier<SimpleRecipeSerializer<ChaliceRecipe>> CHALICE_SERIALIZER =
+            SERIALIZERS.register("chalice", () -> new SimpleRecipeSerializer<>(ChaliceRecipe::new));
 
     public static void register() {
         SERIALIZERS.register();
