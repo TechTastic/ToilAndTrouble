@@ -35,7 +35,7 @@ public class ArthanaSwordItem extends SwordItem {
         Player player = useOnContext.getPlayer();
         InteractionHand hand = useOnContext.getHand();
 
-        if (level.isClientSide || player == null || !player.isCrouching())
+        if (player == null || !player.isCrouching())
             return super.useOn(useOnContext);
 
         ItemStack arthana = useOnContext.getItemInHand();

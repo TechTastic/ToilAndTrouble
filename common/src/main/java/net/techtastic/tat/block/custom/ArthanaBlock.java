@@ -2,6 +2,7 @@ package net.techtastic.tat.block.custom;
 
 import dev.architectury.registry.menu.ExtendedMenuProvider;
 import dev.architectury.registry.menu.MenuRegistry;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.MutableComponent;
@@ -69,23 +70,19 @@ public class ArthanaBlock extends BaseEntityBlock {
     @Override
     public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
         BlockEntity be = blockGetter.getBlockEntity(blockPos);
-        System.err.println("BlockEntity: " + be);
-        if (be instanceof ArthanaBlockEntity arthana) {
-            ItemStack dagger = arthana.getArthana();
-            System.err.println("ItemStack: " + dagger);
-            return dagger;
-        }
+        if (be instanceof ArthanaBlockEntity arthana)
+            return arthana.getArthana().copy();
 
         return super.getCloneItemStack(blockGetter, blockPos, blockState);
     }
 
     public static void placeArthana(Level level, BlockPos pos, BlockState state, ItemStack stack) {
-        level.setBlockAndUpdate(pos, state);
+        if (!level.isClientSide)
+            level.setBlockAndUpdate(pos, state);
 
         BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof ArthanaBlockEntity arthana) {
+        if (be instanceof ArthanaBlockEntity arthana)
             arthana.setArthana(stack);
-        }
     }
 
     @Override

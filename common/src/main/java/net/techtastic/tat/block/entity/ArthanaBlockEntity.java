@@ -12,7 +12,7 @@ import net.techtastic.tat.item.TATItems;
 import org.jetbrains.annotations.NotNull;
 
 public class ArthanaBlockEntity extends BlockEntity {
-    private ItemStack arthana = new ItemStack(TATItems.ARTHANA.get());
+    private CompoundTag arthanaTag = new CompoundTag();
 
     public ArthanaBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.ARTHANA_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -20,7 +20,7 @@ public class ArthanaBlockEntity extends BlockEntity {
 
     @Override
     protected void saveAdditional(@NotNull CompoundTag compoundTag) {
-        ContainerHelper.saveAllItems(compoundTag, NonNullList.of(ItemStack.EMPTY, this.arthana));
+        compoundTag.put("ToilAndTrouble&arthanaNBT", this.arthanaTag);
 
         super.saveAdditional(compoundTag);
     }
@@ -29,17 +29,17 @@ public class ArthanaBlockEntity extends BlockEntity {
     public void load(@NotNull CompoundTag compoundTag) {
         super.load(compoundTag);
 
-        NonNullList<ItemStack> temp = NonNullList.withSize(1, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(compoundTag, temp);
-        this.arthana = temp.get(0);
+        this.arthanaTag = compoundTag.getCompound("ToilAndTrouble&arthanaNBT");
     }
 
     public ItemStack getArthana() {
-        return this.arthana;
+        ItemStack arthana = new ItemStack(TATItems.ARTHANA.get(), 1);
+        arthana.setTag(this.arthanaTag);
+        return arthana;
     }
 
     public void setArthana(ItemStack arthana) {
-        this.arthana.setTag(arthana.getOrCreateTag());
+        this.arthanaTag = arthana.getOrCreateTag();
         this.setChanged();
     }
 }

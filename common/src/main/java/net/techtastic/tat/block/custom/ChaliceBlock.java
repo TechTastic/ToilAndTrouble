@@ -3,6 +3,7 @@ package net.techtastic.tat.block.custom;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -100,12 +101,12 @@ public class ChaliceBlock extends Block {
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
         if (blockState.getValue(SOUP))
             level.addParticle(
-                    ParticleTypes.ELECTRIC_SPARK,
-                    0.5,
-                    0.8,
-                    0.5,
+                    DustParticleOptions.REDSTONE,
+                    blockPos.getX() + 0.5,
+                    blockPos.getY() + 0.6,
+                    blockPos.getZ() + 0.5,
                     0.0,
-                    0.0,
+                    0.1,
                     0.0
             );
     }
