@@ -68,6 +68,12 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> CHALICE = BLOCKS_WITHOUT_ITEMS.register("chalice",
             () -> new ChaliceBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion()));
 
+    public static final RegistrySupplier<Block> INFINITY_EGG = BLOCKS.register("infinity_egg",
+            () -> new DragonEggBlock(BlockBehaviour.Properties.copy(Blocks.DRAGON_EGG).noOcclusion()));
+
+    public static final RegistrySupplier<Block> PENTACLE = BLOCKS.register("pentacle",
+            () -> new PentacleBlock(BlockBehaviour.Properties.copy(Blocks.GOLD_BLOCK).noOcclusion()));
+
     ///////////
     //       //
     // CROPS //

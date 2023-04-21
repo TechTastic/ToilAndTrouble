@@ -6,8 +6,11 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.api.altar.augment.IAltarAugment;
 import net.techtastic.tat.api.altar.augment.IAltarAugmentProvider;
+import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.block.custom.ArthanaBlock;
 import net.techtastic.tat.block.custom.CandelabraBlock;
+import net.techtastic.tat.block.custom.ChaliceBlock;
+import net.techtastic.tat.block.custom.PentacleBlock;
 
 import java.util.Optional;
 
@@ -27,6 +30,12 @@ public class TATAugmentProvider implements IAltarAugmentProvider {
             return Optional.of(new SkullAltarAugment(state));
         else if (state.getBlock() instanceof ArthanaBlock)
             return Optional.of(new ArthanaAltarAugment());
+        else if (state.getBlock() instanceof ChaliceBlock)
+            return Optional.of(new ChaliceAltarAugment(state));
+        else if (state.getBlock() instanceof PentacleBlock)
+            return Optional.of(new PentacleAltarAugment());
+        else if (state.is(TATBlocks.INFINITY_EGG.get()))
+            return Optional.of(new InfinityEggAltarAugment());
         else
             return Optional.empty();
     }

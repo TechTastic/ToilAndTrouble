@@ -33,6 +33,8 @@
   "item.tat.brew_of_flowing_spirit": "Brew of Flowing Spirit",
   "item.tat.brew_of_hollow_tears": "Brew of Hollow Tears",
 
+  "item.tat.redstone_soup": "Redstone Soup",
+
   "item.tat.key": "Key",
   "item.tat.key.tooltip": "Locked At:",
   "item.tat.key_ring": "Key Ring",
@@ -81,6 +83,8 @@
   "block.tat.bloody_rose": "Bloody Rose",
   "block.tat.demon_heart": "Demon Heart",
   "block.tat.arthana": "Arthana",
+  "block.tat.pentacle": "Pentacle",
+  "block.tat.infinity_egg": "Infinity Egg",
   "block.tat.chalice": "Chalice",
   "block.tat.chalice.filled": "Filled",
   "block.tat.candelabra": "Candelabra",

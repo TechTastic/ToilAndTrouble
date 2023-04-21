@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/dragon_egg",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "tat:block/infinity_egg",
+    "all": "tat:block/infinity_egg"
+  }
+}
