@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.block.TATBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
-public class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
+public abstract class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
     public NonNullList<ItemStack> inventory;
     private int craftProgress = 0;
     private final int maxCraftProgress = 0;
@@ -135,4 +135,8 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     public void fillStackedContents(StackedContents stackedContents) {
         this.inventory.forEach(stackedContents::accountStack);
     }
+
+    public abstract boolean hasEnoughFluid(KettleBlockEntity kettle);
+
+    public abstract boolean hasEnoughForBottling(KettleBlockEntity kettle);
 }
