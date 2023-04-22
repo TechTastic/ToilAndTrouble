@@ -6,20 +6,28 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.techtastic.tat.api.TaglockHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Random;
+import java.util.function.Predicate;
 
 public class TaglockItem extends Item {
     public TaglockItem(Properties properties) {
@@ -29,14 +37,14 @@ public class TaglockItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext useOnContext) {
         Level level = useOnContext.getLevel();
-        if (!level.isClientSide()) {
-            BlockPos hitPos = useOnContext.getClickedPos();
-            Player player = useOnContext.getPlayer();
-            InteractionHand hand = useOnContext.getHand();
-            BlockState block = level.getBlockState(hitPos);
-            BlockEntity be = level.getBlockEntity(hitPos);
-            ItemStack stack = player.getItemInHand(hand);
+        BlockPos hitPos = useOnContext.getClickedPos();
+        Player player = useOnContext.getPlayer();
+        InteractionHand hand = useOnContext.getHand();
+        BlockState block = level.getBlockState(hitPos);
+        BlockEntity be = level.getBlockEntity(hitPos);
+        ItemStack stack = player.getItemInHand(hand);
 
+        if (!level.isClientSide()) {
             if (stack.getCount() == 1) {
                 if (!TaglockHelper.getTaglockFromBlock(stack, block.getBlock())) {
                     TaglockHelper.getTaglockFromBlockEntity(stack, be);
@@ -56,26 +64,23 @@ public class TaglockItem extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity entity, @NotNull InteractionHand hand) {
-        if (wasTaglockSuccessful(player, entity)) {
+        if (wasTaglockSuccessful(player, entity))
             if (stack.getCount() == 1) {
                 if (entity instanceof Player target) {
                     target.sendMessage(new TranslatableComponent("item.tat.taglock"), player.getUUID());
                     TaglockHelper.taglockPlayer(stack, target);
-                } else {
+                } else
                     TaglockHelper.taglockEntity(stack, entity);
-                }
                 player.setItemInHand(hand, stack);
             } else {
                 ItemStack taglock = new ItemStack(stack.getItem());
-                if (entity instanceof Player target) {
+                if (entity instanceof Player target)
                     TaglockHelper.taglockPlayer(taglock, target);
-                } else {
+                else
                     TaglockHelper.taglockEntity(taglock, entity);
-                }
-                if (player.addItem(taglock.copy())) player.getItemInHand(hand).shrink(1);
+                if (player.getInventory().getFreeSlot() != -1 && player.getInventory().getSlotWithRemainingSpace(taglock) != -1)
+                    player.getInventory().add(taglock);
             }
-        }
-
         return InteractionResult.sidedSuccess(true);
     }
 
@@ -90,22 +95,30 @@ public class TaglockItem extends Item {
         }
     }
 
+    /*
+        Credit to Bewitchment developer MoriyaShiine for part of the Taglock Success Check
+        regarding where the player is in regards to the target
+    */
+
     public static boolean wasTaglockSuccessful(Player player, Entity target) {
-        Vec3 a = player.getLookAngle();
-        double ax = player.getLookAngle().x;
-        double ay = player.getLookAngle().y;
-        double az = player.getLookAngle().z;
-        double aSqr = Math.sqrt(ax*ax + ay*ay + az*az);
+        double playerHead = player.getYHeadRot();
+        double targetHead = target.getYHeadRot();
 
-        Vec3 b = target.getLookAngle();
-        double bx = target.getLookAngle().x;
-        double by = target.getLookAngle().y;
-        double bz = target.getLookAngle().z;
-        double bSqr = Math.sqrt(bx*bx + by*by + bz*bz);
+        if (playerHead % 360 < 0)
+            playerHead += 360;
+        if (targetHead % 360 < 0)
+            targetHead += 360;
 
-        double angleBetween = Math.acos(a.dot(b) / (aSqr * bSqr));
+        double chance = 0.0;
+        if (Math.abs(targetHead - playerHead) < 120)
+            chance += 0.3;
+        if (player.isCrouching())
+            chance += 0.3;
+        if (target.isInvisibleTo(player))
+            chance += 0.3;
 
-        return angleBetween > 2.2 && angleBetween < 2.4 && !player.level.isClientSide;
+        Random random = new Random();
+        return random.nextDouble() <= chance;
     }
 
     @Override

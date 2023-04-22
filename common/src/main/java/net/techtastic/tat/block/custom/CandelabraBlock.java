@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.dimension.DimensionDefaults;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -70,9 +72,8 @@ public class CandelabraBlock extends AbstractCandleBlock {
 
     @Override
     public void onProjectileHit(Level level, @NotNull BlockState blockState, @NotNull BlockHitResult blockHitResult, @NotNull Projectile projectile) {
-        if (!level.isClientSide && projectile.isOnFire() && this.canBeLit(blockState)) {
+        if (!level.isClientSide && projectile.isOnFire() && this.canBeLit(blockState))
             setLit(level, blockState, blockHitResult.getBlockPos(), true);
-        }
 
     }
 
@@ -111,21 +112,32 @@ public class CandelabraBlock extends AbstractCandleBlock {
     public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
         if (blockState.getValue(LIT)) {
             this.getParticleOffsets(blockState).forEach((vec3) -> {
-                addParticlesAndSound(level, vec3.add((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ()), random);
+                addParticlesAndSound(
+                        level,
+                        vec3.add(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
+                        random,
+                        level.dimensionTypeRegistration().is(DimensionType.NETHER_LOCATION));
             });
         }
     }
 
-    private static void addParticlesAndSound(Level level, Vec3 vec3, Random random) {
+    private static void addParticlesAndSound(Level level, Vec3 vec3, Random random, boolean isNether) {
         float f = random.nextFloat();
         if (f < 0.3F) {
             level.addParticle(ParticleTypes.SMOKE, vec3.x, vec3.y, vec3.z, 0.0, 0.0, 0.0);
-            if (f < 0.17F) {
+            if (f < 0.17F)
                 level.playLocalSound(vec3.x + 0.5, vec3.y + 0.5, vec3.z + 0.5, SoundEvents.CANDLE_AMBIENT, SoundSource.BLOCKS, 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
-            }
         }
 
-        level.addParticle(ParticleTypes.SMALL_FLAME, vec3.x, vec3.y, vec3.z, 0.0, 0.0, 0.0);
+        level.addParticle(
+                isNether ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SMALL_FLAME,
+                vec3.x,
+                vec3.y + (isNether ? 0.05 : 0.0),
+                vec3.z,
+                0.0,
+                0.0,
+                0.0
+        );
     }
 
     public static void extinguish(@Nullable Player player, BlockState blockState, LevelAccessor levelAccessor, @NotNull BlockPos blockPos) {
