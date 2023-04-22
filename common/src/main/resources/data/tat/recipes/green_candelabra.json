@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "IAI",
+    " I "
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:green_candle"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "A": {
+      "item": "tat:attuned_stone"
+    }
+  },
+  "result": {
+    "item": "tat:green_candelabra"
+  }
+}
