@@ -2,9 +2,13 @@ package net.techtastic.tat.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -16,6 +20,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.entity.DistilleryBlockEntity;
@@ -92,5 +97,28 @@ public class KettleBlock extends BaseEntityBlock {
         }
 
         kettle.setItem(kettle.inventory.indexOf(ItemStack.EMPTY), new ItemStack(stack.getItem(), 1));
+    }
+
+    @Override
+    public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+        ItemStack stack = player.getItemInHand(interactionHand);
+
+        BlockEntity be = level.getBlockEntity(blockPos);
+        if (be instanceof KettleBlockEntity kettle)
+            if (stack.is(Items.WATER_BUCKET))
+                if (kettle.tryInsertFluid(kettle, stack)) {
+                    player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
+                    return InteractionResult.SUCCESS;
+                }
+            else if (stack.is(Items.BUCKET) || stack.is(Items.GLASS_BOTTLE))
+                if (kettle.tryExtractFluid(kettle, stack)) {
+                    if (stack.is(Items.BUCKET))
+                        player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
+                    if (stack.is(Items.GLASS_BOTTLE))
+                        player.setItemInHand(interactionHand, kettle.getRecipeOutput(kettle));
+                    return InteractionResult.SUCCESS;
+                }
+
+        return InteractionResult.FAIL;
     }
 }

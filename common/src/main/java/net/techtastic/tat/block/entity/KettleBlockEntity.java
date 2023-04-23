@@ -139,4 +139,16 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
     public abstract boolean hasEnoughFluid(KettleBlockEntity kettle);
 
     public abstract boolean hasEnoughForBottling(KettleBlockEntity kettle);
+
+    public abstract boolean tryInsertFluid(KettleBlockEntity kettle, ItemStack stack);
+
+    public abstract boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack);
+
+    public ItemStack getRecipeOutput(KettleBlockEntity kettle) {
+        return ItemStack.EMPTY;
+    }
+
+    public boolean hasRecipe(KettleBlockEntity kettle) {
+        return false;
+    }
 }
