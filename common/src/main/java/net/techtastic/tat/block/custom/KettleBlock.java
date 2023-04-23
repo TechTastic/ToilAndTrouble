@@ -85,9 +85,13 @@ public class KettleBlock extends BaseEntityBlock {
         BlockEntity be = level.getBlockEntity(blockPos);
         if (!(be instanceof KettleBlockEntity kettle)) return;
 
-        if (!kettle.getItem(kettle.getContainerSize() - 1).isEmpty()) return;
-
         ItemStack stack = item.getItem();
+        ItemStack test = new ItemStack(stack.getItem(), 1);
+
+        if (!kettle.getItem(kettle.getContainerSize() - 1).isEmpty() &&
+                kettle.hasEnoughFluid(kettle) &&
+                kettle.testForNextIngredient(level, test))
+            return;
 
         if (stack.getCount() == 1)
             item.remove(Entity.RemovalReason.DISCARDED);
@@ -96,7 +100,7 @@ public class KettleBlock extends BaseEntityBlock {
             item.setItem(stack);
         }
 
-        kettle.setItem(kettle.inventory.indexOf(ItemStack.EMPTY), new ItemStack(stack.getItem(), 1));
+        kettle.setItem(kettle.inventory.indexOf(ItemStack.EMPTY), test);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.techtastic.tat.block.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -17,6 +18,8 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -26,12 +29,15 @@ import net.techtastic.tat.TATTags;
 import net.techtastic.tat.api.altar.source.AltarSources;
 import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.block.custom.KettleBlock;
+import net.techtastic.tat.recipe.CastIronOvenRecipe;
 import net.techtastic.tat.recipe.DistilleryRecipe;
 import net.techtastic.tat.recipe.KettleRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
@@ -221,5 +227,17 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
         );
 
         return container;
+    }
+
+    public boolean testForNextIngredient(Level level, ItemStack stack) {
+        RecipeManager rm = level.getRecipeManager();
+        List<KettleRecipe> recipes = rm.getAllRecipesFor(KettleRecipe.Type.INSTANCE);
+
+        NonNullList<ItemStack> currInv = this.inventory;
+        currInv.removeIf(ItemStack::isEmpty);
+        recipes.removeIf(recipe -> !recipe.getIngredients().get(
+                currInv.isEmpty() ? 0 : currInv.size() - 1
+        ).test(stack));
+        return !recipes.isEmpty();
     }
 }
