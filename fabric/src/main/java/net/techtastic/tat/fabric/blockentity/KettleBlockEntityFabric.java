@@ -83,8 +83,8 @@ public class KettleBlockEntityFabric extends KettleBlockEntity {
     @Override
     public boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack) {
         KettleBlockEntityFabric fabric = ((KettleBlockEntityFabric) kettle);
-        if ((!stack.is(Items.BUCKET) && fabric.fluidStorage.amount - FluidConstants.BUCKET < 0) ||
-                (!stack.is(Items.GLASS_BOTTLE) && fabric.fluidStorage.amount - FluidConstants.BOTTLE < 0 && hasRecipe(kettle)))
+        if ((!stack.is(Items.BUCKET) && !hasEnoughFluid(kettle)) ||
+                (!stack.is(Items.GLASS_BOTTLE) && !hasEnoughForBottling(kettle) && !hasRecipe(kettle)))
             return false;
         try(Transaction transaction = Transaction.openOuter()) {
             fabric.fluidStorage.extract(FluidVariant.of(Fluids.WATER), stack.is(Items.BUCKET) ? FluidConstants.BUCKET : FluidConstants.BOTTLE, transaction);

@@ -77,8 +77,8 @@ public class KettleBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void fallOn(Level level, BlockState blockState, BlockPos blockPos, Entity entity, float f) {
-        super.fallOn(level, blockState, blockPos, entity, f);
+    public void entityInside(BlockState blockState, Level level, BlockPos blockPos, Entity entity) {
+        super.entityInside(blockState, level, blockPos, entity);
 
         if (!(entity instanceof ItemEntity item)) return;
 
@@ -114,7 +114,7 @@ public class KettleBlock extends BaseEntityBlock {
                 if (kettle.tryExtractFluid(kettle, stack)) {
                     if (stack.is(Items.BUCKET))
                         player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
-                    if (stack.is(Items.GLASS_BOTTLE))
+                    if (stack.is(Items.GLASS_BOTTLE) && KettleBlockEntity.hasRecipe(kettle))
                         player.setItemInHand(interactionHand, kettle.getRecipeOutput(kettle));
                     return InteractionResult.SUCCESS;
                 }

@@ -12,6 +12,8 @@ public class TATTags {
 
         public static final TagKey<Block> MUTANDIS = createTag("mutandis");
 
+        public static final TagKey<Block> FIRE_SOURCE = createTag("fire_source");
+
         private static TagKey<Block> createTag(String name) {
             return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(ToilAndTrouble.MOD_ID, name));
         }
