@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -43,6 +44,7 @@ import java.util.Optional;
 public abstract class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
     public NonNullList<ItemStack> inventory;
     private boolean isHeated = false;
+    private ItemStack output = ItemStack.EMPTY;
 
     public KettleBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -53,8 +55,22 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
 
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
 
-        if (!kettle.hasEnoughFluid(kettle))
+        if (!kettle.hasEnoughFluid(kettle) || !kettle.output.isEmpty()) {
             Collections.fill(kettle.inventory, ItemStack.EMPTY);
+            kettle.setChanged();
+            return;
+        }
+
+        if (!hasRecipe(kettle)) {
+            kettle.setChanged();
+            return;
+        }
+
+        BlockPos altarPos = findNearestAltar(level, kettle.worldPosition);
+        IAltarSource altar = AltarSources.testForAltarSource(level, altarPos);
+
+        if (altar != null && altar.drawPowerFromAltar(level, kettle.worldPosition, altarPos, getPowerRequired(kettle)))
+            kettle.output = getRecipeOutput(kettle);
 
         kettle.setChanged();
     }
@@ -62,7 +78,10 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
     @Override
     protected void saveAdditional(CompoundTag compoundTag) {
         ContainerHelper.saveAllItems(compoundTag, this.inventory);
+
         compoundTag.putBoolean("ToilAndTrouble$isHeated", this.isHeated);
+
+        ContainerHelper.saveAllItems(compoundTag, NonNullList.of(ItemStack.EMPTY, this.output));
 
         super.saveAdditional(compoundTag);
     }
@@ -73,7 +92,12 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
 
         this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(compoundTag, this.inventory);
+
         this.isHeated = compoundTag.getBoolean("ToilAndTrouble$isHeated");
+
+        NonNullList<ItemStack> temp = NonNullList.withSize(1, ItemStack.EMPTY);
+        ContainerHelper.loadAllItems(compoundTag, temp);
+        this.output = temp.get(0);
     }
 
     @Override
@@ -171,7 +195,7 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
 
     public abstract boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack);
 
-    public ItemStack getRecipeOutput(KettleBlockEntity kettle) {
+    public static ItemStack getRecipeOutput(KettleBlockEntity kettle) {
         Level level = kettle.level;
 
         assert level != null;
@@ -181,6 +205,16 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
         return match.isPresent() ? match.get().getOutput() : ItemStack.EMPTY;
     }
 
+    public static int getPowerRequired(KettleBlockEntity kettle) {
+        Level level = kettle.level;
+
+        assert level != null;
+        Optional<KettleRecipe> match = level.getRecipeManager()
+                .getRecipeFor(KettleRecipe.Type.INSTANCE, kettle.getContainer(), level);
+
+        return match.map(KettleRecipe::getPower).orElse(0);
+    }
+
     public static boolean hasRecipe(KettleBlockEntity kettle) {
         Level level = kettle.level;
 
@@ -188,14 +222,8 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
         Optional<KettleRecipe> match = level.getRecipeManager()
                 .getRecipeFor(KettleRecipe.Type.INSTANCE, kettle.getContainer(), level);
 
-        BlockPos altarPos = findNearestAltar(level, kettle.worldPosition);
-        IAltarSource altar = AltarSources.testForAltarSource(level, altarPos);
-
         return match.isPresent() &&
-                kettle.hasEnoughFluid(kettle) &&
-                kettle.isHeated &&
-                altar != null &&
-                altar.drawPowerFromAltar(level, kettle.worldPosition, altarPos, match.get().getPower());
+                kettle.hasEnoughFluid(kettle) && kettle.isHeated;
     }
 
     public static BlockPos findNearestAltar(Level level, BlockPos center) {
@@ -239,5 +267,15 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
                 currInv.isEmpty() ? 0 : currInv.size() - 1
         ).test(stack));
         return !recipes.isEmpty();
+    }
+
+    public void clearOutput() {
+        this.output = ItemStack.EMPTY;
+        this.setChanged();
+    }
+
+    public void shrinkOutput() {
+        this.output.shrink(1);
+        this.setChanged();
     }
 }

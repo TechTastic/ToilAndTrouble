@@ -108,20 +108,34 @@ public class KettleBlock extends BaseEntityBlock {
         ItemStack stack = player.getItemInHand(interactionHand);
 
         BlockEntity be = level.getBlockEntity(blockPos);
-        if (be instanceof KettleBlockEntity kettle)
-            if (stack.is(Items.WATER_BUCKET))
-                if (kettle.tryInsertFluid(kettle, stack)) {
-                    player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
-                    return InteractionResult.SUCCESS;
-                }
-            else if (stack.is(Items.BUCKET) || stack.is(Items.GLASS_BOTTLE))
-                if (kettle.tryExtractFluid(kettle, stack)) {
-                    if (stack.is(Items.BUCKET))
-                        player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
-                    if (stack.is(Items.GLASS_BOTTLE) && KettleBlockEntity.hasRecipe(kettle))
-                        player.setItemInHand(interactionHand, kettle.getRecipeOutput(kettle));
-                    return InteractionResult.SUCCESS;
-                }
+
+        if (!(be instanceof KettleBlockEntity kettle))
+            return InteractionResult.FAIL;
+
+        ItemStack output = KettleBlockEntity.getRecipeOutput(kettle);
+
+        if (stack.is(Items.WATER_BUCKET)) {
+            if (!kettle.tryInsertFluid(kettle, stack))
+                return InteractionResult.FAIL;
+            player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
+            return InteractionResult.SUCCESS;
+        } else if (stack.is(Items.BUCKET) || stack.is(Items.GLASS_BOTTLE)) {
+            if (!kettle.tryExtractFluid(kettle, stack))
+                return InteractionResult.FAIL;
+
+            if (stack.is(Items.BUCKET)) {
+                player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
+                return InteractionResult.SUCCESS;
+            }
+            if (stack.is(Items.GLASS_BOTTLE) && !output.isEmpty()) {
+                if (output.getCount() == 1)
+                    kettle.clearOutput();
+                else
+                    kettle.shrinkOutput();
+                player.setItemInHand(interactionHand, new ItemStack(output.getItem(), 1));
+                return InteractionResult.SUCCESS;
+            }
+        }
 
         return InteractionResult.FAIL;
     }

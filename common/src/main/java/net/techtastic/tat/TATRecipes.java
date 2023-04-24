@@ -27,9 +27,9 @@ public class TATRecipes {
             TYPES.register("distilling", () -> DistilleryRecipe.Type.INSTANCE);
 
     public static final RegistrySupplier<RecipeSerializer<KettleRecipe>> KETTLE_SERIALIZER =
-            SERIALIZERS.register("kettle", () -> KettleRecipe.Serializer.INSTANCE);
+            SERIALIZERS.register("kettle_brewing", () -> KettleRecipe.Serializer.INSTANCE);
     public static final RegistrySupplier<RecipeType<KettleRecipe>> KETTLE_TYPE =
-            TYPES.register("kettle", () -> KettleRecipe.Type.INSTANCE);
+            TYPES.register("kettle_brewing", () -> KettleRecipe.Type.INSTANCE);
 
     public static final RegistrySupplier<SimpleRecipeSerializer<KeyRingRecipe>> KEY_RING_SERIALIZER =
             SERIALIZERS.register("key_ring", () -> new SimpleRecipeSerializer<>(KeyRingRecipe::new));
