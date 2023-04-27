@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": {"model": "tat:block/kettle"},
+    "facing=east": {"model": "tat:block/kettle", "y": 90},
+    "facing=south": {"model": "tat:block/kettle", "y": 180},
+    "facing=west": {"model": "tat:block/kettle", "y": 270}
+  }
+}

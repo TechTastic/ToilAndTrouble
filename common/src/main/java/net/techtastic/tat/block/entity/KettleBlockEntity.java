@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public abstract class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
-    public NonNullList<ItemStack> inventory;
+    public NonNullList<ItemStack> inventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
     private boolean isHeated = false;
     private ItemStack output = ItemStack.EMPTY;
 

@@ -11,7 +11,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
-import org.lwjgl.system.CallbackI;
 
 public class KettleBlockEntityFabric extends KettleBlockEntity {
     public final SingleVariantStorage<FluidVariant> fluidStorage = new SingleVariantStorage<FluidVariant>() {
