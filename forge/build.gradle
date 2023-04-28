@@ -26,6 +26,14 @@ configurations {
     developmentForge.extendsFrom common
 }
 
+repositories {
+    maven {
+        // Flywheel Maven
+        name "tterrag maven"
+        url "https://maven.tterrag.com/"
+    }
+}
+
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
 
@@ -37,6 +45,9 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    // Flywheel
+    modImplementation "com.jozufozu.flywheel:Flywheel-Forge:${flywheel_version}"
 }
 
 processResources {

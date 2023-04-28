@@ -1,10 +1,27 @@
 {
   "type": "tat:kettle_brewing",
   "ingredients": [
-
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "tat:tongue_of_dog"
+    },
+    {
+      "item": "tat:drop_of_luck"
+    },
+    {
+      "item": "tat:belladonna_flower"
+    },
+    {
+      "item": "tat:wool_of_bat"
+    },
+    {
+      "item": "tat:mandrake_root"
+    }
   ],
   "result": {
-
+    "item": "tat:redstone_soup"
   },
   "power": 1000
 }

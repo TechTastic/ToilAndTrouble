@@ -17,6 +17,11 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        // Flywheel Maven
+        name "tterrag maven"
+        url "https://maven.tterrag.com/"
+    }
 }
 
 dependencies {
@@ -31,6 +36,9 @@ dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     // at runtime, use the full JEI jar
     runtimeOnly("mezz.jei:jei-${minecraft_version}-common:${jei_version}")
+
+    // Flywheel
+    modImplementation "com.jozufozu.flywheel:Flywheel-Fabric:${flywheel_version}"
 }
 
 publishing {
