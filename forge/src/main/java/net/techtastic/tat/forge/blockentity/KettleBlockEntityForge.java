@@ -16,6 +16,9 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class KettleBlockEntityForge extends KettleBlockEntity {
     private final FluidTank fluidStorage = new FluidTank(1000) {
         @Override
@@ -89,30 +92,42 @@ public class KettleBlockEntityForge extends KettleBlockEntity {
 
     @Override
     public boolean tryInsertFluid(KettleBlockEntity kettle, ItemStack stack) {
-        KettleBlockEntityForge fabric = ((KettleBlockEntityForge) kettle);
-        if (!stack.is(Items.WATER_BUCKET) && fabric.fluidStorage.amount + FluidConstants.BUCKET > fabric.fluidStorage.getCapacity())
-            return false;
-        try(Transaction transaction = Transaction.openOuter()) {
-            fabric.fluidStorage.insert(FluidVariant.of(Fluids.WATER), FluidConstants.BUCKET, transaction);
-            transaction.commit();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        AtomicReference<Boolean> bool = new AtomicReference<>(false);
+        KettleBlockEntityForge forge = (KettleBlockEntityForge) kettle;
+        stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(handler -> {
+            int drainAmount = Math.min(forge.fluidStorage.getSpace(), 1000);
+
+            FluidStack sim = handler.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
+            if (forge.fluidStorage.isFluidValid(sim)) {
+                fillTankWithFluid(forge, handler.getContainer());
+                bool.set(true);
+            }
+        });
+        return bool.get();
+    }
+
+    public void fillTankWithFluid(KettleBlockEntityForge forge, ItemStack container) {
+        container.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).ifPresent(handler -> {
+            int drainAmount = 1000;
+            FluidStack sim = handler.drain(drainAmount, IFluidHandler.FluidAction.SIMULATE);
+            if (forge.fluidStorage.isFluidValid(sim)) {
+                sim = handler.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
+                forge.fluidStorage.fill(sim, IFluidHandler.FluidAction.EXECUTE);
+            }
+        });
     }
 
     @Override
     public boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack) {
-        KettleBlockEntityForge fabric = ((KettleBlockEntityForge) kettle);
-        if ((!stack.is(Items.BUCKET) && !hasEnoughFluid(kettle)) ||
-                (!stack.is(Items.GLASS_BOTTLE) && !hasEnoughForBottling(kettle) && !hasRecipe(kettle)))
+        KettleBlockEntityForge forge = (KettleBlockEntityForge) kettle;
+        if (!((stack.is(Items.BUCKET) && !hasEnoughFluid(kettle)) ||
+                (stack.is(Items.GLASS_BOTTLE) && hasEnoughForBottling(kettle) && hasRecipe(kettle))))
             return false;
-        try(Transaction transaction = Transaction.openOuter()) {
-            fabric.fluidStorage.extract(FluidVariant.of(Fluids.WATER), stack.is(Items.BUCKET) ? FluidConstants.BUCKET : FluidConstants.BOTTLE, transaction);
-            transaction.commit();
-        } catch (Exception e) {
-            return false;
-        }
+        drainFluidFromTank(forge, stack.is(Items.BUCKET) ? 1000 : forge.fluidStorage.getFluidAmount() == 334 ? 334 : 333);
         return true;
+    }
+
+    public void drainFluidFromTank(KettleBlockEntityForge forge, int amount) {
+        forge.fluidStorage.drain(amount, IFluidHandler.FluidAction.EXECUTE);
     }
 }
