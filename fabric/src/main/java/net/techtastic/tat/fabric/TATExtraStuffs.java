@@ -5,7 +5,8 @@ import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
-import net.techtastic.tat.fabric.blockentity.KettleBlockEntityFabric;
+import net.techtastic.tat.block.entity.KettleBlockEntity;
+import net.techtastic.tat.fabric.util.FabricFluidTank;
 
 public class TATExtraStuffs {
     public static void register() {
@@ -15,9 +16,10 @@ public class TATExtraStuffs {
     }
 
     public static void registerFluidStorage() {
-        FluidStorage.SIDED.registerForBlockEntity((be, direction) ->
-                        be instanceof KettleBlockEntityFabric kettle ? kettle.fluidStorage : null,
-                TATBlockEntities.KETTLE_BLOCK_ENTITY.get());
+        FluidStorage.SIDED.registerForBlockEntity(
+                (be, direction) -> ((FabricFluidTank) be.tank).fluidStorage,
+                TATBlockEntities.KETTLE_BLOCK_ENTITY.get()
+        );
     }
 
     private static void registerFlammables() {

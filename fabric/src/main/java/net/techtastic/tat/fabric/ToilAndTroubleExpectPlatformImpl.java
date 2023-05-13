@@ -5,12 +5,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.techtastic.tat.block.entity.CauldronBlockEntity;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
-import net.techtastic.tat.fabric.blockentity.CauldronBlockEntityFabric;
-import net.techtastic.tat.fabric.blockentity.KettleBlockEntityFabric;
+import net.techtastic.tat.fabric.util.FabricFluidTank;
+import net.techtastic.tat.util.FluidTank;
 
 import java.nio.file.Path;
 
@@ -23,26 +24,35 @@ public class ToilAndTroubleExpectPlatformImpl {
     }
 
     public static BlockEntity getKettleBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new KettleBlockEntityFabric(blockPos, blockState);
+        return new KettleBlockEntity(blockPos, blockState);
     }
 
     public static BlockEntityType.BlockEntitySupplier<KettleBlockEntity> getKettleBlockEntitySupplier() {
-        return KettleBlockEntityFabric::new;
+        return KettleBlockEntity::new;
     }
 
     public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
-        return KettleBlockEntityFabric::tick;
+        return KettleBlockEntity::tick;
     }
 
     public static BlockEntity getCauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new CauldronBlockEntityFabric(blockPos, blockState);
+        return new CauldronBlockEntity(blockPos, blockState);
     }
 
     public static BlockEntityType.BlockEntitySupplier<CauldronBlockEntity> getCauldronBlockEntitySupplier() {
-        return CauldronBlockEntityFabric::new;
+        return CauldronBlockEntity::new;
     }
 
     public static BlockEntityTicker<? super CauldronBlockEntity> getCauldronBlockEntityTicker() {
-        return CauldronBlockEntityFabric::tick;
+        return CauldronBlockEntity::tick;
+    }
+
+    public static FluidTank createFluidTank(Fluid fluid, int capacity, BlockEntity be) {
+        return new FabricFluidTank(capacity * 81, fluid) {
+            @Override
+            public void onContentsChanged() {
+                be.setChanged();
+            }
+        };
     }
 }

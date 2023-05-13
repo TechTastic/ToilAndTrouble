@@ -1,15 +1,11 @@
 package net.techtastic.tat.block.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
@@ -19,32 +15,33 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.material.Fluids;
 import net.techtastic.tat.TATTags;
+import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.api.altar.source.AltarSources;
 import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
-import net.techtastic.tat.block.custom.KettleBlock;
-import net.techtastic.tat.recipe.CastIronOvenRecipe;
-import net.techtastic.tat.recipe.DistilleryRecipe;
 import net.techtastic.tat.recipe.KettleRecipe;
+import net.techtastic.tat.util.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
+public class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
     public NonNullList<ItemStack> inventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
     private boolean isHeated = false;
     private ItemStack output = ItemStack.EMPTY;
+
+    public final FluidTank tank = ToilAndTroubleExpectPlatform.createFluidTank(Fluids.WATER, 1000, this);
 
     public KettleBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -55,7 +52,7 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
 
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
 
-        if (!kettle.hasEnoughFluid(kettle) || !kettle.output.isEmpty()) {
+        if (!kettle.tank.hasEnoughFluid(kettle.tank) || !kettle.output.isEmpty()) {
             Collections.fill(kettle.inventory, ItemStack.EMPTY);
             kettle.setChanged();
             return;
@@ -83,6 +80,8 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
 
         ContainerHelper.saveAllItems(compoundTag, NonNullList.of(ItemStack.EMPTY, this.output));
 
+        this.tank.writeToNbt(compoundTag);
+
         super.saveAdditional(compoundTag);
     }
 
@@ -98,6 +97,8 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
         NonNullList<ItemStack> temp = NonNullList.withSize(1, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(compoundTag, temp);
         this.output = temp.get(0);
+
+        this.tank.readFromNbt(compoundTag);
     }
 
     @Override
@@ -185,15 +186,7 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
         this.inventory.forEach(stackedContents::accountStack);
     }
 
-    public boolean hasEnoughFluid(KettleBlockEntity kettle) {
-        return false;
-    }
 
-    public abstract boolean hasEnoughForBottling(KettleBlockEntity kettle);
-
-    public abstract boolean tryInsertFluid(KettleBlockEntity kettle, ItemStack stack);
-
-    public abstract boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack);
 
     public static ItemStack getRecipeOutput(KettleBlockEntity kettle) {
         Level level = kettle.level;
@@ -223,7 +216,7 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
                 .getRecipeFor(KettleRecipe.Type.INSTANCE, kettle.getContainer(), level);
 
         return match.isPresent() &&
-                kettle.hasEnoughFluid(kettle) && kettle.isHeated;
+                kettle.tank.hasEnoughFluid(kettle.tank) && kettle.isHeated;
     }
 
     public static BlockPos findNearestAltar(Level level, BlockPos center) {
@@ -277,5 +270,21 @@ public abstract class KettleBlockEntity extends BaseContainerBlockEntity impleme
     public void shrinkOutput() {
         this.output.shrink(1);
         this.setChanged();
+    }
+
+    public boolean hasEnoughFluid(KettleBlockEntity kettle) {
+        return kettle.tank.hasEnoughFluid(kettle.tank);
+    }
+
+    public boolean hasEnoughForBottling(KettleBlockEntity kettle) {
+        return kettle.tank.hasEnoughForBottling(kettle.tank);
+    }
+
+    public boolean tryInsertFluid(KettleBlockEntity kettle, ItemStack stack) {
+        return kettle.tank.tryInsertFluid(kettle.tank, stack);
+    }
+
+    public boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack) {
+        return hasRecipe(kettle) && kettle.tank.tryExtractFluid(kettle.tank, stack);
     }
 }

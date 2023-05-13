@@ -1,6 +1,5 @@
 package net.techtastic.tat;
 
-import com.ibm.icu.impl.Assert;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -8,8 +7,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 import net.techtastic.tat.block.entity.CauldronBlockEntity;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
+import net.techtastic.tat.util.FluidTank;
 
 import java.nio.file.Path;
 
@@ -60,6 +61,11 @@ public class ToilAndTroubleExpectPlatform {
 
     @ExpectPlatform
     public static BlockEntityTicker<? super CauldronBlockEntity> getCauldronBlockEntityTicker() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static FluidTank createFluidTank(Fluid fluid, int capacity, BlockEntity be) {
         throw new AssertionError();
     }
 }
