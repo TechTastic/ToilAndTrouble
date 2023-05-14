@@ -45,4 +45,6 @@ public abstract class FluidTank {
     public abstract double getPercentage();
 
     public abstract void setFluid(FluidStack stack);
+
+    public abstract FluidStack getFluidStack();
 }

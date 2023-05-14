@@ -1,14 +1,19 @@
 package net.techtastic.tat.block.entity;
 
+import dev.architectury.networking.NetworkManager;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
@@ -26,6 +31,7 @@ import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.api.altar.source.AltarSources;
 import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.networking.TATNetworking;
 import net.techtastic.tat.recipe.KettleRecipe;
 import net.techtastic.tat.util.FluidTank;
 import org.jetbrains.annotations.Nullable;
@@ -286,5 +292,19 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
     public boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack) {
         return hasRecipe(kettle) && kettle.tank.tryExtractFluid(kettle.tank, stack);
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+
+        assert level != null;
+        if (level.isClientSide) return;
+
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+        this.tank.getFluidStack().write(buf);
+        buf.writeBlockPos(this.worldPosition);
+
+        NetworkManager.sendToPlayers(level.getServer().getPlayerList().getPlayers(), TATNetworking.FLUID_SYNC_S2C_PACKET_ID, buf);
     }
 }

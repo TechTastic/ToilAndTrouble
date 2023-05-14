@@ -105,4 +105,12 @@ public class FabricFluidTank extends FluidTank {
                 FluidVariant.of(stack.getFluid());
         this.fluidStorage.amount = stack.getAmount();
     }
+
+    @Override
+    public FluidStack getFluidStack() {
+        FluidVariant fabric = this.fluidStorage.variant;
+        return fabric.hasNbt() ?
+                FluidStack.create(fabric.getFluid(), this.fluidStorage.amount, fabric.getNbt()) :
+                FluidStack.create(fabric.getFluid(), this.fluidStorage.amount);
+    }
 }

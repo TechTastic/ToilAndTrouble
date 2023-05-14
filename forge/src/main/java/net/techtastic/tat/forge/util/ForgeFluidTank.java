@@ -117,6 +117,14 @@ public class ForgeFluidTank extends FluidTank {
         );
     }
 
+    @Override
+    public dev.architectury.fluid.FluidStack getFluidStack() {
+        FluidStack forge = this.fluidStorage.getFluid();
+        return forge.hasTag() ?
+                dev.architectury.fluid.FluidStack.create(forge.getFluid(), forge.getAmount(), forge.getTag()) :
+                dev.architectury.fluid.FluidStack.create(forge.getFluid(), forge.getAmount());
+    }
+
     public void drainFluidFromTank(ForgeFluidTank forge, int amount) {
         forge.fluidStorage.drain(amount, IFluidHandler.FluidAction.EXECUTE);
     }

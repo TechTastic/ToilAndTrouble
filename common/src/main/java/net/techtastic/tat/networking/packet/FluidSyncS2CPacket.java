@@ -1,31 +1,45 @@
 package net.techtastic.tat.networking.packet;
 
 import dev.architectury.fluid.FluidStack;
-import net.minecraft.nbt.CompoundTag;
+import dev.architectury.networking.NetworkManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.techtastic.tat.ToilAndTroubleExpectPlatform;
-import net.techtastic.tat.util.FluidTank;
+import net.techtastic.tat.block.entity.KettleBlockEntity;
+
+import java.util.function.Supplier;
 
 public class FluidSyncS2CPacket {
-    private final FluidTank tank;
+    private final FluidStack stack;
+    private final BlockPos pos;
 
-    public FluidSyncS2CPacket(Fluid fluid, int capacity, int amount, BlockEntity be) {
-        this.tank = ToilAndTroubleExpectPlatform.createFluidTank(fluid, capacity, be);
-        this.tank.setFluid(FluidStack.create(fluid, amount));
+    public FluidSyncS2CPacket(Fluid fluid, int amount, BlockPos pos) {
+        this.stack = FluidStack.create(fluid, amount);
+        this.pos = pos;
     }
 
-    public FluidSyncS2CPacket(Fluid fluid, int capacity, int amount, BlockEntity be, CompoundTag tag) {
-        this(fluid, capacity, amount, be);
-        this.tank.setFluid(FluidStack.create(fluid, amount, tag));
+    public FluidSyncS2CPacket(FluidStack stack, BlockPos pos) {
+        this.stack = stack;
+        this.pos = pos;
     }
 
     public FluidSyncS2CPacket(FriendlyByteBuf buf) {
-        FluidStack stack = FluidStack.read(buf);
-        int capacity = buf.readInt();
+        this.stack = FluidStack.read(buf);
+        this.pos = buf.readBlockPos();
+    }
 
-        stack.hasTag() ?
-                this(stack.getFluid(), capacity, stack.getAmount(), )
+    public void toBytes(FriendlyByteBuf buf) {
+        this.stack.write(buf);
+        buf.writeBlockPos(pos);
+    }
+
+    public void apply(Supplier<NetworkManager.PacketContext> contextSupplier) {
+        contextSupplier.get().queue(() -> {
+            assert Minecraft.getInstance().level != null;
+            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof KettleBlockEntity blockEntity) {
+                blockEntity.tank.setFluid(this.stack);
+            }
+        });
     }
 }
