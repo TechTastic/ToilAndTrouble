@@ -1,4 +1,4 @@
-package net.techtastic.tat.forge;
+package net.techtastic.tat.forge.util;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -97,6 +97,24 @@ public class ForgeFluidTank extends FluidTank {
     @Override
     public void readFromNbt(CompoundTag compoundTag) {
         this.fluidStorage.readFromNBT(compoundTag.getCompound("ToilAndTrouble$tank"));
+    }
+
+    @Override
+    public long getRemainingFluid() {
+        return this.fluidStorage.getFluidAmount();
+    }
+
+    @Override
+    public double getPercentage() {
+        return (double) this.fluidStorage.getFluidAmount() / this.fluidStorage.getCapacity();
+    }
+
+    @Override
+    public void setFluid(dev.architectury.fluid.FluidStack stack) {
+        this.fluidStorage.setFluid(stack.hasTag() ?
+                new FluidStack(stack.getFluid(), (int) stack.getAmount(), stack.getTag()) :
+                new FluidStack(stack.getFluid(), (int) stack.getAmount())
+        );
     }
 
     public void drainFluidFromTank(ForgeFluidTank forge, int amount) {

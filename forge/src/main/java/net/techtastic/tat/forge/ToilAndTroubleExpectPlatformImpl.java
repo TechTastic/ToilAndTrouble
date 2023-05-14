@@ -9,6 +9,7 @@ import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
 import net.techtastic.tat.forge.blockentity.KettleBlockEntityForge;
+import net.techtastic.tat.forge.util.ForgeFluidTank;
 import net.techtastic.tat.util.FluidTank;
 
 import java.nio.file.Path;

@@ -35,4 +35,14 @@ public abstract class FluidTank {
     public abstract void writeToNbt(CompoundTag compoundTag);
 
     public abstract void readFromNbt(CompoundTag compoundTag);
+
+    public abstract long getRemainingFluid();
+
+    public Fluid getFluid() {
+        return this.fluid;
+    }
+
+    public abstract double getPercentage();
+
+    public abstract void setFluid(FluidStack stack);
 }

@@ -1,5 +1,6 @@
 package net.techtastic.tat.fabric.util;
 
+import dev.architectury.fluid.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
@@ -85,5 +86,23 @@ public class FabricFluidTank extends FluidTank {
     public void readFromNbt(CompoundTag compoundTag) {
         this.fluidStorage.variant = FluidVariant.fromNbt(compoundTag.getCompound("ToilAndTrouble$variant"));
         this.fluidStorage.amount = compoundTag.getLong("ToilAndTrouble$amount");
+    }
+
+    @Override
+    public long getRemainingFluid() {
+        return this.fluidStorage.amount;
+    }
+
+    @Override
+    public double getPercentage() {
+        return (double) this.fluidStorage.amount / this.fluidStorage.getCapacity();
+    }
+
+    @Override
+    public void setFluid(FluidStack stack) {
+        this.fluidStorage.variant = stack.hasTag() ?
+                FluidVariant.of(stack.getFluid(), stack.getTag()) :
+                FluidVariant.of(stack.getFluid());
+        this.fluidStorage.amount = stack.getAmount();
     }
 }

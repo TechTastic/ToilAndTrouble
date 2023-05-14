@@ -7,7 +7,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
-import net.techtastic.tat.forge.ForgeFluidTank;
+import net.techtastic.tat.forge.util.ForgeFluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
