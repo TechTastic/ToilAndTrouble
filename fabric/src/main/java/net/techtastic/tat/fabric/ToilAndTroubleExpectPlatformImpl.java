@@ -31,9 +31,9 @@ public class ToilAndTroubleExpectPlatformImpl {
         return KettleBlockEntity::new;
     }
 
-    public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
+    /*public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
         return KettleBlockEntity::tick;
-    }
+    }*/
 
     public static BlockEntity getCauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
         return new CauldronBlockEntity(blockPos, blockState);

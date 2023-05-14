@@ -44,10 +44,10 @@ public class ToilAndTroubleExpectPlatform {
         throw new AssertionError();
     }
 
-    @ExpectPlatform
+    /*@ExpectPlatform
     public static BlockEntityTicker<? super KettleBlockEntity> getKettleBlockEntityTicker() {
         throw new AssertionError();
-    }
+    }*/
 
     @ExpectPlatform
     public static BlockEntity getCauldronBlockEntity(BlockPos blockPos, BlockState blockState) {
