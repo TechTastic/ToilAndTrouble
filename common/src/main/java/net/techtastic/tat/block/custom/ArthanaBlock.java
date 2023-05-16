@@ -68,7 +68,7 @@ public class ArthanaBlock extends BaseEntityBlock {
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         BlockEntity be = blockGetter.getBlockEntity(blockPos);
         if (be instanceof ArthanaBlockEntity arthana)
             return arthana.getArthana().copy();

@@ -16,6 +16,7 @@ import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.integration.TATFuels;
 import net.techtastic.tat.item.TATItemModelPredicates;
 import net.techtastic.tat.item.TATItems;
+import net.techtastic.tat.networking.TATNetworking;
 import net.techtastic.tat.screen.*;
 import net.techtastic.tat.world.feature.TATConfiguredFeatures;
 
@@ -41,6 +42,8 @@ public class ToilAndTrouble {
         FUELS = TATFuels.getAllFuels();
         NatureBlockStateInfo.init();
         TATExtras.register();
+
+        TATNetworking.register();
 
         ReloadListenerRegistry.register(PackType.SERVER_DATA, new PreparableReloadListener() {
             @Override

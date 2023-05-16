@@ -1,0 +1,42 @@
+package net.techtastic.tat.networking.packet;
+
+import dev.architectury.fluid.FluidStack;
+import dev.architectury.networking.NetworkManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.Fluid;
+import net.techtastic.tat.block.entity.ArthanaBlockEntity;
+import net.techtastic.tat.block.entity.KettleBlockEntity;
+
+import java.util.function.Supplier;
+
+public class ArthanaSyncS2CPacket {
+    private final ItemStack stack;
+    private final BlockPos pos;
+
+    public ArthanaSyncS2CPacket(ItemStack stack, BlockPos pos) {
+        this.stack = stack;
+        this.pos = pos;
+    }
+
+    public ArthanaSyncS2CPacket(FriendlyByteBuf buf) {
+        this.stack = buf.readItem();
+        this.pos = buf.readBlockPos();
+    }
+
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeItem(stack);
+        buf.writeBlockPos(pos);
+    }
+
+    public void apply(Supplier<NetworkManager.PacketContext> contextSupplier) {
+        contextSupplier.get().queue(() -> {
+            assert Minecraft.getInstance().level != null;
+            if (Minecraft.getInstance().level.getBlockEntity(pos) instanceof ArthanaBlockEntity blockEntity) {
+                blockEntity.setArthana(stack);
+            }
+        });
+    }
+}
