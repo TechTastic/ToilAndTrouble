@@ -14,19 +14,13 @@ public class FluidSyncS2CPacket {
     private final FluidStack stack;
     private final BlockPos pos;
 
-    public FluidSyncS2CPacket(Fluid fluid, int amount, BlockPos pos) {
-        this.stack = FluidStack.create(fluid, amount);
-        this.pos = pos;
-    }
-
     public FluidSyncS2CPacket(FluidStack stack, BlockPos pos) {
         this.stack = stack;
         this.pos = pos;
     }
 
     public FluidSyncS2CPacket(FriendlyByteBuf buf) {
-        this.stack = FluidStack.read(buf);
-        this.pos = buf.readBlockPos();
+        this(FluidStack.read(buf), buf.readBlockPos());
     }
 
     public void toBytes(FriendlyByteBuf buf) {

@@ -18,6 +18,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.entity.ArthanaBlockEntity;
 import net.techtastic.tat.block.entity.CastIronOvenBlockEntity;
 import org.jetbrains.annotations.NotNull;
@@ -81,8 +84,12 @@ public class ArthanaBlock extends BaseEntityBlock {
             level.setBlockAndUpdate(pos, state);
 
         BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof ArthanaBlockEntity arthana)
-            arthana.setArthana(stack);
+        if (be instanceof ArthanaBlockEntity arthana) {
+            arthana = new ArthanaBlockEntity(pos, state, stack);
+            System.err.println("Arthana Stack: " + arthana.getArthana());
+            level.setBlockEntity(arthana);
+            arthana.setChanged();
+        }
     }
 
     @Override
@@ -115,11 +122,17 @@ public class ArthanaBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
-        return new ArthanaBlockEntity(blockPos, blockState);
+        return new ArthanaBlockEntity(blockPos, blockState, ItemStack.EMPTY);
     }
 
     @Override
     public RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.MODEL;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
+        return createTickerHelper(blockEntityType, TATBlockEntities.ARTHANA_BLOCK_ENTITY.get(), ArthanaBlockEntity::tick);
     }
 }

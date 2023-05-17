@@ -30,10 +30,7 @@ public class TATNetworking {
         );
 
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, ARTHANA_SYNC_S2C_PACKET_ID,
-                (buf, context) -> {
-            ItemStack stack = buf.readItem();
-            BlockPos pos = buf.readBlockPos();
-        });
+                (buf, context) -> new ArthanaSyncS2CPacket(buf).apply(() -> context));
         CHANNEL.register(
                 ArthanaSyncS2CPacket.class,
                 ArthanaSyncS2CPacket::toBytes,

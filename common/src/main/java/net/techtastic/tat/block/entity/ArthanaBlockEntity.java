@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.techtastic.tat.block.TATBlockEntities;
@@ -16,10 +17,16 @@ import net.techtastic.tat.networking.TATNetworking;
 import org.jetbrains.annotations.NotNull;
 
 public class ArthanaBlockEntity extends BlockEntity {
-    private ItemStack arthana = ItemStack.EMPTY;
+    public ItemStack arthana;
+    public int ticks = 0;
 
     public ArthanaBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.ARTHANA_BLOCK_ENTITY.get(), blockPos, blockState);
+    }
+
+    public ArthanaBlockEntity(BlockPos blockPos, BlockState blockState, ItemStack arthana) {
+        this(blockPos, blockState);
+        this.arthana = arthana;
     }
 
     @Override
@@ -51,6 +58,10 @@ public class ArthanaBlockEntity extends BlockEntity {
     public void setChanged() {
         super.setChanged();
 
+        sendSyncPacket();
+    }
+
+    public void sendSyncPacket() {
         assert level != null;
         if (level.isClientSide) return;
 
@@ -59,5 +70,14 @@ public class ArthanaBlockEntity extends BlockEntity {
         buf.writeBlockPos(this.worldPosition);
 
         NetworkManager.sendToPlayers(level.getServer().getPlayerList().getPlayers(), TATNetworking.ARTHANA_SYNC_S2C_PACKET_ID, buf);
+    }
+
+    public static <E extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, ArthanaBlockEntity arthana) {
+        if (arthana.ticks != 0 && arthana.ticks % 5 == 0) {
+            arthana.sendSyncPacket();
+            arthana.ticks = 0;
+        }
+
+        arthana.ticks++;
     }
 }
