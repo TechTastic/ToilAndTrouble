@@ -119,7 +119,6 @@ public class KettleBlock extends BaseEntityBlock {
         ItemStack stack = player.getItemInHand(interactionHand);
 
         BlockEntity be = level.getBlockEntity(blockPos);
-
         if (!(be instanceof KettleBlockEntity kettle))
             return InteractionResult.FAIL;
 

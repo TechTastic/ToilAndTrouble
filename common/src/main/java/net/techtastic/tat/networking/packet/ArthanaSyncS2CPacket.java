@@ -22,6 +22,11 @@ public class ArthanaSyncS2CPacket {
         this(buf.readItem(), buf.readBlockPos());
     }
 
+    public ArthanaSyncS2CPacket(FriendlyByteBuf buf, NetworkManager.PacketContext context) {
+        this(buf);
+        this.apply(() -> context);
+    }
+
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeItem(stack);
         buf.writeBlockPos(pos);

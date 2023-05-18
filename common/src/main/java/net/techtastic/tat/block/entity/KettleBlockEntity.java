@@ -54,6 +54,13 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     }
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, KettleBlockEntity kettle) {
+        if (level.isClientSide)
+            return;
+
+        System.err.println("Tank Fluid: " + kettle.tank.getFluid());
+        System.err.println("Tank Amount: " + kettle.tank.getRemainingFluid());
+        System.err.println("Tank Capacity: " + kettle.tank.getCapacity());
+
         BlockState fire = level.getBlockState(pos.below());
 
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
@@ -291,7 +298,7 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     }
 
     public boolean tryExtractFluid(KettleBlockEntity kettle, ItemStack stack) {
-        return hasRecipe(kettle) && kettle.tank.tryExtractFluid(kettle.tank, stack);
+        return kettle.tank.tryExtractFluid(kettle.tank, stack);
     }
 
     @Override

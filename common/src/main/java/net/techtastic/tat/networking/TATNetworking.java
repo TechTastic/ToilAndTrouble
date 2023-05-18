@@ -18,10 +18,7 @@ public class TATNetworking {
 
     public static void register() {
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, FLUID_SYNC_S2C_PACKET_ID,
-                (buf, context) -> {
-            FluidStack stack = FluidStack.read(buf);
-            BlockPos pos = buf.readBlockPos();
-        });
+                FluidSyncS2CPacket::new);
         CHANNEL.register(
                 FluidSyncS2CPacket.class,
                 FluidSyncS2CPacket::toBytes,
@@ -30,7 +27,7 @@ public class TATNetworking {
         );
 
         NetworkManager.registerReceiver(NetworkManager.Side.S2C, ARTHANA_SYNC_S2C_PACKET_ID,
-                (buf, context) -> new ArthanaSyncS2CPacket(buf).apply(() -> context));
+                ArthanaSyncS2CPacket::new);
         CHANNEL.register(
                 ArthanaSyncS2CPacket.class,
                 ArthanaSyncS2CPacket::toBytes,

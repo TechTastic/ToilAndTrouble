@@ -23,6 +23,11 @@ public class FluidSyncS2CPacket {
         this(FluidStack.read(buf), buf.readBlockPos());
     }
 
+    public FluidSyncS2CPacket(FriendlyByteBuf buf, NetworkManager.PacketContext context) {
+        this(buf);
+        this.apply(() -> context);
+    }
+
     public void toBytes(FriendlyByteBuf buf) {
         this.stack.write(buf);
         buf.writeBlockPos(pos);

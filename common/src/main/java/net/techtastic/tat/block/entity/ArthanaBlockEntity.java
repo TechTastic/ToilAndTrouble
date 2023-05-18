@@ -73,7 +73,7 @@ public class ArthanaBlockEntity extends BlockEntity {
     }
 
     public static <E extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, ArthanaBlockEntity arthana) {
-        if (arthana.ticks != 0 && arthana.ticks % 5 == 0) {
+        if (!level.isClientSide && arthana.ticks != 0 && arthana.ticks % 5 == 0) {
             arthana.sendSyncPacket();
             arthana.ticks = 0;
         }
