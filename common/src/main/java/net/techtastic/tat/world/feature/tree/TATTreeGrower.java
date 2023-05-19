@@ -8,10 +8,26 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class HawthornTreeGrower extends AbstractTreeGrower {
+public class TATTreeGrower extends AbstractTreeGrower {
+    private final TreeType type;
+
+    public TATTreeGrower(TreeType type) {
+        this.type = type;
+    }
+
     @Nullable
     @Override
     protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(Random random, boolean bl) {
-        return TATConfiguredFeatures.HAWTHORN_TREE;
+        return switch (this.type) {
+            case ROWAN -> TATConfiguredFeatures.ROWAN_TREE;
+            case HAWTHORN -> TATConfiguredFeatures.HAWTHORN_TREE;
+            case ALDER -> TATConfiguredFeatures.ALDER_TREE;
+        };
+    }
+
+    public enum TreeType {
+        ROWAN,
+        HAWTHORN,
+        ALDER;
     }
 }

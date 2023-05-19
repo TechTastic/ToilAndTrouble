@@ -2,18 +2,12 @@ package net.techtastic.tat.block;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.techtastic.tat.api.RitualType;
@@ -21,12 +15,7 @@ import net.techtastic.tat.block.custom.CauldronBlock;
 import net.techtastic.tat.item.TATItems;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.block.custom.*;
-import net.techtastic.tat.item.custom.ChalkBlockItem;
-import net.techtastic.tat.world.feature.tree.AlderTreeGrower;
-import net.techtastic.tat.world.feature.tree.HawthornTreeGrower;
-import net.techtastic.tat.world.feature.tree.RowanTreeGrower;
-
-import java.util.function.Supplier;
+import net.techtastic.tat.world.feature.tree.TATTreeGrower;
 
 public class TATBlocks {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ToilAndTrouble.MOD_ID, Registry.BLOCK_REGISTRY);
@@ -180,7 +169,7 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> ROWAN_LEAVES = BLOCKS.register("rowan_leaves",
             () -> new FlammableLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()));
     public static final RegistrySupplier<Block> ROWAN_SAPLING = BLOCKS.register("rowan_sapling",
-            () -> new SaplingBlock(new RowanTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
+            () -> new SaplingBlock(new TATTreeGrower(TATTreeGrower.TreeType.ROWAN), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
     public static final RegistrySupplier<Block> ROWAN_PRESSURE_PLATE = BLOCKS.register("rowan_pressure_plate",
             () -> new LockedPressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.copy(Blocks.OAK_PRESSURE_PLATE)));
     public static final RegistrySupplier<Block> ROWAN_BUTTON = BLOCKS.register("rowan_button",
@@ -223,7 +212,7 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> HAWTHORN_LEAVES = BLOCKS.register("hawthorn_leaves",
             () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).noOcclusion()));
     public static final RegistrySupplier<Block> HAWTHORN_SAPLING = BLOCKS.register("hawthorn_sapling",
-            () -> new SaplingBlock(new HawthornTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
+            () -> new SaplingBlock(new TATTreeGrower(TATTreeGrower.TreeType.HAWTHORN), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING).noOcclusion()));
 
     //////////////////////////
     //                      //
@@ -256,7 +245,7 @@ public class TATBlocks {
     public static final RegistrySupplier<Block> ALDER_LEAVES = BLOCKS.register("alder_leaves",
             () -> new LeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES)));
     public static final RegistrySupplier<Block> ALDER_SAPLING = BLOCKS.register("alder_sapling",
-            () -> new SaplingBlock(new AlderTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
+            () -> new SaplingBlock(new TATTreeGrower(TATTreeGrower.TreeType.ALDER), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
     ////////////
     //        //
@@ -283,10 +272,14 @@ public class TATBlocks {
         BLOCKS.register();
         BLOCKS_WITHOUT_ITEMS.register();
 
-        for (RegistrySupplier<Block> block : BLOCKS) {
+        BLOCKS.forEach(block ->
+                ITEMS.register(block.getId(),
+                        () -> new BlockItem(block.get(), new Item.Properties().tab(TATItems.TAB))));
+
+        /*for (RegistrySupplier<Block> block : BLOCKS) {
             ITEMS.register(block.getId(),
                     () -> new BlockItem(block.get(), new Item.Properties().tab(TATItems.TAB)));
-        }
+        }*/
 
         ITEMS.register();
     }

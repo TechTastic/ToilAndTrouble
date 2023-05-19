@@ -1,11 +1,8 @@
 package net.techtastic.tat.networking;
 
-import dev.architectury.fluid.FluidStack;
 import dev.architectury.networking.NetworkChannel;
 import dev.architectury.networking.NetworkManager;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.techtastic.tat.ToilAndTrouble;
 import net.techtastic.tat.networking.packet.ArthanaSyncS2CPacket;
 import net.techtastic.tat.networking.packet.FluidSyncS2CPacket;

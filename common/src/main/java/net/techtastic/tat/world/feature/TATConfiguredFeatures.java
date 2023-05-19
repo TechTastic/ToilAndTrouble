@@ -19,7 +19,7 @@ import java.util.OptionalInt;
 public class TATConfiguredFeatures {
 
     public static final Holder<ConfiguredFeature<TreeConfiguration, ?>> ROWAN_TREE =
-            FeatureUtils.register("ebony", Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
+            FeatureUtils.register("rowan", Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                     BlockStateProvider.simple(TATBlocks.ROWAN_LOG.get()),
                     new StraightTrunkPlacer(5, 6, 3),
                     BlockStateProvider.simple(TATBlocks.ROWAN_LEAVES.get()),
