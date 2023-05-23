@@ -5,6 +5,7 @@ import dev.architectury.networking.NetworkManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
 
@@ -36,9 +37,9 @@ public class FluidSyncS2CPacket {
     public void apply(Supplier<NetworkManager.PacketContext> contextSupplier) {
         contextSupplier.get().queue(() -> {
             assert Minecraft.getInstance().level != null;
-            if(Minecraft.getInstance().level.getBlockEntity(pos) instanceof KettleBlockEntity blockEntity) {
-                blockEntity.tank.setFluid(this.stack);
-            }
+            BlockEntity be = Minecraft.getInstance().level.getBlockEntity(pos);
+            if (be instanceof KettleBlockEntity kettle)
+                kettle.tank.setFluid(this.stack);
         });
     }
 }

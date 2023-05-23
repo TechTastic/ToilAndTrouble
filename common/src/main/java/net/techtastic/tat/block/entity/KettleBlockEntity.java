@@ -54,12 +54,7 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
     }
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, KettleBlockEntity kettle) {
-        if (level.isClientSide)
-            return;
-
-        System.err.println("Tank Fluid: " + kettle.tank.getFluid());
-        System.err.println("Tank Amount: " + kettle.tank.getRemainingFluid());
-        System.err.println("Tank Capacity: " + kettle.tank.getCapacity());
+        if (level.isClientSide) return;
 
         BlockState fire = level.getBlockState(pos.below());
 
