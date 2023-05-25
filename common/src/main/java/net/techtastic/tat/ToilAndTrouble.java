@@ -12,7 +12,6 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ItemLike;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
-import net.techtastic.tat.block.entity.renderer.KettleBlockEntityRenderer;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlockStateInfo;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.integration.TATFuels;
@@ -63,8 +62,7 @@ public class ToilAndTrouble {
     public static void initClient() {
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.CAST_IRON_OVEN.get());
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.DISTILLERY.get());
-
-        BlockEntityRendererRegistry.register(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), KettleBlockEntityRenderer::new);
+        RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.KETTLE.get());
 
         RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.CHALICE.get());
 
