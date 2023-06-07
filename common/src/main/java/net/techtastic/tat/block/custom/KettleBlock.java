@@ -38,6 +38,7 @@ public class KettleBlock extends BaseEntityBlock {
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
     public static final BooleanProperty UP = BlockStateProperties.UP;
+    public static final BooleanProperty FULL = BooleanProperty.create("full");
 
 
     public KettleBlock(Properties properties) {
@@ -55,7 +56,7 @@ public class KettleBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, SOUTH, EAST, WEST, UP);
+        builder.add(NORTH, SOUTH, EAST, WEST, UP, FULL);
     }
 
     @Override
@@ -153,11 +154,14 @@ public class KettleBlock extends BaseEntityBlock {
     private BlockState getNewState(Level level, BlockPos pos) {
         BlockState state = this.defaultBlockState();
 
+        BlockState origState = level.getBlockState(pos);
+
         return state
                 .setValue(UP, state.isFaceSturdy(level, pos.relative(Direction.UP), Direction.DOWN, SupportType.CENTER))
                 .setValue(NORTH, state.isFaceSturdy(level, pos.relative(Direction.NORTH), Direction.SOUTH, SupportType.FULL))
                 .setValue(SOUTH, state.isFaceSturdy(level, pos.relative(Direction.SOUTH), Direction.NORTH, SupportType.FULL))
                 .setValue(EAST, state.isFaceSturdy(level, pos.relative(Direction.EAST), Direction.WEST, SupportType.FULL))
-                .setValue(WEST, state.isFaceSturdy(level, pos.relative(Direction.WEST), Direction.EAST, SupportType.FULL));
+                .setValue(WEST, state.isFaceSturdy(level, pos.relative(Direction.WEST), Direction.EAST, SupportType.FULL))
+                .setValue(FULL, origState.hasProperty(FULL) ? origState.getValue(FULL) : false);
     }
 }
