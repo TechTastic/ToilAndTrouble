@@ -33,10 +33,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class KettleBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
+    public static final BooleanProperty NORTH_EXT = BlockStateProperties.NORTH;
+    public static final BooleanProperty SOUTH_EXT = BlockStateProperties.SOUTH;
+    public static final BooleanProperty EAST_EXT = BlockStateProperties.EAST;
+    public static final BooleanProperty WEST_EXT = BlockStateProperties.WEST;
     public static final BooleanProperty UP = BlockStateProperties.UP;
     public static final BooleanProperty FULL = BooleanProperty.create("full");
 
@@ -50,13 +55,14 @@ public class KettleBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         Level level = blockPlaceContext.getLevel();
         BlockPos pos = blockPlaceContext.getClickedPos();
+        Direction facing = blockPlaceContext.getNearestLookingDirection().getOpposite();
 
-        return getNewState(level, pos);
+        return getNewState(level, pos, facing);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, SOUTH, EAST, WEST, UP, FULL);
+        builder.add(FACING, NORTH, SOUTH, EAST, WEST, NORTH_EXT, SOUTH_EXT, EAST_EXT, WEST_EXT, UP, FULL);
     }
 
     @Override
@@ -148,20 +154,29 @@ public class KettleBlock extends BaseEntityBlock {
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         super.neighborChanged(blockState, level, blockPos, block, blockPos2, bl);
 
-        level.setBlockAndUpdate(blockPos, getNewState(level, blockPos));
+        level.setBlockAndUpdate(blockPos, getNewState(level, blockPos, blockState.getValue(FACING)));
     }
 
-    private BlockState getNewState(Level level, BlockPos pos) {
+    private BlockState getNewState(Level level, BlockPos pos, Direction facing) {
         BlockState state = this.defaultBlockState();
+        BlockState north = level.getBlockState(pos.relative(Direction.NORTH));
+        BlockState south = level.getBlockState(pos.relative(Direction.SOUTH));
+        BlockState east = level.getBlockState(pos.relative(Direction.EAST));
+        BlockState west = level.getBlockState(pos.relative(Direction.WEST));
 
         BlockState origState = level.getBlockState(pos);
 
         return state
+                .setValue(FACING, facing)
                 .setValue(UP, state.isFaceSturdy(level, pos.relative(Direction.UP), Direction.DOWN, SupportType.CENTER))
                 .setValue(NORTH, state.isFaceSturdy(level, pos.relative(Direction.NORTH), Direction.SOUTH, SupportType.FULL))
                 .setValue(SOUTH, state.isFaceSturdy(level, pos.relative(Direction.SOUTH), Direction.NORTH, SupportType.FULL))
                 .setValue(EAST, state.isFaceSturdy(level, pos.relative(Direction.EAST), Direction.WEST, SupportType.FULL))
                 .setValue(WEST, state.isFaceSturdy(level, pos.relative(Direction.WEST), Direction.EAST, SupportType.FULL))
+                .setValue(NORTH_EXT, north.getBlock() instanceof WallBlock)
+                .setValue(SOUTH_EXT, south.getBlock() instanceof WallBlock)
+                .setValue(EAST_EXT, east.getBlock() instanceof WallBlock)
+                .setValue(WEST_EXT, west.getBlock() instanceof WallBlock)
                 .setValue(FULL, origState.hasProperty(FULL) ? origState.getValue(FULL) : false);
     }
 }
