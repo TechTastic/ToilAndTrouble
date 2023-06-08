@@ -33,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class KettleBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -55,14 +54,13 @@ public class KettleBlock extends BaseEntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
         Level level = blockPlaceContext.getLevel();
         BlockPos pos = blockPlaceContext.getClickedPos();
-        Direction facing = blockPlaceContext.getNearestLookingDirection().getOpposite();
 
-        return getNewState(level, pos, facing);
+        return getNewState(level, pos);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, NORTH, SOUTH, EAST, WEST, NORTH_EXT, SOUTH_EXT, EAST_EXT, WEST_EXT, UP, FULL);
+        builder.add(NORTH, SOUTH, EAST, WEST, NORTH_EXT, SOUTH_EXT, EAST_EXT, WEST_EXT, UP, FULL);
     }
 
     @Override
@@ -154,10 +152,10 @@ public class KettleBlock extends BaseEntityBlock {
     public void neighborChanged(BlockState blockState, Level level, BlockPos blockPos, Block block, BlockPos blockPos2, boolean bl) {
         super.neighborChanged(blockState, level, blockPos, block, blockPos2, bl);
 
-        level.setBlockAndUpdate(blockPos, getNewState(level, blockPos, blockState.getValue(FACING)));
+        level.setBlockAndUpdate(blockPos, getNewState(level, blockPos));
     }
 
-    private BlockState getNewState(Level level, BlockPos pos, Direction facing) {
+    private BlockState getNewState(Level level, BlockPos pos) {
         BlockState state = this.defaultBlockState();
         BlockState north = level.getBlockState(pos.relative(Direction.NORTH));
         BlockState south = level.getBlockState(pos.relative(Direction.SOUTH));
@@ -167,7 +165,6 @@ public class KettleBlock extends BaseEntityBlock {
         BlockState origState = level.getBlockState(pos);
 
         return state
-                .setValue(FACING, facing)
                 .setValue(UP, state.isFaceSturdy(level, pos.relative(Direction.UP), Direction.DOWN, SupportType.CENTER))
                 .setValue(NORTH, state.isFaceSturdy(level, pos.relative(Direction.NORTH), Direction.SOUTH, SupportType.FULL))
                 .setValue(SOUTH, state.isFaceSturdy(level, pos.relative(Direction.SOUTH), Direction.NORTH, SupportType.FULL))
