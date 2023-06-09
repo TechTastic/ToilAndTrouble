@@ -46,7 +46,7 @@ public class TATBlocks {
 
     public static final RegistrySupplier<Block> KETTLE = BLOCKS.register("kettle",
             () -> new KettleBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops()
-                    .noOcclusion().lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)));
+                    .noOcclusion()));
 
     public static final RegistrySupplier<Block> CAULDRON = BLOCKS.register("cauldron",
             () -> new CauldronBlock(BlockBehaviour.Properties.of(Material.METAL).strength(4.0f).requiresCorrectToolForDrops().noOcclusion()));

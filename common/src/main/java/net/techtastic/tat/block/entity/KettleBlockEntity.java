@@ -31,6 +31,7 @@ import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.api.altar.source.AltarSources;
 import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
+import net.techtastic.tat.block.custom.KettleBlock;
 import net.techtastic.tat.networking.TATNetworking;
 import net.techtastic.tat.recipe.KettleRecipe;
 import net.techtastic.tat.util.FluidTank;
@@ -55,6 +56,8 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, KettleBlockEntity kettle) {
         if (level.isClientSide) return;
+
+        level.setBlockAndUpdate(pos, blockState.setValue(KettleBlock.FULL, kettle.tank.getRemainingFluid() > 0));
 
         BlockState fire = level.getBlockState(pos.below());
 

@@ -1,5 +1,6 @@
 package net.techtastic.tat.block.custom;
 
+import com.mojang.authlib.minecraft.TelemetrySession;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -23,7 +24,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.block.TATBlockEntities;
@@ -31,16 +34,17 @@ import net.techtastic.tat.block.entity.DistilleryBlockEntity;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.CallbackI;
 
 public class KettleBlock extends BaseEntityBlock {
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
     public static final BooleanProperty SOUTH = BlockStateProperties.SOUTH;
     public static final BooleanProperty EAST = BlockStateProperties.EAST;
     public static final BooleanProperty WEST = BlockStateProperties.WEST;
-    public static final BooleanProperty NORTH_EXT = BlockStateProperties.NORTH;
-    public static final BooleanProperty SOUTH_EXT = BlockStateProperties.SOUTH;
-    public static final BooleanProperty EAST_EXT = BlockStateProperties.EAST;
-    public static final BooleanProperty WEST_EXT = BlockStateProperties.WEST;
+    public static final BooleanProperty NORTH_EXT = BooleanProperty.create("north_ext");
+    public static final BooleanProperty SOUTH_EXT = BooleanProperty.create("south_ext");
+    public static final BooleanProperty EAST_EXT = BooleanProperty.create("east_ext");
+    public static final BooleanProperty WEST_EXT = BooleanProperty.create("west_ext");
     public static final BooleanProperty UP = BlockStateProperties.UP;
     public static final BooleanProperty FULL = BooleanProperty.create("full");
 
@@ -65,7 +69,20 @@ public class KettleBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return ;
+        VoxelShape shape = Block.box(4, 1, 4, 12, 6, 12);
+
+        if (blockState.getValue(UP))
+            shape = Shapes.join(shape, Block.box(4, 6, 4, 12, 16, 12), BooleanOp.OR);
+        if (blockState.getValue(NORTH))
+            shape = Shapes.join(shape, Block.box(4, 6, 0, 12, 16, 4), BooleanOp.OR);
+        if (blockState.getValue(SOUTH))
+            shape = Shapes.join(shape, Block.box(4, 6, 12, 12, 16, 16), BooleanOp.OR);
+        if (blockState.getValue(EAST))
+            shape = Shapes.join(shape, Block.box(12, 6, 4, 16, 16, 12), BooleanOp.OR);
+        if (blockState.getValue(WEST))
+            shape = Shapes.join(shape, Block.box(0, 6, 4, 4, 16, 12), BooleanOp.OR);
+
+        return shape.optimize();
     }
 
     @Nullable
@@ -155,25 +172,58 @@ public class KettleBlock extends BaseEntityBlock {
         level.setBlockAndUpdate(blockPos, getNewState(level, blockPos));
     }
 
+    private boolean connectedTo(Level level, BlockPos pos, Direction direction) {
+        BlockState state = level.getBlockState(pos.relative(direction));
+        boolean bool = (!isExceptionForConnection(state) &&
+                state.isFaceSturdy(level, pos, direction.getOpposite())) ||
+                isWall(state);
+
+        System.err.println("Execption for " + direction.getName() + ": " + !isExceptionForConnection(state));
+        System.err.println("Sturdy for " + direction.getName() + ": " + state.isFaceSturdy(level, pos, direction.getOpposite()));
+        System.err.println("Wall for " + direction.getName() + ": " + isWall(state));
+        System.err.println("Method Called for " + direction.getName() + " and returned " + bool);
+
+        return bool;
+    }
+
+    private boolean isWall(BlockState state) {
+        return state.getBlock() instanceof WallBlock;
+    }
+
     private BlockState getNewState(Level level, BlockPos pos) {
-        BlockState state = this.defaultBlockState();
-        BlockState north = level.getBlockState(pos.relative(Direction.NORTH));
-        BlockState south = level.getBlockState(pos.relative(Direction.SOUTH));
-        BlockState east = level.getBlockState(pos.relative(Direction.EAST));
-        BlockState west = level.getBlockState(pos.relative(Direction.WEST));
+        BlockState state = this.defaultBlockState()
+                .setValue(NORTH, false)
+                .setValue(SOUTH, false)
+                .setValue(EAST, false)
+                .setValue(WEST, false)
+                .setValue(UP, false)
+                .setValue(NORTH_EXT, false)
+                .setValue(SOUTH_EXT, false)
+                .setValue(EAST_EXT, false)
+                .setValue(WEST_EXT, false)
+                .setValue(FULL, false);
 
         BlockState origState = level.getBlockState(pos);
 
+        state
+                .setValue(NORTH, connectedTo(level, pos, Direction.NORTH))
+                .setValue(SOUTH, connectedTo(level, pos, Direction.SOUTH))
+                .setValue(EAST, connectedTo(level, pos, Direction.EAST))
+                .setValue(WEST, connectedTo(level, pos, Direction.WEST));
+
         return state
-                .setValue(UP, state.isFaceSturdy(level, pos.relative(Direction.UP), Direction.DOWN, SupportType.CENTER))
-                .setValue(NORTH, state.isFaceSturdy(level, pos.relative(Direction.NORTH), Direction.SOUTH, SupportType.FULL))
-                .setValue(SOUTH, state.isFaceSturdy(level, pos.relative(Direction.SOUTH), Direction.NORTH, SupportType.FULL))
-                .setValue(EAST, state.isFaceSturdy(level, pos.relative(Direction.EAST), Direction.WEST, SupportType.FULL))
-                .setValue(WEST, state.isFaceSturdy(level, pos.relative(Direction.WEST), Direction.EAST, SupportType.FULL))
-                .setValue(NORTH_EXT, north.getBlock() instanceof WallBlock)
-                .setValue(SOUTH_EXT, south.getBlock() instanceof WallBlock)
-                .setValue(EAST_EXT, east.getBlock() instanceof WallBlock)
-                .setValue(WEST_EXT, west.getBlock() instanceof WallBlock)
+                .setValue(NORTH, connectedTo(level, pos, Direction.NORTH))
+                .setValue(SOUTH, connectedTo(level, pos, Direction.SOUTH))
+                .setValue(EAST, connectedTo(level, pos, Direction.EAST))
+                .setValue(WEST, connectedTo(level, pos, Direction.WEST))
+                .setValue(UP, connectedTo(level, pos, Direction.UP) ||
+                        state.getValue(NORTH) || state.getValue(SOUTH) || state.getValue(EAST) || state.getValue(WEST))
+
+                .setValue(NORTH_EXT, isWall(level.getBlockState(pos.relative(Direction.NORTH))))
+                .setValue(SOUTH_EXT, isWall(level.getBlockState(pos.relative(Direction.SOUTH))))
+                .setValue(EAST_EXT, isWall(level.getBlockState(pos.relative(Direction.EAST))))
+                .setValue(WEST_EXT, isWall(level.getBlockState(pos.relative(Direction.WEST))))
+
                 .setValue(FULL, origState.hasProperty(FULL) ? origState.getValue(FULL) : false);
     }
 }

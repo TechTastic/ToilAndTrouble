@@ -1,8 +1,96 @@
 {
-  "variants": {
-    "facing=north": {"model": "tat:block/kettle"},
-    "facing=east": {"model": "tat:block/kettle", "y": 90},
-    "facing=south": {"model": "tat:block/kettle", "y": 180},
-    "facing=west": {"model": "tat:block/kettle", "y": 270}
-  }
+  "multipart": [
+    {
+      "apply": {
+        "model": "tat:block/kettle/kettle_base"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_block"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_block",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_block",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_block",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "north_ext": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_wall"
+      }
+    },
+    {
+      "when": {
+        "east_ext": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_wall",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south_ext": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_wall",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west_ext": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_wall",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_up"
+      }
+    },
+    {
+      "when": {
+        "full": "true"
+      },
+      "apply": {
+        "model": "tat:block/kettle/kettle_full",
+        "uvlock": true
+      }
+    }
+  ]
 }
