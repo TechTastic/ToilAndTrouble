@@ -37,10 +37,9 @@ import net.techtastic.tat.recipe.KettleRecipe;
 import net.techtastic.tat.util.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
@@ -56,8 +55,6 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
     public static void tick(Level level, BlockPos pos, BlockState blockState, KettleBlockEntity kettle) {
         if (level.isClientSide) return;
-
-        level.setBlockAndUpdate(pos, blockState.setValue(KettleBlock.FULL, kettle.tank.getRemainingFluid() > 0));
 
         BlockState fire = level.getBlockState(pos.below());
 
@@ -261,14 +258,25 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         return container;
     }
 
+    public Color getRecipeColor() {
+        Optional<KettleRecipe> match = level.getRecipeManager()
+                .getRecipeFor(KettleRecipe.Type.INSTANCE, this.getContainer(), level);
+
+        if (match.isEmpty())
+            return this.inventory.stream().allMatch(ItemStack::isEmpty) ? Color.BLUE : Color.GRAY;
+
+        return match.get().getColor();
+    }
+
     public boolean testForNextIngredient(Level level, ItemStack stack) {
         RecipeManager rm = level.getRecipeManager();
         List<KettleRecipe> recipes = rm.getAllRecipesFor(KettleRecipe.Type.INSTANCE);
 
         NonNullList<ItemStack> currInv = this.inventory;
-        currInv.removeIf(ItemStack::isEmpty);
+        List<ItemStack> inv = new ArrayList<>(currInv.stream().map(ItemStack::copy).toList());
+        inv.removeIf(ItemStack::isEmpty);
         recipes.removeIf(recipe -> !recipe.getIngredients().get(
-                currInv.isEmpty() ? 0 : currInv.size() - 1
+                inv.isEmpty() ? 0 : inv.size() - 1
         ).test(stack));
         return !recipes.isEmpty();
     }

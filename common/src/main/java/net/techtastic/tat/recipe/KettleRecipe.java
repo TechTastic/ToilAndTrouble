@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -16,18 +17,22 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class KettleRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
     private final NonNullList<Ingredient> recipeItems;
     private final ItemStack output;
     private final int power;
-    public KettleRecipe(ResourceLocation id, NonNullList<Ingredient> recipeItems, ItemStack output, int power) {
+    private final Color color;
+    public KettleRecipe(ResourceLocation id, NonNullList<Ingredient> recipeItems, ItemStack output, int power, Color color) {
         this.id = id;
         this.recipeItems = recipeItems;
         this.output = output;
         this.power = power;
+        this.color = color;
     }
 
     @Override
@@ -71,6 +76,10 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
         return this.power;
     }
 
+    public Color getColor() {
+        return this.color;
+    }
+
     @Override
     public ResourceLocation getId() {
         return id;
@@ -111,7 +120,9 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
             // POWER
             int power = GsonHelper.getAsInt(json, "power", 0);
 
-            return new KettleRecipe(id, inputs, output, power);
+            String color = GsonHelper.getAsString(json, "color", "green");
+
+            return new KettleRecipe(id, inputs, output, power, Color.getColor(color));
         }
 
         @Override
@@ -124,7 +135,9 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
 
             int power = buf.readInt();
 
-            return new KettleRecipe(id, inputs, output, power);
+            String color = Objects.requireNonNull(buf.readNbt()).getString("ToilAndTrouble$color");
+
+            return new KettleRecipe(id, inputs, output, power, Color.getColor(color));
         }
 
         @Override
@@ -136,6 +149,10 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
             Ingredient.of(recipe.getOutput()).toNetwork(buf);
 
             buf.writeInt(recipe.getPower());
+
+            CompoundTag tag = new CompoundTag();
+            tag.putString("ToilAndTrouble$color", recipe.getColor().toString());
+            buf.writeNbt(tag);
         }
     }
 }

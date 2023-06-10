@@ -82,15 +82,6 @@
       "apply": {
         "model": "tat:block/kettle/kettle_up"
       }
-    },
-    {
-      "when": {
-        "full": "true"
-      },
-      "apply": {
-        "model": "tat:block/kettle/kettle_full",
-        "uvlock": true
-      }
     }
   ]
 }

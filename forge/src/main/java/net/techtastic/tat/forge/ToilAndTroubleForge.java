@@ -11,8 +11,6 @@ import net.techtastic.tat.*;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.event.RegistryEvents;
 
-import java.awt.*;
-
 @Mod(ToilAndTrouble.MOD_ID)
 public class ToilAndTroubleForge {
     public ToilAndTroubleForge() {

@@ -64,7 +64,7 @@ public class KettleBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(NORTH, SOUTH, EAST, WEST, NORTH_EXT, SOUTH_EXT, EAST_EXT, WEST_EXT, UP, FULL);
+        builder.add(NORTH, SOUTH, EAST, WEST, NORTH_EXT, SOUTH_EXT, EAST_EXT, WEST_EXT, UP);
     }
 
     @Override
@@ -114,9 +114,9 @@ public class KettleBlock extends BaseEntityBlock {
         ItemStack stack = item.getItem();
         ItemStack test = new ItemStack(stack.getItem(), 1);
 
-        if (!kettle.getItem(kettle.getContainerSize() - 1).isEmpty() &&
-                kettle.hasEnoughFluid(kettle) &&
-                kettle.testForNextIngredient(level, test))
+        if (!kettle.inventory.stream().anyMatch(ItemStack::isEmpty) ||
+                !kettle.hasEnoughFluid(kettle) ||
+                !kettle.testForNextIngredient(level, test))
             return;
 
         if (stack.getCount() == 1)
@@ -144,22 +144,18 @@ public class KettleBlock extends BaseEntityBlock {
                 return InteractionResult.FAIL;
             player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
             return InteractionResult.SUCCESS;
-        } else if (stack.is(Items.BUCKET) || stack.is(Items.GLASS_BOTTLE)) {
+        } else if (stack.is(Items.BUCKET)) {
             if (!kettle.tryExtractFluid(kettle, stack))
                 return InteractionResult.FAIL;
-
-            if (stack.is(Items.BUCKET)) {
-                player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
-                return InteractionResult.SUCCESS;
-            }
-            if (stack.is(Items.GLASS_BOTTLE) && !output.isEmpty()) {
-                if (output.getCount() == 1)
-                    kettle.clearOutput();
-                else
-                    kettle.shrinkOutput();
-                player.setItemInHand(interactionHand, new ItemStack(output.getItem(), 1));
-                return InteractionResult.SUCCESS;
-            }
+            player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
+            return InteractionResult.SUCCESS;
+        } else if (stack.is(Items.GLASS_BOTTLE)) {
+            if (output.getCount() == 1)
+                kettle.clearOutput();
+            else
+                kettle.shrinkOutput();
+            player.setItemInHand(interactionHand, new ItemStack(output.getItem(), 1));
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.FAIL;
@@ -174,16 +170,9 @@ public class KettleBlock extends BaseEntityBlock {
 
     private boolean connectedTo(Level level, BlockPos pos, Direction direction) {
         BlockState state = level.getBlockState(pos.relative(direction));
-        boolean bool = (!isExceptionForConnection(state) &&
+        return (!isExceptionForConnection(state) &&
                 state.isFaceSturdy(level, pos, direction.getOpposite())) ||
                 isWall(state);
-
-        System.err.println("Execption for " + direction.getName() + ": " + !isExceptionForConnection(state));
-        System.err.println("Sturdy for " + direction.getName() + ": " + state.isFaceSturdy(level, pos, direction.getOpposite()));
-        System.err.println("Wall for " + direction.getName() + ": " + isWall(state));
-        System.err.println("Method Called for " + direction.getName() + " and returned " + bool);
-
-        return bool;
     }
 
     private boolean isWall(BlockState state) {
@@ -198,8 +187,6 @@ public class KettleBlock extends BaseEntityBlock {
         boolean east = connectedTo(level, pos, Direction.EAST);
         boolean west = connectedTo(level, pos, Direction.WEST);
 
-        BlockState origState = level.getBlockState(pos);
-
         return state
                 .setValue(NORTH, north)
                 .setValue(SOUTH, south)
@@ -211,8 +198,6 @@ public class KettleBlock extends BaseEntityBlock {
                 .setValue(NORTH_EXT, isWall(level.getBlockState(pos.relative(Direction.NORTH))))
                 .setValue(SOUTH_EXT, isWall(level.getBlockState(pos.relative(Direction.SOUTH))))
                 .setValue(EAST_EXT, isWall(level.getBlockState(pos.relative(Direction.EAST))))
-                .setValue(WEST_EXT, isWall(level.getBlockState(pos.relative(Direction.WEST))))
-
-                .setValue(FULL, origState.hasProperty(FULL) ? origState.getValue(FULL) : false);
+                .setValue(WEST_EXT, isWall(level.getBlockState(pos.relative(Direction.WEST))));
     }
 }

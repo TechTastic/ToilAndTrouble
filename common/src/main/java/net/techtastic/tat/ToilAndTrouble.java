@@ -5,6 +5,8 @@ import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.client.rendering.RenderTypeRegistry;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -12,6 +14,8 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ItemLike;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
+import net.techtastic.tat.block.entity.KettleBlockEntity;
+import net.techtastic.tat.block.entity.renderer.KettleBlockEntityRenderer;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlockStateInfo;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
 import net.techtastic.tat.integration.TATFuels;
@@ -90,5 +94,7 @@ public class ToilAndTrouble {
         MenuRegistry.registerScreenFactory(TATMenuTypes.ALTAR_MENU.get(), AltarScreen::new);
 
         TATItemModelPredicates.registerModelPredicates();
+
+        BlockEntityRendererRegistry.register(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), KettleBlockEntityRenderer::new);
     }
 }
