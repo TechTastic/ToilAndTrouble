@@ -191,33 +191,22 @@ public class KettleBlock extends BaseEntityBlock {
     }
 
     private BlockState getNewState(Level level, BlockPos pos) {
-        BlockState state = this.defaultBlockState()
-                .setValue(NORTH, false)
-                .setValue(SOUTH, false)
-                .setValue(EAST, false)
-                .setValue(WEST, false)
-                .setValue(UP, false)
-                .setValue(NORTH_EXT, false)
-                .setValue(SOUTH_EXT, false)
-                .setValue(EAST_EXT, false)
-                .setValue(WEST_EXT, false)
-                .setValue(FULL, false);
+        BlockState state = this.defaultBlockState();
+
+        boolean north = connectedTo(level, pos, Direction.NORTH);
+        boolean south = connectedTo(level, pos, Direction.SOUTH);
+        boolean east = connectedTo(level, pos, Direction.EAST);
+        boolean west = connectedTo(level, pos, Direction.WEST);
 
         BlockState origState = level.getBlockState(pos);
 
-        state
-                .setValue(NORTH, connectedTo(level, pos, Direction.NORTH))
-                .setValue(SOUTH, connectedTo(level, pos, Direction.SOUTH))
-                .setValue(EAST, connectedTo(level, pos, Direction.EAST))
-                .setValue(WEST, connectedTo(level, pos, Direction.WEST));
-
         return state
-                .setValue(NORTH, connectedTo(level, pos, Direction.NORTH))
-                .setValue(SOUTH, connectedTo(level, pos, Direction.SOUTH))
-                .setValue(EAST, connectedTo(level, pos, Direction.EAST))
-                .setValue(WEST, connectedTo(level, pos, Direction.WEST))
+                .setValue(NORTH, north)
+                .setValue(SOUTH, south)
+                .setValue(EAST, east)
+                .setValue(WEST, west)
                 .setValue(UP, connectedTo(level, pos, Direction.UP) ||
-                        state.getValue(NORTH) || state.getValue(SOUTH) || state.getValue(EAST) || state.getValue(WEST))
+                                north || south || east || west)
 
                 .setValue(NORTH_EXT, isWall(level.getBlockState(pos.relative(Direction.NORTH))))
                 .setValue(SOUTH_EXT, isWall(level.getBlockState(pos.relative(Direction.SOUTH))))

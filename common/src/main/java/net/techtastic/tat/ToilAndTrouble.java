@@ -60,28 +60,30 @@ public class ToilAndTrouble {
     }
 
     public static void initClient() {
-        RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.CAST_IRON_OVEN.get());
+        RenderTypeRegistry.register(RenderType.cutout(),
+                TATBlocks.CAST_IRON_OVEN.get(),
+                TATBlocks.KETTLE.get(),
+                TATBlocks.CHALICE.get(),
+
+                TATBlocks.ROWAN_LEAVES.get(),
+                TATBlocks.ROWAN_SAPLING.get(),
+                TATBlocks.HAWTHORN_LEAVES.get(),
+                TATBlocks.HAWTHORN_SAPLING.get(),
+                TATBlocks.ALDER_LEAVES.get(),
+                TATBlocks.ALDER_SAPLING.get(),
+
+                TATBlocks.BELLADONNA_PLANT.get(),
+                TATBlocks.MANDRAKE_PLANT.get(),
+                TATBlocks.WATER_ARTICHOKE_PLANT.get(),
+                TATBlocks.SNOWBELL_PLANT.get(),
+                TATBlocks.GARLIC_PLANT.get(),
+                TATBlocks.WOLFSBANE_PLANT.get(),
+                TATBlocks.WORMWOOD_PLANT.get(),
+
+                TATBlocks.BLOODY_ROSE.get()
+        );
+
         RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.DISTILLERY.get());
-        RenderTypeRegistry.register(RenderType.translucent(), TATBlocks.KETTLE.get());
-
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.CHALICE.get());
-
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_LEAVES.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ROWAN_SAPLING.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.HAWTHORN_LEAVES.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.HAWTHORN_SAPLING.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ALDER_LEAVES.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.ALDER_SAPLING.get());
-
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.BELLADONNA_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.MANDRAKE_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.WATER_ARTICHOKE_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.SNOWBELL_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.GARLIC_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.WOLFSBANE_PLANT.get());
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.WORMWOOD_PLANT.get());
-
-        RenderTypeRegistry.register(RenderType.cutout(), TATBlocks.BLOODY_ROSE.get());
 
         MenuRegistry.registerScreenFactory(TATMenuTypes.CAST_IRON_OVEN_MENU.get(), CastIronOvenScreen::new);
         MenuRegistry.registerScreenFactory(TATMenuTypes.DISTILLERY_MENU.get(), DistilleryScreen::new);
