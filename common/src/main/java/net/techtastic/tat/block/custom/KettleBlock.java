@@ -3,6 +3,9 @@ package net.techtastic.tat.block.custom;
 import com.mojang.authlib.minecraft.TelemetrySession;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +38,8 @@ import net.techtastic.tat.block.entity.KettleBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.CallbackI;
+
+import java.util.Random;
 
 public class KettleBlock extends BaseEntityBlock {
     public static final BooleanProperty NORTH = BlockStateProperties.NORTH;
@@ -166,6 +171,35 @@ public class KettleBlock extends BaseEntityBlock {
         super.neighborChanged(blockState, level, blockPos, block, blockPos2, bl);
 
         level.setBlockAndUpdate(blockPos, getNewState(level, blockPos));
+    }
+
+    @Override
+    public void animateTick(BlockState blockState, Level level, BlockPos blockPos, Random random) {
+        super.animateTick(blockState, level, blockPos, random);
+
+        BlockEntity be = level.getBlockEntity(blockPos);
+        if (be instanceof KettleBlockEntity kettle) {
+            if (!kettle.output.isEmpty())
+                level.addParticle(
+                        ParticleTypes.ELECTRIC_SPARK,
+                        blockPos.getX() + 0.5,
+                        blockPos.getY() + 6f/16f,
+                        blockPos.getZ() + 0.5,
+                        0.0,
+                        1.0,
+                        0.0
+                );
+            if (kettle.isHeated)
+                level.addParticle(
+                        ParticleTypes.BUBBLE_POP,
+                        blockPos.getX() + random.nextDouble(0.25, 0.75),
+                        blockPos.getY() + 0.7,
+                        blockPos.getZ() + random.nextDouble(0.25, 0.75),
+                        0.0,
+                        0.1,
+                        0.0
+                );
+        }
     }
 
     private boolean connectedTo(Level level, BlockPos pos, Direction direction) {

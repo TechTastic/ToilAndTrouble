@@ -44,10 +44,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
     public NonNullList<ItemStack> inventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
-    private boolean isHeated = false;
-    private ItemStack output = ItemStack.EMPTY;
-
+    public boolean isHeated = false;
+    public ItemStack output = ItemStack.EMPTY;
     public final FluidTank tank = ToilAndTroubleExpectPlatform.createFluidTank(Fluids.WATER, 1000, this);
+
 
     public KettleBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -60,16 +60,15 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
 
-        if (!kettle.tank.hasEnoughFluid(kettle.tank) || !kettle.output.isEmpty()) {
+        if (kettle.tank.getRemainingFluid() == 0 || !kettle.output.isEmpty())
             Collections.fill(kettle.inventory, ItemStack.EMPTY);
-            kettle.setChanged();
-            return;
-        }
 
         if (!hasRecipe(kettle)) {
             kettle.setChanged();
             return;
         }
+
+
 
         BlockPos altarPos = findNearestAltar(level, kettle.worldPosition);
         IAltarSource altar = AltarSources.testForAltarSource(level, altarPos);
@@ -224,7 +223,8 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
                 .getRecipeFor(KettleRecipe.Type.INSTANCE, kettle.getContainer(), level);
 
         return match.isPresent() &&
-                kettle.tank.hasEnoughFluid(kettle.tank) && kettle.isHeated;
+                kettle.tank.hasEnoughFluid(kettle.tank) &&
+                kettle.isHeated;
     }
 
     public static BlockPos findNearestAltar(Level level, BlockPos center) {
