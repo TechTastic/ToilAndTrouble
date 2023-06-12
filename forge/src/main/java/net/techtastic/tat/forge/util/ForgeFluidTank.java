@@ -144,4 +144,9 @@ public class ForgeFluidTank extends FluidTank {
     public void invalidateCaps() {
         lazyFluidHandler.invalidate();
     }
+
+    @Override
+    public void emptyTank() {
+        this.fluidStorage.drain(this.fluidStorage.getCapacity(), IFluidHandler.FluidAction.EXECUTE);
+    }
 }

@@ -23,5 +23,7 @@
   "result": {
     "item": "tat:redstone_soup"
   },
-  "power": 1000
+  "power": 1000,
+  "color": "red",
+  "extra": false
 }

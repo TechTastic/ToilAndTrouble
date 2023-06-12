@@ -27,12 +27,15 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
     private final ItemStack output;
     private final int power;
     private final Color color;
-    public KettleRecipe(ResourceLocation id, NonNullList<Ingredient> recipeItems, ItemStack output, int power, Color color) {
+    private final boolean extra;
+
+    public KettleRecipe(ResourceLocation id, NonNullList<Ingredient> recipeItems, ItemStack output, int power, Color color, boolean extra) {
         this.id = id;
         this.recipeItems = recipeItems;
         this.output = output;
         this.power = power;
         this.color = color;
+        this.extra = extra;
     }
 
     @Override
@@ -80,6 +83,10 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
         return this.color;
     }
 
+    public boolean canGetExtra() {
+        return this.extra;
+    }
+
     @Override
     public ResourceLocation getId() {
         return id;
@@ -120,9 +127,13 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
             // POWER
             int power = GsonHelper.getAsInt(json, "power", 0);
 
+            // RENDERING SOUP COLOR
             String color = GsonHelper.getAsString(json, "color", "green");
 
-            return new KettleRecipe(id, inputs, output, power, Color.getColor(color));
+            // CAN OUTPUT EXTRA BREW
+            boolean extra = GsonHelper.getAsBoolean(json, "extra", true);
+
+            return new KettleRecipe(id, inputs, output, power, Color.getColor(color), extra);
         }
 
         @Override
@@ -137,7 +148,9 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
 
             String color = Objects.requireNonNull(buf.readNbt()).getString("ToilAndTrouble$color");
 
-            return new KettleRecipe(id, inputs, output, power, Color.getColor(color));
+            boolean extra = buf.readBoolean();
+
+            return new KettleRecipe(id, inputs, output, power, Color.getColor(color), extra);
         }
 
         @Override
@@ -153,6 +166,8 @@ public class KettleRecipe implements Recipe<SimpleContainer> {
             CompoundTag tag = new CompoundTag();
             tag.putString("ToilAndTrouble$color", recipe.getColor().toString());
             buf.writeNbt(tag);
+
+            buf.writeBoolean(recipe.canGetExtra());
         }
     }
 }

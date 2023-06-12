@@ -248,16 +248,16 @@ public class TATItems {
 
     /* ANIMAL PARTS */
 
-    /*public static final RegistrySupplier<Item> WOOL_OF_BAT = ITEMS.register("wool_of_bat",
+    public static final RegistrySupplier<Item> WOOL_OF_BAT = ITEMS.register("wool_of_bat",
             () -> new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> CONDENSED_BAT_BALL = ITEMS.register("condensed_bat_ball",
-            () -> new Item(new Item.Properties().tab(TAB)));
+    /*public static final RegistrySupplier<Item> CONDENSED_BAT_BALL = ITEMS.register("condensed_bat_ball",
+            () -> new Item(new Item.Properties().tab(TAB)));*/
 
     public static final RegistrySupplier<Item> TONGUE_OF_DOG = ITEMS.register("tongue_of_dog",
             () -> new Item(new Item.Properties().tab(TAB)));
 
-    public static final RegistrySupplier<Item> CREEPER_HEART = ITEMS.register("creeper_heart",
+    /*public static final RegistrySupplier<Item> CREEPER_HEART = ITEMS.register("creeper_heart",
             () -> new Item(new Item.Properties().tab(TAB)));
 
     public static final RegistrySupplier<Item> TOE_OF_FROG = ITEMS.register("toe_of_frog",

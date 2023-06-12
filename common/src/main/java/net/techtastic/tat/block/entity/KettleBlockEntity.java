@@ -9,11 +9,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
@@ -31,16 +29,15 @@ import net.techtastic.tat.ToilAndTroubleExpectPlatform;
 import net.techtastic.tat.api.altar.source.AltarSources;
 import net.techtastic.tat.api.altar.source.IAltarSource;
 import net.techtastic.tat.block.TATBlockEntities;
-import net.techtastic.tat.block.custom.KettleBlock;
 import net.techtastic.tat.networking.TATNetworking;
 import net.techtastic.tat.recipe.KettleRecipe;
 import net.techtastic.tat.util.FluidTank;
+import net.techtastic.tat.util.IWitchcraftPlayer;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class KettleBlockEntity extends BaseContainerBlockEntity implements StackedContentsCompatible, WorldlyContainer {
     public NonNullList<ItemStack> inventory = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
@@ -57,24 +54,10 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         if (level.isClientSide) return;
 
         BlockState fire = level.getBlockState(pos.below());
-
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
 
         if (kettle.tank.getRemainingFluid() == 0 || !kettle.output.isEmpty())
             Collections.fill(kettle.inventory, ItemStack.EMPTY);
-
-        if (!hasRecipe(kettle)) {
-            kettle.setChanged();
-            return;
-        }
-
-
-
-        BlockPos altarPos = findNearestAltar(level, kettle.worldPosition);
-        IAltarSource altar = AltarSources.testForAltarSource(level, altarPos);
-
-        if (altar != null && altar.drawPowerFromAltar(level, kettle.worldPosition, altarPos, getPowerRequired(kettle)))
-            kettle.output = getRecipeOutput(kettle);
 
         kettle.setChanged();
     }
@@ -195,14 +178,25 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
 
 
 
-    public static ItemStack getRecipeOutput(KettleBlockEntity kettle) {
+    public static ItemStack getRecipeOutput(KettleBlockEntity kettle, Player player) {
         Level level = kettle.level;
+        ItemStack output = ItemStack.EMPTY;
 
         assert level != null;
         Optional<KettleRecipe> match = level.getRecipeManager()
                 .getRecipeFor(KettleRecipe.Type.INSTANCE, kettle.getContainer(), level);
 
-        return match.isPresent() ? match.get().getOutput() : ItemStack.EMPTY;
+        // get extra brew chance from player later when implemented
+        double chance = ((IWitchcraftPlayer) player).getExtraBrewChance();
+        Random random = new Random();
+
+        if (match.isPresent()) {
+            KettleRecipe recipe = match.get();
+            output = recipe.getOutput();
+            output.grow((chance > random.nextDouble()) && recipe.canGetExtra() ? 1 : 0);
+        }
+
+        return output;
     }
 
     public static int getPowerRequired(KettleBlockEntity kettle) {
@@ -272,6 +266,9 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         RecipeManager rm = level.getRecipeManager();
         List<KettleRecipe> recipes = rm.getAllRecipesFor(KettleRecipe.Type.INSTANCE);
 
+        if (recipes.isEmpty())
+            return false;
+
         NonNullList<ItemStack> currInv = this.inventory;
         List<ItemStack> inv = new ArrayList<>(currInv.stream().map(ItemStack::copy).toList());
         inv.removeIf(ItemStack::isEmpty);
@@ -279,16 +276,6 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
                 inv.isEmpty() ? 0 : inv.size() - 1
         ).test(stack));
         return !recipes.isEmpty();
-    }
-
-    public void clearOutput() {
-        this.output = ItemStack.EMPTY;
-        this.setChanged();
-    }
-
-    public void shrinkOutput() {
-        this.output.shrink(1);
-        this.setChanged();
     }
 
     public boolean hasEnoughFluid(KettleBlockEntity kettle) {
@@ -319,5 +306,37 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         buf.writeBlockPos(this.worldPosition);
 
         NetworkManager.sendToPlayers(level.getServer().getPlayerList().getPlayers(), TATNetworking.FLUID_SYNC_S2C_PACKET_ID, buf);
+    }
+
+    public void emptyTank() {
+        this.tank.emptyTank();
+    }
+
+    public ItemStack getOrCreateOutput(Player player) {
+        BlockPos altarPos = findNearestAltar(this.level, this.worldPosition);
+        IAltarSource altar = AltarSources.testForAltarSource(this.level, altarPos);
+
+        if (this.output.isEmpty() &&
+                hasRecipe(this) &&
+                altar != null &&
+                altar.drawPowerFromAltar(level, this.worldPosition, altarPos, getPowerRequired(this)))
+            this.output = getRecipeOutput(this, player);
+
+        this.setChanged();
+        return this.output;
+    }
+
+    public void shrinkOrRemoveOutput() {
+        if (output.isEmpty())
+            return;
+
+        if (output.getCount() > 1)
+            this.output.shrink(1);
+        else {
+            this.output = ItemStack.EMPTY;
+            this.emptyTank();
+        }
+
+        this.setChanged();
     }
 }

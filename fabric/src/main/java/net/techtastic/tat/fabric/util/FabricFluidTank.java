@@ -113,4 +113,11 @@ public class FabricFluidTank extends FluidTank {
                 FluidStack.create(fabric.getFluid(), this.fluidStorage.amount, fabric.getNbt()) :
                 FluidStack.create(fabric.getFluid(), this.fluidStorage.amount);
     }
+
+    @Override
+    public void emptyTank() {
+        this.fluidStorage.variant = FluidVariant.blank();
+        this.fluidStorage.amount = 0;
+        this.onContentsChanged();
+    }
 }

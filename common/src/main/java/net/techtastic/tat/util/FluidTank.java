@@ -47,4 +47,6 @@ public abstract class FluidTank {
     public abstract void setFluid(FluidStack stack);
 
     public abstract FluidStack getFluidStack();
+
+    public abstract void emptyTank();
 }

@@ -3,9 +3,11 @@ package net.techtastic.tat.block.custom;
 import com.mojang.authlib.minecraft.TelemetrySession;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -119,9 +121,19 @@ public class KettleBlock extends BaseEntityBlock {
         ItemStack stack = item.getItem();
         ItemStack test = new ItemStack(stack.getItem(), 1);
 
-        if (!kettle.inventory.stream().anyMatch(ItemStack::isEmpty) ||
-                !kettle.hasEnoughFluid(kettle) ||
-                !kettle.testForNextIngredient(level, test))
+        boolean openSlots = kettle.inventory.stream().anyMatch(ItemStack::isEmpty);
+        boolean full = kettle.hasEnoughFluid(kettle);
+        boolean nextIng = kettle.testForNextIngredient(level, test);
+
+        System.err.println("Any Empty Slots? " + openSlots);
+        System.err.println("Full Tank? " + full);
+        System.err.println("Is Correct Next Ingredient? " + nextIng);
+
+        System.err.println("Does this Check Pass? " +
+                (!openSlots || full || nextIng)
+        );
+
+        if (!openSlots || full || nextIng)
             return;
 
         if (stack.getCount() == 1)
@@ -136,30 +148,53 @@ public class KettleBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState blockState, Level level, BlockPos blockPos, Player player, InteractionHand interactionHand, BlockHitResult blockHitResult) {
+        if (level.isClientSide)
+            return InteractionResult.sidedSuccess(level.isClientSide);
+
         ItemStack stack = player.getItemInHand(interactionHand);
 
         BlockEntity be = level.getBlockEntity(blockPos);
         if (!(be instanceof KettleBlockEntity kettle))
             return InteractionResult.FAIL;
 
-        ItemStack output = KettleBlockEntity.getRecipeOutput(kettle);
-
         if (stack.is(Items.WATER_BUCKET)) {
             if (!kettle.tryInsertFluid(kettle, stack))
                 return InteractionResult.FAIL;
+
             player.setItemInHand(interactionHand, new ItemStack(Items.BUCKET));
+
             return InteractionResult.SUCCESS;
         } else if (stack.is(Items.BUCKET)) {
             if (!kettle.tryExtractFluid(kettle, stack))
                 return InteractionResult.FAIL;
+
             player.setItemInHand(interactionHand, new ItemStack(Items.WATER_BUCKET));
+
             return InteractionResult.SUCCESS;
         } else if (stack.is(Items.GLASS_BOTTLE)) {
-            if (output.getCount() == 1)
-                kettle.clearOutput();
-            else
-                kettle.shrinkOutput();
-            player.setItemInHand(interactionHand, new ItemStack(output.getItem(), 1));
+            for (ItemStack temp : kettle.inventory) {
+                System.err.println("Item at " + kettle.inventory.indexOf(temp) + " is " + temp.getItem());
+            }
+
+            ItemStack output = kettle.getOrCreateOutput(player);
+            if (output.isEmpty())
+                return InteractionResult.FAIL;
+
+            ItemStack newStack = new ItemStack(output.getItem(), 1);
+            kettle.shrinkOrRemoveOutput();
+
+            if (stack.getCount() == 1) {
+                player.setItemInHand(interactionHand, newStack);
+            } else {
+                if (player.getInventory().getFreeSlot() != -1 && player.getInventory().getSlotWithRemainingSpace(newStack) != -1)
+                    player.getInventory().add(newStack);
+                else {
+                    ItemEntity drop = new ItemEntity(level, blockPos.getX(), blockPos.getY(), blockPos.getZ(), newStack);
+                    drop.moveTo(blockPos.getX() + 0.5, blockPos.getY() + 1, blockPos.getZ() + 0.5);
+                    level.addFreshEntity(drop);
+                }
+            }
+
             return InteractionResult.SUCCESS;
         }
 
@@ -179,7 +214,7 @@ public class KettleBlock extends BaseEntityBlock {
 
         BlockEntity be = level.getBlockEntity(blockPos);
         if (be instanceof KettleBlockEntity kettle) {
-            if (!kettle.output.isEmpty())
+            if (KettleBlockEntity.hasRecipe(kettle))
                 level.addParticle(
                         ParticleTypes.ELECTRIC_SPARK,
                         blockPos.getX() + 0.5,
