@@ -64,6 +64,8 @@ public class ToilAndTrouble {
     }
 
     public static void initClient() {
+        TATPartials.init();
+
         RenderTypeRegistry.register(RenderType.cutout(),
                 TATBlocks.CAST_IRON_OVEN.get(),
                 TATBlocks.KETTLE.get(),

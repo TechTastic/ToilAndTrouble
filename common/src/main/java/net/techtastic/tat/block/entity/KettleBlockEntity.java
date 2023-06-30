@@ -56,9 +56,6 @@ public class KettleBlockEntity extends BaseContainerBlockEntity implements Stack
         BlockState fire = level.getBlockState(pos.below());
         kettle.isHeated = fire.is(TATTags.Blocks.FIRE_SOURCE);
 
-        if (kettle.tank.getRemainingFluid() == 0 || !kettle.output.isEmpty())
-            Collections.fill(kettle.inventory, ItemStack.EMPTY);
-
         kettle.setChanged();
     }
 

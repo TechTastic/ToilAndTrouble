@@ -20,18 +20,7 @@ configurations {
 }
 
 repositories {
-    maven {
-        url "https://cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
     maven { url "https://maven.shedaniel.me/" }
-    maven {
-        // Flywheel Maven
-        name "tterrag maven"
-        url "https://maven.tterrag.com/"
-    }
 }
 
 dependencies {
@@ -47,7 +36,7 @@ dependencies {
     modApi "me.shedaniel.cloth:cloth-config-fabric:6.4.90"
 
     // Flywheel
-    modImplementation "com.jozufozu.flywheel:Flywheel-Fabric:${flywheel_version}"
+    modImplementation "com.jozufozu.flywheel:flywheel-fabric-${minecraft_version}:${flywheel_version}"
 }
 
 processResources {
