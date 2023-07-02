@@ -1,6 +1,0 @@
-{
-  "parent": "tat:block/candelabra/candelabra_lit",
-  "textures": {
-    "1": "minecraft:block/brown_candle_lit"
-  }
-}

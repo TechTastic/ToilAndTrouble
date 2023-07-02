@@ -15,6 +15,7 @@ import net.minecraft.world.level.ItemLike;
 import net.techtastic.tat.block.TATBlockEntities;
 import net.techtastic.tat.block.TATBlocks;
 import net.techtastic.tat.block.entity.KettleBlockEntity;
+import net.techtastic.tat.block.entity.renderer.CandelabraBlockEntityRenderer;
 import net.techtastic.tat.block.entity.renderer.KettleBlockEntityRenderer;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlockStateInfo;
 import net.techtastic.tat.dataloader.altar.nature.NatureBlocksDataResolver;
@@ -97,6 +98,9 @@ public class ToilAndTrouble {
 
         TATItemModelPredicates.registerModelPredicates();
 
-        BlockEntityRendererRegistry.register(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(), KettleBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(TATBlockEntities.KETTLE_BLOCK_ENTITY.get(),
+                KettleBlockEntityRenderer::new);
+        BlockEntityRendererRegistry.register(TATBlockEntities.CANDELABRA_BLOCK_ENTITY.get(),
+                CandelabraBlockEntityRenderer::new);
     }
 }

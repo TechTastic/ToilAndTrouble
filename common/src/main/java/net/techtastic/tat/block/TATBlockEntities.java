@@ -55,6 +55,10 @@ public class TATBlockEntities {
             BLOCK_ENTITIES.register("taglocked", () ->
                     BlockEntityType.Builder.of(BaseTaglockedBlockEntity::new, TATBlocks.BLOODY_ROSE.get()).build(null));
 
+    public static final RegistrySupplier<BlockEntityType<CandelabraBlockEntity>> CANDELABRA_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("candelabra", () ->
+                    BlockEntityType.Builder.of(CandelabraBlockEntity::new, TATBlocks.CANDELABRA.get()).build(null));
+
     public static void register() {
         BLOCK_ENTITIES.register();
     }

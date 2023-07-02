@@ -20,6 +20,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.AbstractCandleBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -28,15 +31,18 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.techtastic.tat.block.entity.CandelabraBlockEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Random;
 
-public class CandelabraBlock extends AbstractCandleBlock {
+public class CandelabraBlock extends AbstractCandleBlock implements EntityBlock {
     public static final BooleanProperty LIT = AbstractCandleBlock.LIT;
 
     public CandelabraBlock(Properties properties) {
@@ -56,7 +62,9 @@ public class CandelabraBlock extends AbstractCandleBlock {
 
     @Override
     public VoxelShape getShape(@NotNull BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return Block.box(1, 0, 1, 15, 14, 15);
+        VoxelShape shape = Shapes.join(Block.box(1.5, 0, 1.5, 14.5, 7, 14.5), Block.box(6.5, 7, 6.5, 9.5, 8, 9.5), BooleanOp.OR);
+
+        return shape.optimize();
     }
 
     @Nullable
@@ -153,5 +161,16 @@ public class CandelabraBlock extends AbstractCandleBlock {
 
     private static void setLit(LevelAccessor levelAccessor, BlockState blockState, BlockPos blockPos, boolean bl) {
         levelAccessor.setBlock(blockPos, blockState.setValue(LIT, bl), 11);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(@NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+        return new CandelabraBlockEntity(blockPos, blockState);
+    }
+
+    @Override
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState blockState) {
+        return RenderShape.MODEL;
     }
 }

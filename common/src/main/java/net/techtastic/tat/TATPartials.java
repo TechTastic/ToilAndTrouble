@@ -8,8 +8,8 @@ public class TATPartials {
     public static final PartialModel
             OVEN_DOOR = block("oven/door"),
             DISTILLERY_JAR = block("distilley/jar"),
-            CANDLE = new PartialModel(new ResourceLocation("minecraft", "block/candle_one")),
-            CANDLE_LIT = new PartialModel(new ResourceLocation("minecraft", "block/candle_one_lit"))
+            CANDLE = new PartialModel(new ResourceLocation("minecraft", "block/candle_one_candle")),
+            CANDLE_LIT = new PartialModel(new ResourceLocation("minecraft", "block/candle_one_candle_lit"))
     ;
 
     private static PartialModel block(String path) {

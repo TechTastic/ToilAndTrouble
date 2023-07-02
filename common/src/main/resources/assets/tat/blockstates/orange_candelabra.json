@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "lit=false": { "model": "tat:block/candelabra/orange_candelabra_unlit" },
-    "lit=true": { "model": "tat:block/candelabra/orange_candelabra_lit" }
-  }
-}
